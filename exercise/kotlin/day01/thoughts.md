@@ -18,6 +18,11 @@
       - is this a good thing?
       - is it coupling too tightly by having more knowledge about the services it depends on?
 
+## More thoughts after looking at some other solutions
+- Seems i only solved part of the initial problem (ability to swap parameters by mistake) and moved it to the constructor
+  - can no longer swap reindeer name & location, but can still swap today & christmas day
+  - need to think about a better solution that neither reduces testability (new LocalDate()) nor increases complexity ("ForGettingToday")
+
 ## Notes made during session
 - first hunch: constructor-inject logger, as it probably is
   - useful for many methods in communication
