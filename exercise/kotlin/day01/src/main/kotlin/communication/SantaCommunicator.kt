@@ -3,23 +3,21 @@ package communication
 class SantaCommunicator(private val numberOfDaysToRest: Int, private val logger: Logger) {
 
     fun composeMessage(
-        reindeerName: String,
-        currentLocation: String,
+        reindeer: Reindeer,
         numbersOfDaysForComingBack: Int,
         numberOfDaysBeforeChristmas: Int
     ): String {
         val daysBeforeReturn = daysBeforeReturn(numbersOfDaysForComingBack, numberOfDaysBeforeChristmas)
-        return "Dear $reindeerName, please return from $currentLocation in $daysBeforeReturn day(s) to be ready and rest before Christmas."
+        return "Dear ${reindeer.name}, please return from ${reindeer.currentLocation} in $daysBeforeReturn day(s) to be ready and rest before Christmas."
     }
 
     fun isOverdue(
-        reindeerName: String,
-        currentLocation: String,
+        reindeer: Reindeer,
         numbersOfDaysForComingBack: Int,
         numberOfDaysBeforeChristmas: Int
     ): Boolean {
         if (daysBeforeReturn(numbersOfDaysForComingBack, numberOfDaysBeforeChristmas) <= 0) {
-            this.logger.log("Overdue for $reindeerName located $currentLocation.")
+            this.logger.log("Overdue for ${reindeer.name} located ${reindeer.currentLocation}.")
             return true
         }
         return false
