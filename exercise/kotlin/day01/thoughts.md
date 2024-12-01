@@ -22,3 +22,4 @@
   - would feel wrong to pass in strings as locations
     - refactoring: Introduce Location wrapper around string to better represent intention of those strings
 - understood from composed message content: resting time is the time reindeers need to rest at base before christmas
+  - refactor: make that clear through constructor parameter name & explanatory variable 

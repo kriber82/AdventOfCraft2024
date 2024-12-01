@@ -37,8 +37,18 @@ class SantaCommunicatorTest : DescribeSpec({
     }
 
     describe("isOverdue") {
-        it("should detect overdue reindeer") {
+        it("should detect reindeer arriving after christmas") {
             travelTimes.answers[Pair(northPole, secretBase)] = numberOfDayBeforeChristmas
+            val overdue = communicator.isOverdue(
+                Reindeer("Dasher", northPole),
+            )
+
+            overdue shouldBe true
+            logger.getLog() shouldBe "Overdue for Dasher located North Pole."
+        }
+
+        it("should detect reindeer arriving after start of resting period before christmas") {
+            travelTimes.answers[Pair(northPole, secretBase)] = numberOfDayBeforeChristmas - numberOfDaysToRest
             val overdue = communicator.isOverdue(
                 Reindeer("Dasher", northPole),
             )

@@ -5,7 +5,7 @@ import java.time.Duration
 import java.time.LocalDate
 
 class SantaCommunicator(
-    private val numberOfDaysToRest: Int,
+    private val numberOfDaysToRestBetweenArrivalAndChristmas: Int,
     private val logger: Logger,
     private val today: LocalDate,
     private val christmasDay: LocalDate,
@@ -23,7 +23,7 @@ class SantaCommunicator(
     fun isOverdue(
         reindeer: Reindeer
     ): Boolean {
-        if (daysBeforeReturn(reindeer) <= 0) {
+        if (arrivalWhenDepartingToday(reindeer) >= startOfRestingPeriod()) {
             this.logger.log("Overdue for ${reindeer.name} located ${reindeer.currentLocation}.")
             return true
         }
@@ -31,8 +31,17 @@ class SantaCommunicator(
     }
 
     private fun daysBeforeReturn(reindeer: Reindeer): Int {
-        val numberOfDaysBeforeChristmas = Duration.between(today.atStartOfDay(), christmasDay.atStartOfDay()).toDays().toInt()
+        return Duration.between(
+            arrivalWhenDepartingToday(reindeer).atStartOfDay(),
+            startOfRestingPeriod().atStartOfDay()).toDays().toInt()
+    }
+
+    private fun arrivalWhenDepartingToday(reindeer: Reindeer): LocalDate {
         val numbersOfDaysForComingBack = travelTimes.getTravelTimeInDays(reindeer.currentLocation, secretBase)
-        return numberOfDaysBeforeChristmas - numbersOfDaysForComingBack - numberOfDaysToRest
+        return today.plusDays(numbersOfDaysForComingBack.toLong())
+    }
+
+    private fun startOfRestingPeriod(): LocalDate {
+        return christmasDay.minusDays(numberOfDaysToRestBetweenArrivalAndChristmas.toLong())
     }
 }
