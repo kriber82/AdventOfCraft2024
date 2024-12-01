@@ -23,7 +23,7 @@ class SantaCommunicatorTest : DescribeSpec({
 
     beforeEach {
         travelTimes = TravelTimesForTest()
-        communicator = SantaCommunicator(numberOfDaysToRest, logger, today, christmasDay, secretBase, travelTimes)
+        communicator = SantaCommunicator(numberOfDaysToRest, today, christmasDay, secretBase, travelTimes, logger)
     }
 
     describe("composeMessage") {

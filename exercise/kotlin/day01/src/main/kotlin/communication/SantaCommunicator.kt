@@ -5,12 +5,12 @@ import java.time.Duration
 import java.time.LocalDate
 
 class SantaCommunicator(
-    private val numberOfDaysToRestBetweenArrivalAndChristmas: Int,
-    private val logger: Logger,
+    private val numberOfRestingDaysBetweenArrivalAndChristmas: Int,
     private val today: LocalDate,
     private val christmasDay: LocalDate,
     private val secretBase: Location,
-    private val travelTimes: ForGettingTravelTimes
+    private val travelTimeCalculator: ForGettingTravelTimes,
+    private val logger: Logger
 ) {
 
     fun composeMessage(
@@ -37,11 +37,11 @@ class SantaCommunicator(
     }
 
     private fun arrivalWhenDepartingToday(reindeer: Reindeer): LocalDate {
-        val numbersOfDaysForComingBack = travelTimes.getTravelTimeInDays(reindeer.currentLocation, secretBase)
+        val numbersOfDaysForComingBack = travelTimeCalculator.getTravelTimeInDays(reindeer.currentLocation, secretBase)
         return today.plusDays(numbersOfDaysForComingBack.toLong())
     }
 
     private fun startOfRestingPeriod(): LocalDate {
-        return christmasDay.minusDays(numberOfDaysToRestBetweenArrivalAndChristmas.toLong())
+        return christmasDay.minusDays(numberOfRestingDaysBetweenArrivalAndChristmas.toLong())
     }
 }
