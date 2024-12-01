@@ -11,7 +11,7 @@ class SantaCommunicatorTest : DescribeSpec({
     lateinit var communicator: SantaCommunicator
 
     beforeEach {
-        communicator = SantaCommunicator(numberOfDaysToRest)
+        communicator = SantaCommunicator(numberOfDaysToRest, logger)
     }
 
     describe("composeMessage") {
@@ -32,8 +32,7 @@ class SantaCommunicatorTest : DescribeSpec({
                 "Dasher",
                 "North Pole",
                 numberOfDayBeforeChristmas,
-                numberOfDayBeforeChristmas,
-                logger
+                numberOfDayBeforeChristmas
             )
 
             overdue shouldBe true
@@ -45,8 +44,7 @@ class SantaCommunicatorTest : DescribeSpec({
                 "Dasher",
                 "North Pole",
                 numberOfDayBeforeChristmas - numberOfDaysToRest - 1,
-                numberOfDayBeforeChristmas,
-                logger
+                numberOfDayBeforeChristmas
             ) shouldBe false
         }
     }
