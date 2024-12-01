@@ -21,3 +21,4 @@
   - would need some kind of test stub to inject value for numberOfDaysForComingBack
   - would feel wrong to pass in strings as locations
     - refactoring: Introduce Location wrapper around string to better represent intention of those strings
+- understood from composed message content: resting time is the time reindeers need to rest at base before christmas
