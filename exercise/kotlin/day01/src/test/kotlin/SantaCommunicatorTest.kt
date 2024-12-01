@@ -3,15 +3,18 @@ package communication
 import doubles.TestLogger
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import java.time.LocalDate
 
 class SantaCommunicatorTest : DescribeSpec({
     val numberOfDaysToRest = 2
-    val numberOfDayBeforeChristmas = 24
     val logger = TestLogger()
+    val today = LocalDate.of(2024, 11, 30)
+    val christmasDay = LocalDate.of(2024, 12, 24)
+    val numberOfDayBeforeChristmas = 24
     lateinit var communicator: SantaCommunicator
 
     beforeEach {
-        communicator = SantaCommunicator(numberOfDaysToRest, logger)
+        communicator = SantaCommunicator(numberOfDaysToRest, logger, today, christmasDay)
     }
 
     describe("composeMessage") {
@@ -19,8 +22,7 @@ class SantaCommunicatorTest : DescribeSpec({
             communicator
                 .composeMessage(
                     Reindeer("Dasher", "North Pole"),
-                    5,
-                    numberOfDayBeforeChristmas
+                    5
                 ) shouldBe "Dear Dasher, please return from North Pole in 17 day(s) to be ready and rest before Christmas."
         }
     }
@@ -29,7 +31,6 @@ class SantaCommunicatorTest : DescribeSpec({
         it("should detect overdue reindeer") {
             val overdue = communicator.isOverdue(
                 Reindeer("Dasher", "North Pole"),
-                numberOfDayBeforeChristmas,
                 numberOfDayBeforeChristmas,
             )
 
@@ -41,7 +42,6 @@ class SantaCommunicatorTest : DescribeSpec({
             communicator.isOverdue(
                 Reindeer("Dasher", "North Pole"),
                 numberOfDayBeforeChristmas - numberOfDaysToRest - 1,
-                numberOfDayBeforeChristmas,
             ) shouldBe false
         }
     }
