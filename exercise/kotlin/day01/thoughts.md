@@ -16,3 +16,8 @@
 - refactoring: try to capture time as a concept
   - introduce today and christmasDay as LocalDates to replace numberOfDaysBeforeChristmas
     - assumption: Communicator will be reconstructed regularly
+- idea: introduce NavigationService as a dependency for numberOfDaysForComingBack
+  - would need baseLocation
+  - would need some kind of test stub to inject value for numberOfDaysForComingBack
+  - would feel wrong to pass in strings as locations
+    - refactoring: Introduce Location wrapper around string to better represent intention of those strings

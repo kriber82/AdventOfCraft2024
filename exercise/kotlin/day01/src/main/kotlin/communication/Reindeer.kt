@@ -1,5 +1,7 @@
 package communication
 
-class Reindeer(val name: String, val currentLocation: String) {
+import location.Location
+
+class Reindeer(val name: String, val currentLocation: Location) {
 
 }
