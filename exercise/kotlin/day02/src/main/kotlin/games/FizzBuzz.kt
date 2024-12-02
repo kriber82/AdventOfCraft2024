@@ -7,14 +7,14 @@ import arrow.core.Some
 const val MIN = 1
 const val MAX = 100
 
-class FizzBuzzReplacement(public val first: Int, public val second: String)
+class FizzBuzzReplacement(val forNumbersDivisibleBy: Int, val sayWord: String)
 
-public val defaultReplacementWordsByDivisor: Collection<FizzBuzzReplacement> = listOf(
+val defaultReplacementWordsByDivisor: Collection<FizzBuzzReplacement> = listOf(
     FizzBuzzReplacement(3, "Fizz"),
     FizzBuzzReplacement(5, "Buzz"),
 )
 
-public val santaVersionReplacementWordsByDivisor: Collection<FizzBuzzReplacement> =
+val santaVersionReplacementWordsByDivisor: Collection<FizzBuzzReplacement> =
     defaultReplacementWordsByDivisor +
             listOf(
                 FizzBuzzReplacement(7, "Whizz"),
@@ -29,8 +29,8 @@ class FizzBuzz(private val replacementWordsByDivisor: Collection<FizzBuzzReplace
 
     private fun convertSafely(input: Int): String {
         val concatenatedReplacementWords = replacementWordsByDivisor
-            .filter { isDivisible(input, it.first) }
-            .map { it.second }
+            .filter { isDivisible(input, it.forNumbersDivisibleBy) }
+            .map { it.sayWord }
             .reduceOrNull { w1, w2 -> w1 + w2 }
 
         return concatenatedReplacementWords ?: input.toString()

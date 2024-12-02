@@ -9,7 +9,7 @@
   - where to put defaultReplacementWordsByDivisor and santaVersionReplacementWordsByDivisor?
   - refactor unit tests to target specific properties of the solution (i.e. "concatenates replacement words when input matches multiple replacements" rather than providing a long list of examples implying the solutions properties
   - type of input parameter should probably be wrapped in a type to prevent primitive obsession
-    - pair in that type should probably also be replaced by a fizzbuzz specific type (could also suffice to just replace pair)
+    - ✅ pair in that type should probably also be replaced by a fizzbuzz specific type (could also suffice to just replace pair)
   
 ## Before viewing the code
 
