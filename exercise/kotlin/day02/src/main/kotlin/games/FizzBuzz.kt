@@ -7,19 +7,21 @@ import arrow.core.Some
 const val MIN = 1
 const val MAX = 100
 
-public val defaultReplacementWordsByDivisor: Collection<Pair<Int, String>> = listOf(
-    Pair(3, "Fizz"),
-    Pair(5, "Buzz"),
+typealias FizzBuzzReplacement = Pair<Int, String>
+
+public val defaultReplacementWordsByDivisor: Collection<FizzBuzzReplacement> = listOf(
+    FizzBuzzReplacement(3, "Fizz"),
+    FizzBuzzReplacement(5, "Buzz"),
 )
 
-public val santaVersionReplacementWordsByDivisor: Collection<Pair<Int, String>> =
+public val santaVersionReplacementWordsByDivisor: Collection<FizzBuzzReplacement> =
     defaultReplacementWordsByDivisor +
             listOf(
-                Pair(7, "Whizz"),
-                Pair(11, "Bang"),
+                FizzBuzzReplacement(7, "Whizz"),
+                FizzBuzzReplacement(11, "Bang"),
             )
 
-class FizzBuzz(private val replacementWordsByDivisor: Collection<Pair<Int, String>> = defaultReplacementWordsByDivisor) {
+class FizzBuzz(private val replacementWordsByDivisor: Collection<FizzBuzzReplacement> = defaultReplacementWordsByDivisor) {
     fun convert(input: Int): Option<String> = when {
         isOutOfRange(input) -> None
         else -> Some(convertSafely(input))
