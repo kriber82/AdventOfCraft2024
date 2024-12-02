@@ -3,6 +3,7 @@ package games
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
+import arrow.core.reduceOrNull
 import java.util.Collections
 
 const val MIN = 1
@@ -23,6 +24,13 @@ object FizzBuzz {
     }
 
     private fun convertSafely(input: Int): String {
+        val concatenatedDivisorWords = wordsByDivisor
+            .filter { input % it.first == 0 }
+            .map { it.second }
+            .reduceOrNull { w1, w2 -> w1 + w2 }
+
+        return concatenatedDivisorWords ?: input.toString()
+
         return when {
 
             `is`(FIZZBUZZ, input) -> "FizzBuzz"
