@@ -6,23 +6,37 @@ import arrow.core.Some
 
 const val MIN = 1
 const val MAX = 100
-private const val FIZZBUZZ = 15
-private const val FIZZ = 3
-private const val BUZZ = 5
 
-object FizzBuzz {
+class FizzBuzzReplacement(val forNumbersDivisibleBy: Int, val sayWord: String)
+
+val defaultReplacementWordsByDivisor: Collection<FizzBuzzReplacement> = listOf(
+    FizzBuzzReplacement(3, "Fizz"),
+    FizzBuzzReplacement(5, "Buzz"),
+)
+
+val santaVersionReplacementWordsByDivisor: Collection<FizzBuzzReplacement> =
+    defaultReplacementWordsByDivisor +
+            listOf(
+                FizzBuzzReplacement(7, "Whizz"),
+                FizzBuzzReplacement(11, "Bang"),
+            )
+
+class FizzBuzz(private val replacementWordsByDivisor: Collection<FizzBuzzReplacement> = defaultReplacementWordsByDivisor) {
     fun convert(input: Int): Option<String> = when {
         isOutOfRange(input) -> None
         else -> Some(convertSafely(input))
     }
 
-    private fun convertSafely(input: Int): String = when {
-        `is`(FIZZBUZZ, input) -> "FizzBuzz"
-        `is`(FIZZ, input) -> "Fizz"
-        `is`(BUZZ, input) -> "Buzz"
-        else -> input.toString()
+    private fun convertSafely(input: Int): String {
+        val concatenatedReplacementWords = replacementWordsByDivisor
+            .filter { isDivisible(input, it.forNumbersDivisibleBy) }
+            .map { it.sayWord }
+            .reduceOrNull { w1, w2 -> w1 + w2 }
+
+        return concatenatedReplacementWords ?: input.toString()
     }
 
-    private fun `is`(divisor: Int, input: Int): Boolean = input % divisor == 0
+    private fun isDivisible(candidate: Int, by: Int) = candidate % by == 0
+
     private fun isOutOfRange(input: Int) = input < MIN || input > MAX
 }
