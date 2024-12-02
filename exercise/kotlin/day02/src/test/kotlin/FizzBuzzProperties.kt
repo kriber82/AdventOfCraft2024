@@ -11,9 +11,13 @@ val fizzBuzzStrings = listOf("Fizz", "Buzz", "FizzBuzz")
 fun validStringsFor(x: Int): List<String> = fizzBuzzStrings + x.toString()
 
 class FizzBuzzProperties : StringSpec({
-    "parse return a valid string for numbers between 1 and 100" {
+    "convert returns either given number or combination of replacement words for numbers between 1 and 100" {
         forAll(Arb.int(MIN..MAX)) { x ->
-            FizzBuzz.convert(x).isSome { result -> validStringsFor(x).contains(result) }
+            FizzBuzz.convert(x).isSome {
+                val isParsedInput = it == x.toString()
+                val isValidReplacementWord = fizzBuzzStrings.contains(it)
+                isParsedInput || isValidReplacementWord
+            }
         }
     }
 

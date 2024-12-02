@@ -16,3 +16,7 @@ Idea: Two variants with varying degrees of rule-injection freedom
 
 ## Changing Code
 - preparatory refactoring: replace fizzbuzz case with individual divisability tests + string concatenation
+- preparatory refactoring: replace explicit fizzbuzz case in property test with several more decomposed tests
+  - idea 1: test that ensures result is either the number or a combination of replacement words
+  - idea 2: test that ensures each replacement word is only contained once
+  - idea 3: test that ensures replacement words are contained in correct order
