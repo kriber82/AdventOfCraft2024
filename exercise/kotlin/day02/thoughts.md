@@ -20,3 +20,5 @@ Idea: Two variants with varying degrees of rule-injection freedom
   - idea 1: test that ensures result is either the number or a combination of replacement words
   - idea 2: test that ensures each replacement word is only contained once
   - idea 3: test that ensures replacement words are contained in correct order
+  - when thinking about a regex to implement idea 1, i realized, that all 3 ideas could be realized with a rather simple regex
+    - what i don't like here: as is common with regexes, this one needed a comment in order to explain its details

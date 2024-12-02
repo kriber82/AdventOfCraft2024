@@ -22,7 +22,7 @@ object FizzBuzz {
         val concatenatedReplacementWords = wordsByDivisor
             .filter { isDivisible(input, it.first) }
             .map { it.second }
-            .reduceOrNull { w1, w2 -> w1 + w2 }
+            .reduceOrNull { w1, w2 -> w1 + w2}
 
         return concatenatedReplacementWords ?: input.toString()
     }

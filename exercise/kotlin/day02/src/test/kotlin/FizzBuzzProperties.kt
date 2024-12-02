@@ -3,19 +3,20 @@ import games.MAX
 import games.MIN
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.property.Arb
+import io.kotest.property.Exhaustive
 import io.kotest.property.arbitrary.filter
 import io.kotest.property.arbitrary.int
+import io.kotest.property.exhaustive.ints
 import io.kotest.property.forAll
-
-val fizzBuzzStrings = listOf("Fizz", "Buzz", "FizzBuzz")
-fun validStringsFor(x: Int): List<String> = fizzBuzzStrings + x.toString()
 
 class FizzBuzzProperties : StringSpec({
     "convert returns either given number or combination of replacement words for numbers between 1 and 100" {
-        forAll(Arb.int(MIN..MAX)) { x ->
+        forAll(Exhaustive.ints (MIN..MAX)) { x ->
             FizzBuzz.convert(x).isSome {
                 val isParsedInput = it == x.toString()
-                val isValidReplacementWord = fizzBuzzStrings.contains(it)
+                // the regex ensures the following: string contains nothing but expected replacement words, replacement words are in correct order, replacement words are not repeated
+                val replacementWordsMatchesExpectedRegex = Regex("(Fizz)?(Buzz)?").matches(it)
+                val isValidReplacementWord = replacementWordsMatchesExpectedRegex && it.isNotEmpty()
                 isParsedInput || isValidReplacementWord
             }
         }
