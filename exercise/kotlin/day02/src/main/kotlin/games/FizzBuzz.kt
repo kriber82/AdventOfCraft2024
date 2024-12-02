@@ -7,7 +7,7 @@ import arrow.core.Some
 const val MIN = 1
 const val MAX = 100
 
-typealias FizzBuzzReplacement = Pair<Int, String>
+class FizzBuzzReplacement(public val first: Int, public val second: String)
 
 public val defaultReplacementWordsByDivisor: Collection<FizzBuzzReplacement> = listOf(
     FizzBuzzReplacement(3, "Fizz"),
