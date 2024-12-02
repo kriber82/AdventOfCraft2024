@@ -9,6 +9,7 @@
 - things i dislike about my solution
   - seems hugely overengineered
   - overall number of parameters not reduced (when taking constructor into account)
+  - tests might be harder to understand, as some of the parameters necessary for understanding are moved to beforeEach
 - other observations:
   - problem seems tiny, but contains loads of
     - refactoring opportunities
