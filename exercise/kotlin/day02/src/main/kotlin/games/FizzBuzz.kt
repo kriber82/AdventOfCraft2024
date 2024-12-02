@@ -7,22 +7,29 @@ import arrow.core.Some
 const val MIN = 1
 const val MAX = 100
 
-private val defaultWordsByDivisor: Collection<Pair<Int, String>> = listOf(
+public val defaultReplacementWordsByDivisor: Collection<Pair<Int, String>> = listOf(
     Pair(3, "Fizz"),
     Pair(5, "Buzz"),
-    )
+)
 
-class FizzBuzz(private val wordsByDivisor: Collection<Pair<Int, String>> = defaultWordsByDivisor) {
+public val santaVersionReplacementWordsByDivisor: Collection<Pair<Int, String>> =
+    defaultReplacementWordsByDivisor +
+            listOf(
+                Pair(7, "Whizz"),
+                Pair(11, "Bang"),
+            )
+
+class FizzBuzz(private val replacementWordsByDivisor: Collection<Pair<Int, String>> = defaultReplacementWordsByDivisor) {
     fun convert(input: Int): Option<String> = when {
         isOutOfRange(input) -> None
         else -> Some(convertSafely(input))
     }
 
     private fun convertSafely(input: Int): String {
-        val concatenatedReplacementWords = wordsByDivisor
+        val concatenatedReplacementWords = replacementWordsByDivisor
             .filter { isDivisible(input, it.first) }
             .map { it.second }
-            .reduceOrNull { w1, w2 -> w1 + w2}
+            .reduceOrNull { w1, w2 -> w1 + w2 }
 
         return concatenatedReplacementWords ?: input.toString()
     }

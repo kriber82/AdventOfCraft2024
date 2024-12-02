@@ -1,5 +1,10 @@
 # Exercise Thoughts
 
+## TL/DR: My personal retrospective
+- fun exercise
+- production code changes rather simple for me
+- Main challenge: Getting my head around kotest and property tests
+  
 ## Before viewing the code
 
 Idea: Two variants with varying degrees of rule-injection freedom
