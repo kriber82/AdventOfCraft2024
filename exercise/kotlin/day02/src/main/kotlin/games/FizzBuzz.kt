@@ -7,12 +7,12 @@ import arrow.core.Some
 const val MIN = 1
 const val MAX = 100
 
-private val wordsByDivisor: Collection<Pair<Int, String>> = listOf(
+private val defaultWordsByDivisor: Collection<Pair<Int, String>> = listOf(
     Pair(3, "Fizz"),
     Pair(5, "Buzz"),
     )
 
-object FizzBuzz {
+class FizzBuzz(private val wordsByDivisor: Collection<Pair<Int, String>> = defaultWordsByDivisor) {
     fun convert(input: Int): Option<String> = when {
         isOutOfRange(input) -> None
         else -> Some(convertSafely(input))

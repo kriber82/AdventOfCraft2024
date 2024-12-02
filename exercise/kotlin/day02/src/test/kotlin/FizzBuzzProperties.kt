@@ -12,7 +12,7 @@ import io.kotest.property.forAll
 class FizzBuzzProperties : StringSpec({
     "convert returns either given number or combination of replacement words for numbers between 1 and 100" {
         forAll(Exhaustive.ints (MIN..MAX)) { x ->
-            FizzBuzz.convert(x).isSome {
+            FizzBuzz().convert(x).isSome {
                 val isParsedInput = it == x.toString()
                 // the regex ensures the following: string contains nothing but expected replacement words, replacement words are in correct order, replacement words are not repeated
                 val replacementWordsMatchesExpectedRegex = Regex("(Fizz)?(Buzz)?").matches(it)
@@ -24,7 +24,7 @@ class FizzBuzzProperties : StringSpec({
 
     "parse fail for numbers out of range" {
         forAll(Arb.int().filter { i -> i < MIN || i > MAX }) { x ->
-            FizzBuzz.convert(x).isNone()
+            FizzBuzz().convert(x).isNone()
         }
     }
 })

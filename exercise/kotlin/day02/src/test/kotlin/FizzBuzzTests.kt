@@ -20,13 +20,13 @@ class FizzBuzzTests : FunSpec({
             ValidInput(30, "FizzBuzz"),
             ValidInput(45, "FizzBuzz")
         ) { (input, expectedResult) ->
-            FizzBuzz.convert(input).shouldBeSome(expectedResult)
+            FizzBuzz().convert(input).shouldBeSome(expectedResult)
         }
     }
 
     context("fails for numbers out of range") {
         withData(0, -1, 101) { x ->
-            FizzBuzz.convert(x).shouldBeNone()
+            FizzBuzz().convert(x).shouldBeNone()
         }
     }
 })
