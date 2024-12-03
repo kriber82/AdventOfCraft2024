@@ -19,9 +19,9 @@ class SantaWorkshopServiceFuzzTest {
         assertEquals("foo", "foo")
     }
 
-    @FuzzTest
+    @FuzzTest(maxExecutions = 1000000)
     fun `should prepare a gift with valid parameters`(data: FuzzedDataProvider) {
-            val giftName = data.consumeString(129)
+            val giftName = data.consumeString(1025)
             val weight = data.consumeRegularDouble(Double.MIN_VALUE, 5.0)
             val color = "Purple"
             val material = "Plastic1"

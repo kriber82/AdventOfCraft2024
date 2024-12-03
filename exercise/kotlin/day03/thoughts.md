@@ -17,4 +17,5 @@
   - ensure fuzzer only generates valid values for weight?
 - testing with jazzer fails with *** java.lang.instrument ASSERTION FAILED ***: "!errorOutstanding" with message can't create name string at s\src\java.instrument\share\native\libinstrument\JPLISAgent.c line: 838
   - asking ai tools suggests, that JDK issues or low heap memory could be causes trying to increase heap -Xmx2048m -> no improvement
-  - trying to switch to java
+  - trying to switch to java -> happens there as well
+    - setting maxExecutions on FuzzTest helps -> could indeed be a heap size problem -> won't fix now, as 1000000 executions seems reasonably high for trying
