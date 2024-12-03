@@ -14,17 +14,12 @@ class SantaWorkshopServiceFuzzTest {
     fun beforeEach() {
         service = SantaWorkshopService()
     }
-    @Test
-    fun test1() {
-        assertEquals("foo", "foo")
-    }
-
     @FuzzTest(maxExecutions = 1000000)
     fun `should prepare a gift with valid parameters`(data: FuzzedDataProvider) {
             val giftName = data.consumeString(1025)
             val weight = data.consumeRegularDouble(Double.MIN_VALUE, 5.0)
-            val color = "Purple"
-            val material = "Plastic1"
+            val color = data.consumeString(1025)
+            val material = data.consumeString(1025)
 
             assertNotNull(service.prepareGift(giftName, weight, color, material))
     }
