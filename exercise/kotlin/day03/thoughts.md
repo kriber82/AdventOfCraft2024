@@ -7,4 +7,11 @@
 
 ## First steps:
 
-- inspect code: SantaWorkshopService.preparedGifts seems weird, as it is set only - add tests or remove, if time permits? 
+- inspect code: SantaWorkshopService.preparedGifts seems weird, as it is set only - add tests or remove, if time permits?
+- install/use jazzer:
+  - to my surprise junit 5 worked out of the box
+  - setup not too hard
+  - test execution seems weird, as fuzzing part is shown as ignored in idea, unless something fails
+- how to handle weight?
+  - replace exception with a different mechanism?
+  - ensure fuzzer only generates valid values for weight?

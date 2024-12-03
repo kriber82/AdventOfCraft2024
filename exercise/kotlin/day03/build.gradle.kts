@@ -13,6 +13,7 @@ dependencies {
     val kotestVersion = "5.8.0"
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation(kotlin("test"))
+    testImplementation("com.code-intelligence:jazzer-junit:0.22.0")
 }
 
 tasks.test {
