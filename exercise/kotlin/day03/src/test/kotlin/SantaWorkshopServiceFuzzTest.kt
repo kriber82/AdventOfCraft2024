@@ -22,7 +22,7 @@ class SantaWorkshopServiceFuzzTest {
     @FuzzTest
     fun `should prepare a gift with valid parameters`(data: FuzzedDataProvider) {
             val giftName = data.consumeString(129)
-            val weight = data.consumeDouble()
+            val weight = data.consumeRegularDouble(Double.MIN_VALUE, 5.0)
             val color = "Purple"
             val material = "Plastic1"
 

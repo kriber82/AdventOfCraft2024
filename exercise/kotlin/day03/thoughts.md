@@ -15,3 +15,6 @@
 - how to handle weight?
   - replace exception with a different mechanism?
   - ensure fuzzer only generates valid values for weight?
+- testing with jazzer fails with *** java.lang.instrument ASSERTION FAILED ***: "!errorOutstanding" with message can't create name string at s\src\java.instrument\share\native\libinstrument\JPLISAgent.c line: 838
+  - asking ai tools suggests, that JDK issues or low heap memory could be causes trying to increase heap -Xmx2048m -> no improvement
+  - trying to switch to java
