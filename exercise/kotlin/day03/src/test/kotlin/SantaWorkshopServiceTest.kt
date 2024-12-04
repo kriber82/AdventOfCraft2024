@@ -27,7 +27,7 @@ class SantaWorkshopServiceTest : DescribeSpec({
             val gift = Gift(giftName, weight, color, material)
             gift.addAttribute("recommendedAge", "3")
 
-            gift.getRecommendedAge() shouldBe 3
+            gift.recommendedAge shouldBe 3
         }
 
         it("should fail if gift is too heavy") {

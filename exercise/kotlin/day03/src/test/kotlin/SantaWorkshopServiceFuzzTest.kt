@@ -43,7 +43,6 @@ class SantaWorkshopServiceFuzzTest {
         gift.addAttribute("recommendedAge", data.consumeString(1025))
 
         //ensure getRecommended Age does not throw
-        gift.getRecommendedAge()
     }
 
     private fun shouldRetrieveSensibleValuesForRecommendedAge(data: FuzzedDataProvider) {
@@ -57,7 +56,7 @@ class SantaWorkshopServiceFuzzTest {
         gift.addAttribute("recommendedAge", recommendedAge.toString())
 
         //ensure getRecommended Age does not throw
-        gift.getRecommendedAge() shouldBe recommendedAge
+        gift.recommendedAge shouldBe recommendedAge
     }
 
     private fun shouldRetrieveAllIntValuesForRecommendedAge(data: FuzzedDataProvider) {
@@ -71,7 +70,7 @@ class SantaWorkshopServiceFuzzTest {
         gift.addAttribute("recommendedAge", recommendedAge.toString())
 
         //ensure getRecommended Age does not throw
-        gift.getRecommendedAge() shouldBe recommendedAge
+        gift.recommendedAge shouldBe recommendedAge
     }
 
     private fun shouldBeAbleToSetAnyAttribute(data: FuzzedDataProvider) {
@@ -83,6 +82,6 @@ class SantaWorkshopServiceFuzzTest {
         val gift = Gift(giftName, weight, color, material)
         gift.addAttribute(data.consumeString(1025), data.consumeString(1025))
 
-        gift.getRecommendedAge() shouldBe 0
+        gift.recommendedAge shouldBe 0
     }
 }

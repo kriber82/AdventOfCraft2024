@@ -5,7 +5,7 @@ class Gift(
     private val weight: Double,
     private val color: String,
     private val material: String,
-    private var recommendedAge: Int = 0
+    var recommendedAge: Int = 0
 ) {
     private val attributes: MutableMap<String, String> = mutableMapOf();
 
@@ -15,8 +15,6 @@ class Gift(
             recommendedAge = value.toIntOrNull() ?: 0
         }
     }
-
-    fun getRecommendedAge(): Int = recommendedAge
 
     override fun toString(): String = "A $color-colored $name weighing $weight kg made in $material"
 }
