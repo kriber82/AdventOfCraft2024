@@ -12,11 +12,11 @@ class Gift(
     fun addAttribute(key: String, value: String) {
         attributes[key] = value
         if (key == "recommendedAge") {
-            recommendedAge = value ?.toIntOrNull() ?: 0
+            recommendedAge = value.toIntOrNull() ?: 0
         }
     }
 
-    fun getRecommendedAge(): Int = attributes["recommendedAge"]?.toIntOrNull() ?: 0
+    fun getRecommendedAge(): Int = recommendedAge
 
     override fun toString(): String = "A $color-colored $name weighing $weight kg made in $material"
 }
