@@ -40,8 +40,7 @@ class SantaWorkshopServiceFuzzTest {
         val material = "Cotton"
 
         val gift = Gift(giftName, weight, color, material)
-        val value = data.consumeString(1025)
-        gift.recommendedAge = value.toIntOrNull() ?: 0
+        gift.recommendedAge = 0
 
         //ensure getRecommended Age does not throw
     }
@@ -54,8 +53,7 @@ class SantaWorkshopServiceFuzzTest {
 
         val gift = Gift(giftName, weight, color, material)
         val recommendedAge = data.consumeInt(0, 200)
-        val value = recommendedAge.toString()
-        gift.recommendedAge = value.toIntOrNull() ?: 0
+        gift.recommendedAge = recommendedAge
 
         gift.recommendedAge shouldBe recommendedAge
     }
@@ -68,8 +66,7 @@ class SantaWorkshopServiceFuzzTest {
 
         val gift = Gift(giftName, weight, color, material)
         val recommendedAge = data.consumeInt()
-        val value = recommendedAge.toString()
-        gift.recommendedAge = value.toIntOrNull() ?: 0
+        gift.recommendedAge = recommendedAge
 
         //ensure getRecommended Age does not throw
         gift.recommendedAge shouldBe recommendedAge
