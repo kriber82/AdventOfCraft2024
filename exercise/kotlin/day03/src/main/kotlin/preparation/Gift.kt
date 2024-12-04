@@ -5,12 +5,15 @@ class Gift(
     private val weight: Double,
     private val color: String,
     private val material: String,
-    private val recommendedAge: Int = 0
+    private var recommendedAge: Int = 0
 ) {
     private val attributes: MutableMap<String, String> = mutableMapOf();
 
     fun addAttribute(key: String, value: String) {
         attributes[key] = value
+        if (key == "recommendedAge") {
+            recommendedAge = value ?.toIntOrNull() ?: 0
+        }
     }
 
     fun getRecommendedAge(): Int = attributes["recommendedAge"]?.toIntOrNull() ?: 0
