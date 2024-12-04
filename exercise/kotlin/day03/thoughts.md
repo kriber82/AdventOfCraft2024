@@ -5,7 +5,7 @@
 - smell in code snippet from description: property recommended age is set via string identifier and retrieved via specific getter. This should be improved upon, if there is time left.
 - found fuzzing library [jazzer](https://github.com/CodeIntelligenceTesting/jazzer) for JVM languages, which is also integrated into googles [OSS fuzz](https://github.com/google/oss-fuzz). Will give jazzer a try.  
 
-## First steps:
+## Working notes:
 
 - inspect code: SantaWorkshopService.preparedGifts seems weird, as it is set only - add tests or remove, if time permits?
 - install/use jazzer:
@@ -25,3 +25,11 @@
 - "gradle test" seems to execute only one of the fuzz tests. Why?
   - ChatGPT: The behavior you're encountering—where only one of the fuzz tests is executed—happens because Jazzer is designed to run one fuzzing test per JVM instance. This is a common design choice for fuzzing frameworks to avoid interference between test runs and to ensure that each fuzz test has complete control over the environment.
   - My workaround: Introduce a single @FuzzTest-annotated method that calls the individual tests (not among ChatGPTs proposed solutions)
+  - open point: would this prevent non-fuzzed tests in test classes after the fuzz-test-class? 
+- Trying to refactor recommendedAge with IDEAs AI Assistant was rough:
+  - initial suggestion for the refactoring was a good one, imho
+  - refactoring execution was bumpy to say the least, especially for fixing usages I had to revert to manual changes.
+  - would probably have been smoother applying a chain of IDE refactorings by hand
+- Retracing refactoring by hand
+  - only noticed now: all other fields are immutable, should probably also apply to recommendedAge, making even more tests obsolete
+  - most of the refactoring could be done with automated steps. Some local changes in Gift & final pruning of addAttribute calls needed to be done by hand

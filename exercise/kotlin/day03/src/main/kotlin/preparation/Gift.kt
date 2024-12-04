@@ -5,7 +5,7 @@ class Gift(
     private val weight: Double,
     private val color: String,
     private val material: String,
-    var recommendedAge: Int = 0
+    val recommendedAge: Int = 0
 ) {
     private val attributes: MutableMap<String, String> = mutableMapOf();
 

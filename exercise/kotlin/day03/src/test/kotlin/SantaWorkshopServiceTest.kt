@@ -24,9 +24,7 @@ class SantaWorkshopServiceTest : DescribeSpec({
             val color = "Multi"
             val material = "Cotton"
 
-            val gift = Gift(giftName, weight, color, material)
-
-            gift.recommendedAge = 3
+            val gift = Gift(giftName, weight, color, material, 3)
 
             gift.recommendedAge shouldBe 3
         }
