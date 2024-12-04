@@ -13,8 +13,12 @@ class Gift(
         if (key == "recommendedAge") {
             recommendedAge = value.toIntOrNull() ?: 0
         } else {
-            attributes[key] = value
+            addAttributeTemp(key, value)
         }
+    }
+
+    fun addAttributeTemp(key: String, value: String) {
+        attributes[key] = value
     }
 
     override fun toString(): String = "A $color-colored $name weighing $weight kg made in $material"
