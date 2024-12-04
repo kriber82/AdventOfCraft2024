@@ -1,5 +1,22 @@
 # Day 3 thoughts
 
+## TL/DR: My thoughts afterward
+- learned a lot about fuzzing, which i have not used previously
+- learned a little too much about jazzer as a fuzzing library ;-)
+- it's hard for me to assess the validity of software design and severity of smells on these small snippets
+  - seemingly, I'm judging software designs and associated smells depending on the context, they are embedded in
+  - => the infamous "it depends" holds true for my sw-design senses as well
+- first steps with IDEAs AI Assistant:
+  - pretty good, but seemingly inconsistent in proposing refactorings
+  - didn't seem very helpful for executing refactorings that span more than one class :-(
+  - free ChatGPT was way more helpful in pinpointing and explaining niche problems with jazzer
+- fuzzing helped uncover some of the more absurd aspects of storing recommendedAge in attributes
+  - i detected the initial smell on recommendedAge before fuzzing -> would probably have refactored that anyway
+  - fuzzing as a sw-design tool questionable
+- i can see the value of fuzzing in catching edge-cases, especially on public APIs
+  - might be especially interesting for security concerns
+
+
 ## Before viewing the code
 - fuzzing is new to me, so i will try to concentrate on that first in order to optimize for learning
 - smell in code snippet from description: property recommended age is set via string identifier and retrieved via specific getter. This should be improved upon, if there is time left.
@@ -33,3 +50,4 @@
 - Retracing refactoring by hand
   - only noticed now: all other fields are immutable, should probably also apply to recommendedAge, making even more tests obsolete
   - most of the refactoring could be done with automated steps. Some local changes in Gift & final pruning of addAttribute calls needed to be done by hand
+- will keep the exception in prepareGift and attributes in Gift, as context information for assessing their validity is missing
