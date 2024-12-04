@@ -19,3 +19,9 @@
   - asking ai tools suggests, that JDK issues or low heap memory could be causes trying to increase heap -Xmx2048m -> no improvement
   - trying to switch to java -> happens there as well
     - setting maxExecutions on FuzzTest helps -> could indeed be a heap size problem -> won't fix now, as 1000000 executions seems reasonably high for trying
+  - it seems using [recommended JVM options](https://github.com/CodeIntelligenceTesting/jazzer/blob/main/docs/common.md#recommended-jvm-options) helps preventing the crash (not tested in isolation of other changes) 
+- fuzz testing "should retrieve an attribute to a gift"
+  - with arbitrary string input to recommended age, parsing to int will go wrong
+- "gradle test" seems to execute only one of the fuzz tests. Why?
+  - ChatGPT: The behavior you're encountering—where only one of the fuzz tests is executed—happens because Jazzer is designed to run one fuzzing test per JVM instance. This is a common design choice for fuzzing frameworks to avoid interference between test runs and to ensure that each fuzz test has complete control over the environment.
+  - My workaround: Introduce a single @FuzzTest-annotated method that calls the individual tests (not among ChatGPTs proposed solutions)
