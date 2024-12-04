@@ -25,7 +25,11 @@ class SantaWorkshopServiceTest : DescribeSpec({
             val material = "Cotton"
 
             val gift = Gift(giftName, weight, color, material)
-            gift.addAttribute("recommendedAge", "3")
+            if ("recommendedAge" == "recommendedAge") {
+                gift.recommendedAge = "3".toIntOrNull() ?: 0
+            } else {
+                gift.addAttributeTemp("recommendedAge", "3")
+            }
 
             gift.recommendedAge shouldBe 3
         }

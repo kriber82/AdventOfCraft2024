@@ -25,12 +25,12 @@ class SantaWorkshopServiceFuzzTest {
     }
 
     private fun shouldPrepareAGiftWithValidParameters(data: FuzzedDataProvider) {
-            val giftName = data.consumeString(1025)
-            val weight = data.consumeRegularDouble(Double.MIN_VALUE, 5.0)
-            val color = data.consumeString(1025)
-            val material = data.consumeString(1025)
+        val giftName = data.consumeString(1025)
+        val weight = data.consumeRegularDouble(Double.MIN_VALUE, 5.0)
+        val color = data.consumeString(1025)
+        val material = data.consumeString(1025)
 
-            assertNotNull(service.prepareGift(giftName, weight, color, material))
+        assertNotNull(service.prepareGift(giftName, weight, color, material))
     }
 
     private fun shouldRetrieveAnAttributeToAGift(data: FuzzedDataProvider) {
@@ -40,7 +40,12 @@ class SantaWorkshopServiceFuzzTest {
         val material = "Cotton"
 
         val gift = Gift(giftName, weight, color, material)
-        gift.addAttribute("recommendedAge", data.consumeString(1025))
+        val value = data.consumeString(1025)
+        if ("recommendedAge" == "recommendedAge") {
+            gift.recommendedAge = value.toIntOrNull() ?: 0
+        } else {
+            gift.addAttributeTemp("recommendedAge", value)
+        }
 
         //ensure getRecommended Age does not throw
     }
@@ -53,7 +58,12 @@ class SantaWorkshopServiceFuzzTest {
 
         val gift = Gift(giftName, weight, color, material)
         val recommendedAge = data.consumeInt(0, 200)
-        gift.addAttribute("recommendedAge", recommendedAge.toString())
+        val value = recommendedAge.toString()
+        if ("recommendedAge" == "recommendedAge") {
+            gift.recommendedAge = value.toIntOrNull() ?: 0
+        } else {
+            gift.addAttributeTemp("recommendedAge", value)
+        }
 
         //ensure getRecommended Age does not throw
         gift.recommendedAge shouldBe recommendedAge
@@ -67,7 +77,12 @@ class SantaWorkshopServiceFuzzTest {
 
         val gift = Gift(giftName, weight, color, material)
         val recommendedAge = data.consumeInt()
-        gift.addAttribute("recommendedAge", recommendedAge.toString())
+        val value = recommendedAge.toString()
+        if ("recommendedAge" == "recommendedAge") {
+            gift.recommendedAge = value.toIntOrNull() ?: 0
+        } else {
+            gift.addAttributeTemp("recommendedAge", value)
+        }
 
         //ensure getRecommended Age does not throw
         gift.recommendedAge shouldBe recommendedAge
@@ -80,7 +95,13 @@ class SantaWorkshopServiceFuzzTest {
         val material = "Cotton"
 
         val gift = Gift(giftName, weight, color, material)
-        gift.addAttribute(data.consumeString(1025), data.consumeString(1025))
+        val key = data.consumeString(1025)
+        val value = data.consumeString(1025)
+        if (key == "recommendedAge") {
+            gift.recommendedAge = value.toIntOrNull() ?: 0
+        } else {
+            gift.addAttributeTemp(key, value)
+        }
 
         gift.recommendedAge shouldBe 0
     }
