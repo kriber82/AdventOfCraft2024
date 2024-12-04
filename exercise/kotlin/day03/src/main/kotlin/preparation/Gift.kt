@@ -10,9 +10,10 @@ class Gift(
     private val attributes: MutableMap<String, String> = mutableMapOf();
 
     fun addAttribute(key: String, value: String) {
-        attributes[key] = value
         if (key == "recommendedAge") {
             recommendedAge = value.toIntOrNull() ?: 0
+        } else {
+            attributes[key] = value
         }
     }
 
