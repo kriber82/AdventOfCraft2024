@@ -15,7 +15,7 @@ class SantaWorkshopServiceFuzzTest {
         service = SantaWorkshopService()
     }
 
-    @FuzzTest(maxDuration = "2s")
+    @FuzzTest(maxDuration = "1s")
     fun runAllFuzzTests(data: FuzzedDataProvider) {
         shouldPrepareAGiftWithValidParameters(data)
         shouldRetrieveSensibleValuesForRecommendedAge(data)

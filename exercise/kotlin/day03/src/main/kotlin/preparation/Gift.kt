@@ -4,7 +4,8 @@ class Gift(
     private val name: String,
     private val weight: Double,
     private val color: String,
-    private val material: String
+    private val material: String,
+    private val recommendedAge: Int = 0
 ) {
     private val attributes: MutableMap<String, String> = mutableMapOf();
 
