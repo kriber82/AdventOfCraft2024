@@ -60,7 +60,7 @@ class RoutineTestWithMyFakes : StringSpec({
 })
 
 class CallsTracker {
-    val calledMethodIds = mutableListOf<String>()
+    private val calledMethodIds = mutableListOf<String>()
 
     fun registerMethodCall(methodId: String) {
         calledMethodIds.add(methodId)
@@ -68,6 +68,12 @@ class CallsTracker {
 
     fun assertIsLastInteraction(methodId: String) {
         calledMethodIds.last() shouldBe methodId
+    }
+
+    fun getCallOrderIndex(method: String): Int {
+        val callIndex = calledMethodIds.indexOf(method)
+        callIndex shouldBeGreaterThan -1 // Ensure the method exists
+        return callIndex
     }
 }
 
@@ -93,16 +99,10 @@ class ScheduleServiceForTest(val callsTracker: CallsTracker) : ScheduleService {
     }
 
     fun assertContinueDayWasCalledAfterOrganizingDay() {
-        val organizeIndex = getCallOrderIndex("organizeMyDay")
-        val continueIndex = getCallOrderIndex("continueDay")
+        val organizeIndex = callsTracker.getCallOrderIndex("organizeMyDay")
+        val continueIndex = callsTracker.getCallOrderIndex("continueDay")
 
         continueIndex shouldBeGreaterThan organizeIndex
-    }
-
-    private fun getCallOrderIndex(method: String): Int {
-        val callIndex = callsTracker.calledMethodIds.indexOf(method)
-        callIndex shouldBeGreaterThan -1
-        return callIndex
     }
 }
 
