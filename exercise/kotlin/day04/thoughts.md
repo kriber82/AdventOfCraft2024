@@ -1,5 +1,26 @@
 # Day 4 Thoughts
 
+## TL/DR - My personal highlights
+- It was interesting to see a very concise case of how much more readable tests with fakes are. Especially for slightly more complex cases.
+  - Despite having written quite a few lines of fake-related code, here, I feel reinforced in my tendency to roll my own fakes. 
+- I'm glad I included the temporal coupling tests, as they provided a nice challenge and associated insights
+  - I was genuinely surprised how well the CallsTracker turned out!
+- Valuable insights from experiments with AI-assisted coding:
+  - IDEAs AI Assistant isn't exactly blowing my mind
+  - ChatGPT (in browser) worked surprisingly well despite using the free version and having to copy code back & forth
+    - Open question: Is there a more integrated solution? My wishes would be:
+      - Not having to copy code back & forth
+      - Ability to easily add more files to the context
+    - GPT as a driver/typist based on rather high-Level/intention-type navigation works surprisingly well (see commit logs for prompts)
+    - Might try next: Check if there are other aspects of having a pairing partner for which GenAI could be a backup
+      - sounds spooky and sad but still worth exploring
+      - ideas: Detecting code smells, Proposing refactorings, Discussing pros & cons of design alternatives, Coming up with test cases, Choosing the next test case to implement, ...
+    - Open question: What are conditions under which GenAIs start to fail?
+      - How (and possibly why) do they fail?
+      - Obvious candidate: Program size & complexity
+- I hate debugging JVM version incompatibility issues! Why does this happen so often (to me)? 
+  - gradle, I'm looking at you! Although bytebuddy was the culprit, here.
+
 ## Before reading the code
 
 - Looking forward to the opportunity to check out mockk or similar!
