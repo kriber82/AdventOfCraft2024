@@ -37,4 +37,5 @@
   - verifying temporal coupling between organizeMyDay and continueDay was rather effortless
   - verifying continueDay is the last call seems messy with mockk. wonder if there is a better way to express this with manually created fakes
 - testing with manually created fakes
-  - 
+  - will try to replicate same test cases for easier comparison 
+  - setup of dummy objects generates some boilerplate code, but was very quick
