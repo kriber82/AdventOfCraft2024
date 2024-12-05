@@ -1,5 +1,4 @@
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import routine.*
@@ -70,7 +69,11 @@ class CallsTracker {
         calledMethodIds.last() shouldBe methodId
     }
 
-    private fun getCallOrderIndex(method: String): Int {
+    fun assertMethodCalled(methodId: String) {
+        calledMethodIds.contains(methodId) shouldBe true
+    }
+
+    fun getCallOrderIndex(method: String): Int {
         val callIndex = calledMethodIds.indexOf(method)
         callIndex shouldBeGreaterThan -1 // Ensure the method exists
         return callIndex
@@ -103,6 +106,7 @@ class ScheduleServiceForTest(val callsTracker: CallsTracker) : ScheduleService {
 
     fun assertDayWasOrganizedBasedOn(schedule: Schedule) {
         scheduleUsedForOrganizingMyDay shouldBe schedule
+        callsTracker.assertMethodCalled("organizeMyDay")
     }
 
     fun assertContinueDayWasCalledAfterOrganizingDay() {
@@ -111,27 +115,21 @@ class ScheduleServiceForTest(val callsTracker: CallsTracker) : ScheduleService {
 }
 
 class EmailServiceForTest(val callsTracker: CallsTracker) : EmailService {
-    var emailsHaveBeenRead = false
-
     override fun readNewEmails() {
-        emailsHaveBeenRead = true
         callsTracker.registerMethodCall("readNewEmails")
     }
 
     fun assertEmailsHaveBeenRead() {
-        emailsHaveBeenRead shouldBe true
+        callsTracker.assertMethodCalled("readNewEmails")
     }
 }
 
 class ReindeerFeederForTest(val callsTracker: CallsTracker) : ReindeerFeeder {
-    var reindeersHaveBeenFed = false
-
     override fun feedReindeers() {
-        reindeersHaveBeenFed = true
         callsTracker.registerMethodCall("feedReindeers")
     }
 
     fun assertReindeersHaveBeenFed() {
-        reindeersHaveBeenFed shouldBe true
+        callsTracker.assertMethodCalled("feedReindeers")
     }
 }

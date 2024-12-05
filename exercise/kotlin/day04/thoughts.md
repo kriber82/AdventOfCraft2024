@@ -64,3 +64,4 @@
     - how easily could something similar be achieved with mockk?
   - using chatGPT (free) to modify code within a single file, based on high-level prompts works surprisingly well
     - see commit log for prompts
+  - hand-written solution does not create false alert when removing feedReindeers (would it be simple enough to adjust the mockk-based tests to accomodate for that finding?)
