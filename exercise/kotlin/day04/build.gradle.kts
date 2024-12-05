@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     val kotestVersion = "5.8.0"
-    val mockkVersion = "1.12.0"
+    val mockkVersion = "1.13.3"
 
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation(kotlin("test"))
@@ -21,12 +21,16 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+
+    doFirst {
+        println("Running tests with JVM: ${System.getProperty("java.version")}")
+    }
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(20)
 
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
+        jvmTarget.set(JvmTarget.JVM_20)
     }
 }

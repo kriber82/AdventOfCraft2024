@@ -23,4 +23,9 @@
     - using Routine.kt as the context for generating @BeforeEach of SUT with mockk dummies worked well
       - friction of moving the generated code over to the other file)
       - test code was generated using junit instead of kotest (probably due to existing test code missing in context)
--  
+- When running tests from within IDEA: Unsupported class file major version 65 for mockk generated mocks (I hate those types of problems, yet another reason to use hand-written fakes)
+  - invalidated assumption: not happening with "gradle test" in IDEA terminal... -> need to set project SDK in IDEA...
+    - was just not visible due to --info missing on gradle call
+  - IDEA had project JDK set to 17, not 21
+  - upgrading mockk to version to latest ("1.13.3") made the error message more explicit (explicitly saying JVM 21 not supported)
+  - downgrading jvmToolchain & jvmTarget to 20 worked
