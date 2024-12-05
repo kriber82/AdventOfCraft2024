@@ -27,5 +27,14 @@
   - invalidated assumption: not happening with "gradle test" in IDEA terminal... -> need to set project SDK in IDEA...
     - was just not visible due to --info missing on gradle call
   - IDEA had project JDK set to 17, not 21
-  - upgrading mockk to version to latest ("1.13.3") made the error message more explicit (explicitly saying JVM 21 not supported)
-  - downgrading jvmToolchain & jvmTarget to 20 worked (but only in conjunction with the mockk upgrade)
+  - upgrading mockk to version to "1.13.3" made the error message more explicit (explicitly saying JVM 21 not supported)
+    - no idea, why i did not discover the actual latest version (1.13.13) right away, which would have fixed the error...
+  - downgrading jvmToolchain & jvmTarget to 20 worked (but only in conjunction with the mockk upgrade to 1.13.3)
+- verification with mockk
+  - syntax is simple
+  - for the simple interactions in Routine.start(), this works rather well
+  - when using automated IDE refactorings, the mocks will increase friction in some cases, as their setup will be repeated throughout the code base
+  - verifying temporal coupling between organizeMyDay and continueDay was rather effortless
+  - verifying continueDay is the last call seems messy with mockk. wonder if there is a better way to express this with manually created fakes
+- testing with manually created fakes
+  - 
