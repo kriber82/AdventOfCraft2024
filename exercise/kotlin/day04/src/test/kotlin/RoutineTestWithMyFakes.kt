@@ -1,6 +1,8 @@
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
-import io.mockk.*
 import routine.*
 
 class RoutineTestWithMyFakes : StringSpec({
@@ -39,11 +41,13 @@ class RoutineTestWithMyFakes : StringSpec({
         scheduleService.assertDayWasOrganizedBasedOn(todaysSchedule)
     }
 
-    /*
     "should call continueDay after organizeMyDay" {
         routine.start()
+
+        scheduleService.assertContinueDayWasCalledAfterOrganizingDay()
     }
 
+    /*
     "should not have any other interaction after continueDay" {
         routine.start()
     }
@@ -52,35 +56,39 @@ class RoutineTestWithMyFakes : StringSpec({
 })
 
 class ScheduleServiceForTest : ScheduleService {
-    var dayWasOrganized = false
-    var continueDayWasCalled = false
-    var todaysSchedule: Schedule? = null
-    var dayWasBasedOnSchedule: Schedule? = null
+    var todaysSchedule = Schedule()
+    var scheduleUsedForOrganizingMyDay: Schedule? = null
+
+    private val methodCallOrder = mutableListOf<String>()
 
     override fun todaySchedule(): Schedule {
-        return todaysSchedule ?: Schedule()
+        return todaysSchedule
     }
 
     override fun organizeMyDay(schedule: Schedule) {
-        dayWasOrganized = true
-        dayWasBasedOnSchedule = schedule
+        scheduleUsedForOrganizingMyDay = schedule
+        methodCallOrder.add("organizeMyDay")
     }
 
     override fun continueDay() {
-        continueDayWasCalled = true
+        methodCallOrder.add("continueDay")
     }
 
     fun assertDayWasOrganizedBasedOn(schedule: Schedule) {
-        dayWasOrganized shouldBe true
-        dayWasBasedOnSchedule shouldBe schedule
+        methodCallOrder shouldContain "organizeMyDay"
+        scheduleUsedForOrganizingMyDay shouldBe schedule
     }
 
-    fun assertContinueDayWasCalled() {
-        continueDayWasCalled shouldBe true
-    }
+    fun assertContinueDayWasCalledAfterOrganizingDay() {
+        val organizeIndex = methodCallOrder.indexOf("organizeMyDay")
+        val continueIndex = methodCallOrder.indexOf("continueDay")
 
-    fun assertNoOtherInteraction() {
-        //assert all other properties are false
+        // Assert that both methods were called
+        organizeIndex shouldBeGreaterThan -1
+        continueIndex shouldBeGreaterThan -1
+
+        // Assert that continueDay was called after organizeMyDay
+        continueIndex shouldBeGreaterThan organizeIndex
     }
 
 }

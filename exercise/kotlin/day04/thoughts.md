@@ -46,3 +46,15 @@
       - additionally anticipated the need for assertContinueDayWasCalled and assertNoOtherInteractions
         - names are not in line with other assert methods on fakes
         - implementation for assertNoOtherInteractions was missing
+        - implementation of assertContinueDayWasCalled did not anticipate the test for temporal coupling implied by the test name
+  - AI Assistant failed miserably at adjusting implementation for assertContinueDayWasCalledAfterOrganizingDay
+    - generation stopped mid-file
+    - two generation runs yielded wildly different implementations
+    - generation took quite some time
+    - first attempt was based on creating more booleans for tracking the call order :-(
+    - trying with chatGPT
+      - worked and used a list of method calls, as i would probably have done it 
+      - prompt to replace the existing bools using the list of calls worked as expected
+      - friction copying code back and forth :-(
+  - fake for ScheduleService gathered quite some complexity
+    - on the flip-side the readability of the test cases is great
