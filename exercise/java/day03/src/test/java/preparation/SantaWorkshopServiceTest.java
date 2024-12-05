@@ -1,5 +1,8 @@
 package preparation;
 
+import com.code_intelligence.jazzer.api.FuzzedDataProvider;
+import com.code_intelligence.jazzer.junit.FuzzTest;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +21,18 @@ class SantaWorkshopServiceTest {
     @Test
     void prepareGiftWithValidToyShouldInstantiateIt() {
         var giftName = "Bitzee";
+        double weight = 3;
+        var color = "Purple";
+        var material = "Plastic";
+
+        var gift = service.prepareGift(giftName, weight, color, material);
+
+        assertThat(gift).isNotNull();
+    }
+
+    @FuzzTest(maxExecutions = 1000000)
+    void prepareGiftWithValidToyShouldInstantiateItFuzz(FuzzedDataProvider data) {
+        var giftName = data.consumeString(1025);
         double weight = 3;
         var color = "Purple";
         var material = "Plastic";

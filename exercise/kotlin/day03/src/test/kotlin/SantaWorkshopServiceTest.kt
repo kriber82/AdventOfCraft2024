@@ -9,7 +9,7 @@ class SantaWorkshopServiceTest : DescribeSpec({
     val service = SantaWorkshopService()
 
     describe("prepareGift") {
-        it("should prepare a gift with valid parameters") {
+        it("should prepare a gift with required parameters") {
             val giftName = "Bitzee"
             val weight = 3.0
             val color = "Purple"
@@ -18,16 +18,15 @@ class SantaWorkshopServiceTest : DescribeSpec({
             service.prepareGift(giftName, weight, color, material) shouldNotBe null
         }
 
-        it("should retrieve an attribute to a gift") {
+        it("should store optional recommendedAge on gift") {
             val giftName = "Furby"
             val weight = 1.0
             val color = "Multi"
             val material = "Cotton"
 
-            val gift = Gift(giftName, weight, color, material)
-            gift.addAttribute("recommendedAge", "3")
+            val gift = Gift(giftName, weight, color, material, 3)
 
-            gift.getRecommendedAge() shouldBe 3
+            gift.recommendedAge shouldBe 3
         }
 
         it("should fail if gift is too heavy") {
