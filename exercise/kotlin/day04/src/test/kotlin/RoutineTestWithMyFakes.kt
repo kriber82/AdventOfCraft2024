@@ -1,12 +1,13 @@
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.*
 import routine.*
 
 class RoutineTestWithMyFakes : StringSpec({
 
-    lateinit var emailService: EmailService
-    lateinit var scheduleService: ScheduleService
-    lateinit var reindeerFeeder: ReindeerFeeder
+    lateinit var emailService: EmailServiceForTest
+    lateinit var scheduleService: ScheduleServiceForTest
+    lateinit var reindeerFeeder: ReindeerFeederForTest
     lateinit var routine: Routine
 
     beforeTest {
@@ -20,7 +21,7 @@ class RoutineTestWithMyFakes : StringSpec({
     "should feed reindeers during routine" {
         routine.start()
 
-        //TODO add verification
+        reindeerFeeder.assertReindeersHaveBeenFed()
     }
 
     /*
@@ -68,7 +69,13 @@ class EmailServiceForTest : EmailService {
 
 
 class ReindeerFeederForTest : ReindeerFeeder {
+    var reindeersHaveBeenFed = false
+
     override fun feedReindeers() {
-        //dummy for now
+        reindeersHaveBeenFed = true
+    }
+
+    fun assertReindeersHaveBeenFed() {
+        reindeersHaveBeenFed shouldBe true
     }
 }

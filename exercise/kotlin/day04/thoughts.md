@@ -39,3 +39,4 @@
 - testing with manually created fakes
   - will try to replicate same test cases for easier comparison 
   - setup of dummy objects generates some boilerplate code, but was very quick
+  - verification using custom methods on fakes creates some more boilerplate, but seems very readable and is done quickly
