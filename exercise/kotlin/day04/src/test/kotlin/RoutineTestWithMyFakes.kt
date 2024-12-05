@@ -24,11 +24,13 @@ class RoutineTestWithMyFakes : StringSpec({
         reindeerFeeder.assertReindeersHaveBeenFed()
     }
 
-    /*
     "should read new emails during routine" {
         routine.start()
+
+        emailService.assertEmailsHaveBeenRead()
     }
 
+    /*
     "should organize day based on todays schedule during routine" {
         routine.start()
     }
@@ -61,10 +63,15 @@ class ScheduleServiceForTest : ScheduleService {
 }
 
 class EmailServiceForTest : EmailService {
+    var emailsHaveBeenRead = false
+
     override fun readNewEmails() {
-        //dummy for now
+        emailsHaveBeenRead = true
     }
 
+    fun assertEmailsHaveBeenRead() {
+        emailsHaveBeenRead shouldBe true
+    }
 }
 
 
