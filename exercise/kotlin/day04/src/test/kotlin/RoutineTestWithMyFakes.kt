@@ -1,6 +1,5 @@
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import routine.*
@@ -80,15 +79,16 @@ class ScheduleServiceForTest : ScheduleService {
     }
 
     fun assertContinueDayWasCalledAfterOrganizingDay() {
-        val organizeIndex = methodCallOrder.indexOf("organizeMyDay")
-        val continueIndex = methodCallOrder.indexOf("continueDay")
+        val organizeIndex = getCallOrderIndex("organizeMyDay")
+        val continueIndex = getCallOrderIndex("continueDay")
 
-        // Assert that both methods were called
-        organizeIndex shouldBeGreaterThan -1
-        continueIndex shouldBeGreaterThan -1
-
-        // Assert that continueDay was called after organizeMyDay
         continueIndex shouldBeGreaterThan organizeIndex
+    }
+
+    private fun getCallOrderIndex(method: String): Int {
+        val callIndex = methodCallOrder.indexOf(method)
+        callIndex shouldBeGreaterThan -1
+        return callIndex
     }
 
 }
