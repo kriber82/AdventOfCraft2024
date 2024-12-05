@@ -30,12 +30,16 @@ class RoutineTestWithMyFakes : StringSpec({
         emailService.assertEmailsHaveBeenRead()
     }
 
-    /*
     "should organize day based on todays schedule during routine" {
+        val todaysSchedule = Schedule()
+        scheduleService.todaysSchedule = todaysSchedule
+
         routine.start()
+
+        scheduleService.assertDayWasOrganizedBasedOn(todaysSchedule)
     }
 
-
+    /*
     "should call continueDay after organizeMyDay" {
         routine.start()
     }
@@ -48,16 +52,35 @@ class RoutineTestWithMyFakes : StringSpec({
 })
 
 class ScheduleServiceForTest : ScheduleService {
+    var dayWasOrganized = false
+    var continueDayWasCalled = false
+    var todaysSchedule: Schedule? = null
+    var dayWasBasedOnSchedule: Schedule? = null
+
     override fun todaySchedule(): Schedule {
-        return Schedule()
+        return todaysSchedule ?: Schedule()
     }
 
     override fun organizeMyDay(schedule: Schedule) {
-        //dummy for now
+        dayWasOrganized = true
+        dayWasBasedOnSchedule = schedule
     }
 
     override fun continueDay() {
-        //dummy for now
+        continueDayWasCalled = true
+    }
+
+    fun assertDayWasOrganizedBasedOn(schedule: Schedule) {
+        dayWasOrganized shouldBe true
+        dayWasBasedOnSchedule shouldBe schedule
+    }
+
+    fun assertContinueDayWasCalled() {
+        continueDayWasCalled shouldBe true
+    }
+
+    fun assertNoOtherInteraction() {
+        //assert all other properties are false
     }
 
 }

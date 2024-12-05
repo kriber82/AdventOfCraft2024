@@ -40,3 +40,9 @@
   - will try to replicate same test cases for easier comparison 
   - setup of dummy objects generates some boilerplate code, but was very quick
   - verification using custom methods on fakes creates some more boilerplate, but seems very readable and is done quickly
+  - AI generating the test code for organize day with high-level prompts did not generate good test code
+    - AI generating fake implementation using hand-written test code was OK-ish
+      - needed several manual adjustments to match my expectations
+      - additionally anticipated the need for assertContinueDayWasCalled and assertNoOtherInteractions
+        - names are not in line with other assert methods on fakes
+        - implementation for assertNoOtherInteractions was missing
