@@ -58,3 +58,8 @@
       - friction copying code back and forth :-(
   - fake for ScheduleService gathered quite some complexity
     - on the flip-side the readability of the test cases is great
+- ensuring continueDay is the last interaction:
+  - fake complexity rises to a level, where using a library seems worthwhile
+  - having "CallsOrder.assertIsLastInteraction" is great for test readability
+    - how easily could something similar be achieved with mockk?
+  - using chatGPT to modify code within a single file, based on high-level prompts works surprisingly well

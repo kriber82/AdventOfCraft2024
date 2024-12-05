@@ -54,13 +54,13 @@ class RoutineTestWithMyFakes : StringSpec({
     "should not have any other interaction after continueDay" {
         routine.start()
 
-        callsTracker.assertIsLastInteraction("continueDay") // would probably not build this in a real project and resolve the temporal coupling in production code
+        callsTracker.assertIsLastInteraction("continueDay")
     }
 
 })
 
 class CallsTracker {
-    private val calledMethodIds = mutableListOf<String>()
+    val calledMethodIds = mutableListOf<String>()
 
     fun registerMethodCall(methodId: String) {
         calledMethodIds.add(methodId)
@@ -71,11 +71,9 @@ class CallsTracker {
     }
 }
 
-class ScheduleServiceForTest(val callsTracker: CallsTracker = CallsTracker()) : ScheduleService {
+class ScheduleServiceForTest(val callsTracker: CallsTracker) : ScheduleService {
     var todaysSchedule = Schedule()
     var scheduleUsedForOrganizingMyDay: Schedule? = null
-
-    private val methodCallOrder = mutableListOf<String>()
 
     override fun todaySchedule(): Schedule {
         return todaysSchedule
@@ -84,16 +82,13 @@ class ScheduleServiceForTest(val callsTracker: CallsTracker = CallsTracker()) : 
     override fun organizeMyDay(schedule: Schedule) {
         scheduleUsedForOrganizingMyDay = schedule
         callsTracker.registerMethodCall("organizeMyDay")
-        methodCallOrder.add("organizeMyDay")
     }
 
     override fun continueDay() {
         callsTracker.registerMethodCall("continueDay")
-        methodCallOrder.add("continueDay")
     }
 
     fun assertDayWasOrganizedBasedOn(schedule: Schedule) {
-        methodCallOrder shouldContain "organizeMyDay"
         scheduleUsedForOrganizingMyDay shouldBe schedule
     }
 
@@ -105,18 +100,18 @@ class ScheduleServiceForTest(val callsTracker: CallsTracker = CallsTracker()) : 
     }
 
     private fun getCallOrderIndex(method: String): Int {
-        val callIndex = methodCallOrder.indexOf(method)
+        val callIndex = callsTracker.calledMethodIds.indexOf(method)
         callIndex shouldBeGreaterThan -1
         return callIndex
     }
-
 }
 
-class EmailServiceForTest(val callsTracker: CallsTracker = CallsTracker()) : EmailService {
+class EmailServiceForTest(val callsTracker: CallsTracker) : EmailService {
     var emailsHaveBeenRead = false
 
     override fun readNewEmails() {
         emailsHaveBeenRead = true
+        callsTracker.registerMethodCall("readNewEmails")
     }
 
     fun assertEmailsHaveBeenRead() {
@@ -124,12 +119,12 @@ class EmailServiceForTest(val callsTracker: CallsTracker = CallsTracker()) : Ema
     }
 }
 
-
-class ReindeerFeederForTest(val callOrderTracker: CallsTracker = CallsTracker()) : ReindeerFeeder {
+class ReindeerFeederForTest(val callsTracker: CallsTracker) : ReindeerFeeder {
     var reindeersHaveBeenFed = false
 
     override fun feedReindeers() {
         reindeersHaveBeenFed = true
+        callsTracker.registerMethodCall("feedReindeers")
     }
 
     fun assertReindeersHaveBeenFed() {
