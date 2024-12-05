@@ -28,4 +28,4 @@
     - was just not visible due to --info missing on gradle call
   - IDEA had project JDK set to 17, not 21
   - upgrading mockk to version to latest ("1.13.3") made the error message more explicit (explicitly saying JVM 21 not supported)
-  - downgrading jvmToolchain & jvmTarget to 20 worked
+  - downgrading jvmToolchain & jvmTarget to 20 worked (but only in conjunction with the mockk upgrade)

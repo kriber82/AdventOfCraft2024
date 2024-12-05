@@ -21,10 +21,6 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
-
-    doFirst {
-        println("Running tests with JVM: ${System.getProperty("java.version")}")
-    }
 }
 
 kotlin {
