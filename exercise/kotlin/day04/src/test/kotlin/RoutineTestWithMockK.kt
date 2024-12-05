@@ -64,5 +64,17 @@ class RoutineTestWithMockK : StringSpec({
         confirmVerified(scheduleService, reindeerFeeder, emailService)
     }
 
-    //TODO demonstrate spy
+    "demonstrate spy to santa - should read new emails" {
+        val spiedUpon = EmailServiceForTest()
+        val emailServiceSpy = spyk(spiedUpon) //create spy (try not to use spies, if possible)
+        routine = Routine(emailServiceSpy, scheduleService, reindeerFeeder)
+
+        routine.start()
+
+        verify { emailServiceSpy.readNewEmails() } // verify interaction through spy
+        spiedUpon.assertEmailsHaveBeenRead() // just to demonstrate, that the calls end up on the spied-upon subject
+    }
+
+    // TODO assignment for santa (due end of jan 2025): create a test, using a spy for read-access
+
 })

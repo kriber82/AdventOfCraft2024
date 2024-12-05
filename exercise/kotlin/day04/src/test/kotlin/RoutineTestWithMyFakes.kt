@@ -73,7 +73,7 @@ class CallsTracker {
         calledMethodIds.contains(methodId) shouldBe true
     }
 
-    fun getCallOrderIndex(method: String): Int {
+    private fun getCallOrderIndex(method: String): Int {
         val callIndex = calledMethodIds.indexOf(method)
         callIndex shouldBeGreaterThan -1 // Ensure the method exists
         return callIndex
@@ -87,9 +87,9 @@ class CallsTracker {
     }
 }
 
-class ScheduleServiceForTest(val callsTracker: CallsTracker) : ScheduleService {
+class ScheduleServiceForTest(private val callsTracker: CallsTracker = CallsTracker()) : ScheduleService {
     var todaysSchedule = Schedule()
-    var scheduleUsedForOrganizingMyDay: Schedule? = null
+    private var scheduleUsedForOrganizingMyDay: Schedule? = null
 
     override fun todaySchedule(): Schedule {
         return todaysSchedule
@@ -114,7 +114,7 @@ class ScheduleServiceForTest(val callsTracker: CallsTracker) : ScheduleService {
     }
 }
 
-class EmailServiceForTest(val callsTracker: CallsTracker) : EmailService {
+class EmailServiceForTest(private val callsTracker: CallsTracker = CallsTracker()) : EmailService {
     override fun readNewEmails() {
         callsTracker.registerMethodCall("readNewEmails")
     }
@@ -124,7 +124,7 @@ class EmailServiceForTest(val callsTracker: CallsTracker) : EmailService {
     }
 }
 
-class ReindeerFeederForTest(val callsTracker: CallsTracker) : ReindeerFeeder {
+class ReindeerFeederForTest(private val callsTracker: CallsTracker = CallsTracker()) : ReindeerFeeder {
     override fun feedReindeers() {
         callsTracker.registerMethodCall("feedReindeers")
     }
