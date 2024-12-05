@@ -1,7 +1,7 @@
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.comparables.shouldBeGreaterThan
 import routine.*
 
 class RoutineTestWithMyFakes : StringSpec({
@@ -70,10 +70,17 @@ class CallsTracker {
         calledMethodIds.last() shouldBe methodId
     }
 
-    fun getCallOrderIndex(method: String): Int {
+    private fun getCallOrderIndex(method: String): Int {
         val callIndex = calledMethodIds.indexOf(method)
         callIndex shouldBeGreaterThan -1 // Ensure the method exists
         return callIndex
+    }
+
+    fun assertCallOrder(earlierMethodId: String, laterMethodId: String) {
+        val earlierIndex = getCallOrderIndex(earlierMethodId)
+        val laterIndex = getCallOrderIndex(laterMethodId)
+
+        laterIndex shouldBeGreaterThan earlierIndex
     }
 }
 
@@ -99,10 +106,7 @@ class ScheduleServiceForTest(val callsTracker: CallsTracker) : ScheduleService {
     }
 
     fun assertContinueDayWasCalledAfterOrganizingDay() {
-        val organizeIndex = callsTracker.getCallOrderIndex("organizeMyDay")
-        val continueIndex = callsTracker.getCallOrderIndex("continueDay")
-
-        continueIndex shouldBeGreaterThan organizeIndex
+        callsTracker.assertCallOrder("organizeMyDay", "continueDay")
     }
 }
 

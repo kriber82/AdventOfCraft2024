@@ -63,3 +63,4 @@
   - having "CallsOrder.assertIsLastInteraction" is great for test readability
     - how easily could something similar be achieved with mockk?
   - using chatGPT (free) to modify code within a single file, based on high-level prompts works surprisingly well
+    - see commit log for prompts
