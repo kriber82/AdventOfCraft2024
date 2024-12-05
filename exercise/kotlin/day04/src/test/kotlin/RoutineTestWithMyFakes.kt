@@ -9,12 +9,17 @@ class RoutineTestWithMyFakes : StringSpec({
     lateinit var emailService: EmailServiceForTest
     lateinit var scheduleService: ScheduleServiceForTest
     lateinit var reindeerFeeder: ReindeerFeederForTest
+
+    lateinit var callsTracker: CallsTracker
+
     lateinit var routine: Routine
 
     beforeTest {
-        emailService = EmailServiceForTest()
-        scheduleService = ScheduleServiceForTest()
-        reindeerFeeder = ReindeerFeederForTest()
+        callsTracker = CallsTracker()
+
+        emailService = EmailServiceForTest(callsTracker)
+        scheduleService = ScheduleServiceForTest(callsTracker)
+        reindeerFeeder = ReindeerFeederForTest(callsTracker)
 
         routine = Routine(emailService, scheduleService, reindeerFeeder)
     }
@@ -46,15 +51,27 @@ class RoutineTestWithMyFakes : StringSpec({
         scheduleService.assertContinueDayWasCalledAfterOrganizingDay()
     }
 
-    /*
     "should not have any other interaction after continueDay" {
         routine.start()
+
+        callsTracker.assertIsLastInteraction("continueDay") // would probably not build this in a real project and resolve the temporal coupling in production code
     }
-    */
 
 })
 
-class ScheduleServiceForTest : ScheduleService {
+class CallsTracker {
+    private val calledMethodIds = mutableListOf<String>()
+
+    fun registerMethodCall(methodId: String) {
+        calledMethodIds.add(methodId)
+    }
+
+    fun assertIsLastInteraction(methodId: String) {
+        calledMethodIds.last() shouldBe methodId
+    }
+}
+
+class ScheduleServiceForTest(val callsTracker: CallsTracker = CallsTracker()) : ScheduleService {
     var todaysSchedule = Schedule()
     var scheduleUsedForOrganizingMyDay: Schedule? = null
 
@@ -66,10 +83,12 @@ class ScheduleServiceForTest : ScheduleService {
 
     override fun organizeMyDay(schedule: Schedule) {
         scheduleUsedForOrganizingMyDay = schedule
+        callsTracker.registerMethodCall("organizeMyDay")
         methodCallOrder.add("organizeMyDay")
     }
 
     override fun continueDay() {
+        callsTracker.registerMethodCall("continueDay")
         methodCallOrder.add("continueDay")
     }
 
@@ -93,7 +112,7 @@ class ScheduleServiceForTest : ScheduleService {
 
 }
 
-class EmailServiceForTest : EmailService {
+class EmailServiceForTest(val callsTracker: CallsTracker = CallsTracker()) : EmailService {
     var emailsHaveBeenRead = false
 
     override fun readNewEmails() {
@@ -106,7 +125,7 @@ class EmailServiceForTest : EmailService {
 }
 
 
-class ReindeerFeederForTest : ReindeerFeeder {
+class ReindeerFeederForTest(val callOrderTracker: CallsTracker = CallsTracker()) : ReindeerFeeder {
     var reindeersHaveBeenFed = false
 
     override fun feedReindeers() {
