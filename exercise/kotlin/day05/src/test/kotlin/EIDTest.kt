@@ -9,6 +9,10 @@ class EIDTest : StringSpec({
     }
 
     "should extract payload digits from sample EID" {
-        jercivalsValidSampleEid.getPayloadDigits() shouldBe 198007 //primitive obsession?
+        jercivalsValidSampleEid.getPayloadDigits() shouldBe 198007
+    }
+
+    "should extract payload digits from other EIDs" {
+        EID(12345678).getPayloadDigits() shouldBe 123456
     }
 })

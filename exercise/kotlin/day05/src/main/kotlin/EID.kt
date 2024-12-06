@@ -1,5 +1,5 @@
-class EID(elfIdentifier: Int) {
-    fun getPayloadDigits(): Int {
-        return 198007
+class EID(val elfIdentifier: Int) {
+    fun getPayloadDigits(): Int { // TODO fix primitive obsession?
+        return elfIdentifier.toString().slice(0..5).toInt()
     }
 }

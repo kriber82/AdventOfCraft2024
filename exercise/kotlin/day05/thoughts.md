@@ -61,10 +61,15 @@
   - New test discovered: Invalid EIDs due to less than 8 digits
 - Test: Extract first six digits from full EID (new)
   - observation: fluidly switching to testing an aspect I see on EID, rather than on the validator
+  - observation: reasoning about eid parts will need accessors for them -> new tests
 
 
 - Open tests:
   - Compute control key from first six digits
+  - EID: get control key
+  - EID: get gender
+  - EID: get birth year
+  - EID: get serial number
   - Valid EID for each Sex
   - Invalid EID due to sex > 3
   - Invalid EID due to sex = 0
