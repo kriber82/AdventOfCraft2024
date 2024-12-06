@@ -6,8 +6,6 @@ class EIDTest : DescribeSpec({
     val jercivalsEidPayload = 198007
     val jercivalsEidControlKey = 67
 
-    val eidOneThroughEight = EID(12345678)
-
     describe("EidValidator") {
 
         describe ("sample EID") {
@@ -51,6 +49,10 @@ class EIDTest : DescribeSpec({
             it("should extract control digits") {
                 jercivalsValidSampleEid.getControlDigits() shouldBe jercivalsEidControlKey
             }
+
+            it("should return the elf identifier") {
+                jercivalsValidSampleEid.getGenderPart() shouldBe 1
+            }
         }
 
         describe("EID 12345678") {
@@ -62,5 +64,6 @@ class EIDTest : DescribeSpec({
                 EID(12345678).getControlDigits() shouldBe 78
             }
         }
+
     }
 })

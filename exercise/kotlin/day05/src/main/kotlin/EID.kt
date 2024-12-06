@@ -6,4 +6,8 @@ class EID(val elfIdentifier: Int) {
     fun getControlDigits(): Int {
         return elfIdentifier.toString().slice(6..7).toInt()
     }
+
+    fun getGenderPart(): Int {
+        return elfIdentifier.toString().slice(0..0).toInt()
+    }
 }

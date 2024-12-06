@@ -67,9 +67,11 @@
   - split tests into EID and EidValidator ☑
 - Test 4: EID: get control key
 - Test 5: Invalid EIDs due to control key not matching
+- Test 6: EID: get gender
+  - observation: having the test list seems to reduce cognitive load :-)
+- Test 7: 
 
 - Open tests:
-  - EID: get gender
   - EID: get birth year
   - EID: get serial number
   - Valid EID for each Sex
