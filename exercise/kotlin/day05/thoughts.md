@@ -51,7 +51,7 @@
       - take string now and introduce parsing code? seems complicated as well
     - whole number? simplest external interface, but with fear of complicating implementation
     - => lean into interface / impl separation and use whole number
-- Test: Compute control key from first six digits (new, deferred)
+- Test x: Compute control key from first six digits (new, deferred)
   - Which one? In order to craft more tests, being able to compute valid control keys would be nice
   - Design question: What would be the input for computing the control key?
     - Option: Split EID into data and validation?
@@ -59,13 +59,14 @@
       - => Test for that first!
   - New test discovered: Invalid EIDs due to more than 8 digits
   - New test discovered: Invalid EIDs due to less than 8 digits
-- Test: Extract first six digits from full EID (new)
+- Test 2: Extract first six digits from full EID (new)
   - observation: fluidly switching to testing an aspect I see on EID, rather than on the validator
   - observation: reasoning about eid parts will need accessors for them -> new tests
-
-
+- Test 3: Compute control key from first six digits
+  - 
+- TODO: split tests into EID and EidValidator
+ 
 - Open tests:
-  - Compute control key from first six digits
   - EID: get control key
   - EID: get gender
   - EID: get birth year
