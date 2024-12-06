@@ -69,12 +69,14 @@
 - Test 5: Invalid EIDs due to control key not matching
 - Test 6: EID: get gender
   - observation: having the test list seems to reduce cognitive load :-)
-- Test 7: 
+- Test x: Valid EID for each Sex (deferred)
+  - formulating these tests without a way of constructing an EID from its parts is hard -> new test & deferred
+- Test 7: construct EID from parts
 
 - Open tests:
+  - Valid EID for each Sex
   - EID: get birth year
   - EID: get serial number
-  - Valid EID for each Sex
   - Invalid EID due to sex > 3
   - Invalid EID due to sex = 0
   - Valid EID for some or all years (property based?)

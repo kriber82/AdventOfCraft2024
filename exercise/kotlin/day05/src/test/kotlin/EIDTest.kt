@@ -1,5 +1,6 @@
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.mpp.Property
 
 class EIDTest : DescribeSpec({
     val jercivalsValidSampleEid = EID(19800767)
@@ -38,6 +39,16 @@ class EIDTest : DescribeSpec({
                 EidValidator.isValid(EID(12345625)) shouldBe true
             }
         }
+
+        /*
+        describe("sex validation") {
+            it("should return true for valid sexes") {
+                val payload = ("1" + "99" + "999").toInt()
+                val control = EidValidator.computeValidControlKey(EID(payload))
+                EidValidator.isValid(EID(pa)) shouldBe true
+            }
+        }
+         */
     }
 
     describe("EID") {
