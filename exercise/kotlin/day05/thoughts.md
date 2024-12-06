@@ -42,4 +42,12 @@
     - Invalid EIDs due to control key not matching
   - Will give github copilot a try, as ai assistant was very disappointing
 
-## Implementation:
+## Implementation
+
+- New First test discovered: Sample EID is valid
+  - Choice: EID from individual fields numbers or string?
+    - individual numbers? feels complicated
+    - string? seems simpler, but opens up a plethora of failure modes
+      - take string now and introduce parsing code? seems complicated as well
+    - whole number? simplest external interface, but with fear of complicating implementation
+    - => lean into interface / impl separation and use whole number  

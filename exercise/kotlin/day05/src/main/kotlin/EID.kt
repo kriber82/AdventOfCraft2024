@@ -1,0 +1,3 @@
+class EID(elfIdentifier: Int) {
+
+}
