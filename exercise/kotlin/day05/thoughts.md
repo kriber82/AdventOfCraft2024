@@ -60,6 +60,7 @@
   - New test discovered: Invalid EIDs due to more than 8 digits
   - New test discovered: Invalid EIDs due to less than 8 digits
 - Test: Extract first six digits from full EID (new)
+  - observation: fluidly switching to testing an aspect I see on EID, rather than on the validator
 
 
 - Open tests:
