@@ -1,0 +1,45 @@
+# Advent of Craft 2024 - Day 5
+
+## Before implementing
+
+- Skimmed through the Canon TDD article, but never read it fully and never tried -> love the opportunity
+
+### Observations about Canon TDD:
+- Not used to working with a pre-written test list - curious how that turns out
+- Does not prescribe baby steps, as far as I can tell. Will try whole test as step-width
+- I like how interface/implementation split is highlighted. Will try to leak as little implementation into the red phase as possible
+
+### EID task:
+- I loved the other days focussing on refactoring or testing aspects without much prod implementation, but greenfield is great for a change :-D
+- Main task: *Validation* of Elf Ids (EID)
+  - Components of EID: Sex, Year of Birth, Serial # / Birth order, Control Key
+  - Several interesting questions about the EID come to my mind, but most have nothing to do with validation. Will list some here, for my own and your amusement ;-)
+    - What about non-ternary gender?
+    - Can Elves be older than 100 years? In that case, 2 digits for year of birth would not suffice to ensure uniqueness
+      - Can elves die at all? 
+    - Are there Elf-Twins? How would birth order be handled in this case
+    - Can two Elves be born at the same time?
+    - Is the birth number per year, or is the population of elves limited to 999?
+    - Are EIDs freed up on death, with some delay, or not at all? The latter would present a huge problem in 100 years!
+  - Back to validation (with a test list):
+    - Valid EID for each Sex
+    - Invalid EID due to sex > 3
+    - Invalid EID due to sex = 0
+    - Valid EID for some or all years (property based?)
+      - No invalid cases for years (at least, if digits of EID are restricted to numbers)
+    - (Design choice: Are EIDs Strings or numbers? Or a number for each field?)
+    - Valid EIDs with Valid Serial numbers (Some? all?, probably property based)
+    - Invalid EID due to serial number = 0
+    - Valid EIDs with control key matching previous digits modulo 97
+      - Might first need to test-drive forming the number of first 6 digits
+      - concept not entirely clear yet, checking example EID:
+        - 198007 % 97 = 30 => not just modulo
+        - complement to 97 => 97 - x => 97 - 30 = 67 ☑
+      - Some examples of calculating the control key
+        - maybe individual test for modulo 
+        - maybe individual test for complement
+        - might also be candidates for "fake it till you make it" / triangulation
+    - Invalid EIDs due to control key not matching
+  - Will give github copilot a try, as ai assistant was very disappointing
+
+## Implementation:
