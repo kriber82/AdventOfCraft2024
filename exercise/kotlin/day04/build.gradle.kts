@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     kotlin("jvm") version "1.9.21"
+
     application
 }
 
@@ -11,7 +12,7 @@ repositories {
 
 dependencies {
     val kotestVersion = "5.8.0"
-    val mockkVersion = "1.12.0"
+    val mockkVersion = "1.13.13"
 
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
     testImplementation(kotlin("test"))
