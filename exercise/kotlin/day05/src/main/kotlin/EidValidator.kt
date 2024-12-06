@@ -1,7 +1,7 @@
 class EidValidator {
     companion object {
         fun isValid(eid: EID): Boolean {
-            return true
+            return eid.getControlDigits() == computeValidControlKey(eid)
         }
 
         fun computeValidControlKey(eid: EID): Int { // TODO should parameter be eid payload?

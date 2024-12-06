@@ -66,8 +66,8 @@
   - decided to experiment with nested tests in DescribeSpec
   - split tests into EID and EidValidator ☑
 - Test 4: EID: get control key
+- Test 5: Invalid EIDs due to control key not matching
 
- 
 - Open tests:
   - EID: get gender
   - EID: get birth year
@@ -80,15 +80,5 @@
   - (Design choice: Are EIDs Strings or numbers? Or a number for each field?)
   - Valid EIDs with Valid Serial numbers (Some? all?, probably property based)
   - Invalid EID due to serial number = 0
-  - Valid EIDs with control key matching previous digits modulo 97
-    - Might first need to test-drive forming the number of first 6 digits
-    - concept not entirely clear yet, checking example EID:
-      - 198007 % 97 = 30 => not just modulo
-      - complement to 97 => 97 - x => 97 - 30 = 67 ☑
-    - Some examples of calculating the control key
-      - maybe individual test for modulo
-      - maybe individual test for complement
-      - might also be candidates for "fake it till you make it" / triangulation
-  - Invalid EIDs due to control key not matching
   - Invalid EIDs due to more than 8 digits
   - Invalid EIDs due to less than 8 digits
