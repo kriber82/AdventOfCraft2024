@@ -50,4 +50,37 @@
     - string? seems simpler, but opens up a plethora of failure modes
       - take string now and introduce parsing code? seems complicated as well
     - whole number? simplest external interface, but with fear of complicating implementation
-    - => lean into interface / impl separation and use whole number  
+    - => lean into interface / impl separation and use whole number
+- Test: Compute control key from first six digits (new, deferred)
+  - Which one? In order to craft more tests, being able to compute valid control keys would be nice
+  - Design question: What would be the input for computing the control key?
+    - Option: Split EID into data and validation?
+    - Option: Function for extracting first six digits from whole EID number?
+      - => Test for that first!
+  - New test discovered: Invalid EIDs due to more than 8 digits
+  - New test discovered: Invalid EIDs due to less than 8 digits
+- Test: Extract first six digits from full EID (new)
+
+
+- Open tests:
+  - Compute control key from first six digits
+  - Valid EID for each Sex
+  - Invalid EID due to sex > 3
+  - Invalid EID due to sex = 0
+  - Valid EID for some or all years (property based?)
+    - No invalid cases for years (at least, if digits of EID are restricted to numbers)
+  - (Design choice: Are EIDs Strings or numbers? Or a number for each field?)
+  - Valid EIDs with Valid Serial numbers (Some? all?, probably property based)
+  - Invalid EID due to serial number = 0
+  - Valid EIDs with control key matching previous digits modulo 97
+    - Might first need to test-drive forming the number of first 6 digits
+    - concept not entirely clear yet, checking example EID:
+      - 198007 % 97 = 30 => not just modulo
+      - complement to 97 => 97 - x => 97 - 30 = 67 ☑
+    - Some examples of calculating the control key
+      - maybe individual test for modulo
+      - maybe individual test for complement
+      - might also be candidates for "fake it till you make it" / triangulation
+  - Invalid EIDs due to control key not matching
+  - Invalid EIDs due to more than 8 digits
+  - Invalid EIDs due to less than 8 digits
