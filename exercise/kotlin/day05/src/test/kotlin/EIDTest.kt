@@ -20,6 +20,14 @@ class EIDTest : StringSpec({
     }
 
     "should compute valid control digits for payload digits" {
-        EidValidator.computeValidControlKey(jercivalsEidPayload) shouldBe jercivalsEidControlKey
+        EidValidator.computeValidControlKey(jercivalsValidSampleEid) shouldBe jercivalsEidControlKey
+
+        /*
+            eid = 12345678
+            eid payload = first six digits = 123456
+            payload modulo 97 = 123456 % 97 = 72
+            complement of payload modulo 97 = 97 - payload modulo 97 = 97 - 72 = 25
+         */
+        EidValidator.computeValidControlKey(EID(12345678)) shouldBe 25
     }
 })
