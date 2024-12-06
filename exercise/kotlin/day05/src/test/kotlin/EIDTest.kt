@@ -38,11 +38,19 @@ class EIDTest : DescribeSpec({
             it("should extract payload digits") {
                 jercivalsValidSampleEid.getPayloadDigits() shouldBe jercivalsEidPayload
             }
+
+            it("should extract control digits") {
+                jercivalsValidSampleEid.getControlDigits() shouldBe jercivalsEidControlKey
+            }
         }
 
         describe("other EID") {
             it("should extract payload digits") {
                 EID(12345678).getPayloadDigits() shouldBe 123456
+            }
+
+            it("should extract control digits") {
+                EID(12345678).getControlDigits() shouldBe 78
             }
         }
     }

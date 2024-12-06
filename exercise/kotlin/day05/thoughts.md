@@ -65,10 +65,10 @@
 - Test 3: Compute control key from first six digits
   - decided to experiment with nested tests in DescribeSpec
   - split tests into EID and EidValidator ☑
+- Test 4: EID: get control key
 
  
 - Open tests:
-  - EID: get control key
   - EID: get gender
   - EID: get birth year
   - EID: get serial number
