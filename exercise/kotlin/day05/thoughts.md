@@ -63,8 +63,9 @@
   - observation: fluidly switching to testing an aspect I see on EID, rather than on the validator
   - observation: reasoning about eid parts will need accessors for them -> new tests
 - Test 3: Compute control key from first six digits
-  - 
-- TODO: split tests into EID and EidValidator
+  - decided to experiment with nested tests in DescribeSpec
+  - split tests into EID and EidValidator ☑
+
  
 - Open tests:
   - EID: get control key
