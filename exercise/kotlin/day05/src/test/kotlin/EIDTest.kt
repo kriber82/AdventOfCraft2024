@@ -5,7 +5,7 @@ import io.kotest.matchers.shouldBe
 class EIDTest : DescribeSpec({
     val jercivalsValidSampleEid = EID(19800767)
     val jercivalsEidPayload = EidPayload(198007)
-    val jercivalsEidControlKey = 67
+    val jercivalsEidControlKey = EidControlKey(67)
 
     val validSex = 1
     val validYear = 0
@@ -32,7 +32,7 @@ class EIDTest : DescribeSpec({
                     payload modulo 97 = 123456 % 97 = 72
                     complement of payload modulo 97 = 97 - payload modulo 97 = 97 - 72 = 25
                  */
-                EidPayload(123456).computeValidControlKey() shouldBe 25
+                EidPayload(123456).computeValidControlKey() shouldBe EidControlKey(25)
             }
 
             it("should not validate due to control digits") {
@@ -65,11 +65,11 @@ class EIDTest : DescribeSpec({
     describe("EID") {
         describe("sample EID") {
             it("should extract payload digits") {
-                jercivalsValidSampleEid.getPayloadDigits() shouldBe jercivalsEidPayload.payload
+                jercivalsValidSampleEid.payload shouldBe jercivalsEidPayload
             }
 
             it("should extract control digits") {
-                jercivalsValidSampleEid.getControlDigits() shouldBe jercivalsEidControlKey
+                jercivalsValidSampleEid.controlKey shouldBe jercivalsEidControlKey
             }
 
         }

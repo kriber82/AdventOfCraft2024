@@ -5,7 +5,7 @@ class EidValidator {
                 return false
             }
 
-            return eid.getControlDigits() == eid.payload.computeValidControlKey()
+            return eid.controlKey == eid.payload.computeValidControlKey()
         }
 
     }

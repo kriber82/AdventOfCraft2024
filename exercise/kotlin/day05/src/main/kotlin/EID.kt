@@ -1,14 +1,13 @@
-
 class EID(elfIdentifier: Int) {
     val payload: EidPayload = EidPayload(elfIdentifier.toString().slice(0..5).toInt())
-    val controlKey: Int = elfIdentifier.toString().slice(6..7).toInt()
+    val controlKey: EidControlKey = EidControlKey(elfIdentifier.toString().slice(6..7).toInt())
 
     fun getPayloadDigits(): Int {
         return payload.payload
     }
 
     fun getControlDigits(): Int {
-        return controlKey
+        return controlKey.controlKey
     }
 
     override fun toString(): String {
@@ -20,7 +19,12 @@ class EID(elfIdentifier: Int) {
     }
 
     companion object {
-        fun fromParts(singleDigitSex: Int, twoDigitYear: Int, threeDigitsSerialNumber: Int, twoDigitControlKey: Int? = null): EID {
+        fun fromParts(
+            singleDigitSex: Int,
+            twoDigitYear: Int,
+            threeDigitsSerialNumber: Int,
+            twoDigitControlKey: Int? = null
+        ): EID {
             val payload = EidPayload.fromParts(singleDigitSex, twoDigitYear, threeDigitsSerialNumber)
             val controlKey = twoDigitControlKey ?: payload.computeValidControlKey()
             val controlKeyString = controlKey.toString().padStart(2, '0')
@@ -41,10 +45,10 @@ class EidPayload(val payload: Int) {
         return payload.toString().slice(0..0).toInt()
     }
 
-    fun computeValidControlKey(): Int {
+    fun computeValidControlKey(): EidControlKey {
         val payloadModulo = payload % 97
         val complementOfPayloadModulo = 97 - payloadModulo
-        return complementOfPayloadModulo
+        return EidControlKey(complementOfPayloadModulo)
     }
 
     override fun toString(): String {
@@ -68,4 +72,25 @@ class EidPayload(val payload: Int) {
             return EidPayload(payloadString.toInt())
         }
     }
+}
+
+class EidControlKey(val controlKey: Int) {
+    /* TODO evaluate this Copilot suggestion
+    init {
+        require(controlKey in 0..99) { "Control key must be a two-digit number" }
+    }
+     */
+
+    override fun toString(): String {
+        return controlKey.toString().padStart(2, '0')
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return other is EidControlKey && other.controlKey == controlKey
+    }
+
+    override fun hashCode(): Int {
+        return controlKey
+    }
+
 }
