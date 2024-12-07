@@ -1,6 +1,4 @@
-class EID(elfIdentifier: Int) {
-    val payload: EidPayload = EidPayload(elfIdentifier.toString().slice(0..5).toInt())
-    val controlKey: EidControlKey = EidControlKey(elfIdentifier.toString().slice(6..7).toInt())
+class EID(val payload: EidPayload, val controlKey: EidControlKey) {
 
     override fun toString(): String {
         return payload.toString() + controlKey.toString().padStart(2, '0')
@@ -11,6 +9,12 @@ class EID(elfIdentifier: Int) {
     }
 
     companion object {
+        fun fromCompleteIdentifier(elfIdentifier: Int): EID {
+            val payload = EidPayload(elfIdentifier.toString().slice(0..5).toInt())
+            val controlKey = EidControlKey(elfIdentifier.toString().slice(6..7).toInt())
+            return EID(payload, controlKey)
+        }
+
         fun fromParts(
             singleDigitSex: Int,
             twoDigitYear: Int,
@@ -18,10 +22,8 @@ class EID(elfIdentifier: Int) {
             twoDigitControlKey: Int? = null
         ): EID {
             val payload = EidPayload.fromParts(singleDigitSex, twoDigitYear, threeDigitsSerialNumber)
-            val controlKey = twoDigitControlKey ?: payload.computeValidControlKey()
-            val controlKeyString = controlKey.toString().padStart(2, '0')
-            val eidString = payload.toString() + controlKeyString
-            return EID(eidString.toInt())
+            val controlKey = twoDigitControlKey?.let { EidControlKey(it) } ?: payload.computeValidControlKey()
+            return EID(payload, controlKey)
         }
     }
 }

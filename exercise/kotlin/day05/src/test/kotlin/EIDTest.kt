@@ -3,7 +3,7 @@ import io.kotest.matchers.shouldBe
 
 
 class EIDTest : DescribeSpec({
-    val jercivalsValidSampleEid = EID(19800767)
+    val jercivalsValidSampleEid = EID.fromCompleteIdentifier(19800767)
     val jercivalsEidPayload = EidPayload(198007)
     val jercivalsEidControlKey = EidControlKey(67)
 
@@ -36,10 +36,10 @@ class EIDTest : DescribeSpec({
             }
 
             it("should not validate due to control digits") {
-                EidValidator.isValid(EID(12345678)) shouldBe false
+                EidValidator.isValid(EID.fromCompleteIdentifier(12345678)) shouldBe false
 
                 //test with valid control digits
-                EidValidator.isValid(EID(12345625)) shouldBe true
+                EidValidator.isValid(EID.fromCompleteIdentifier(12345625)) shouldBe true
             }
         }
 
@@ -76,18 +76,18 @@ class EIDTest : DescribeSpec({
 
         describe("EID 12345678") {
             it("should extract payload digits") {
-                EID(12345678).payload shouldBe EidPayload(123456)
+                EID.fromCompleteIdentifier(12345678).payload shouldBe EidPayload(123456)
             }
 
             it("should extract control digits") {
-                EID(12345678).controlKey shouldBe EidControlKey(78)
+                EID.fromCompleteIdentifier(12345678).controlKey shouldBe EidControlKey(78)
             }
         }
 
         describe("should be constructable from individual parts") {
             EID.fromParts(1, 98, 7, 67) shouldBe jercivalsValidSampleEid
-            EID.fromParts(1, 23, 456, 78) shouldBe EID(12345678)
-            EID.fromParts(1, 0, 0,1) shouldBe EID(10000001)
+            EID.fromParts(1, 23, 456, 78) shouldBe EID.fromCompleteIdentifier(12345678)
+            EID.fromParts(1, 0, 0,1) shouldBe EID.fromCompleteIdentifier(10000001)
         }
 
     }
