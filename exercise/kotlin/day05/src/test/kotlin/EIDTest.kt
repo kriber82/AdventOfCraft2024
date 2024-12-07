@@ -4,7 +4,7 @@ import io.kotest.matchers.shouldBe
 
 class EIDTest : DescribeSpec({
     val jercivalsValidSampleEid = EID.fromCompleteIdentifier(19800767)
-    val jercivalsEidPayload = EidPayload(198007)
+    val jercivalsEidPayload = EidPayload.fromParts(1, 98, 7)
     val jercivalsEidControlKey = EidControlKey(67)
 
     val validSex = 1
@@ -34,6 +34,12 @@ class EIDTest : DescribeSpec({
         describe("sex validation") {
             it("should return false for sexes greater than 3") {
                 val invalidSex = 4
+                val invalidEidDueToSex = EID.fromParts(invalidSex, validYear, validSerialNumber)
+                EidValidator.isValid(invalidEidDueToSex) shouldBe false
+            }
+
+            it("should return false for sex 0") {
+                val invalidSex = 0
                 val invalidEidDueToSex = EID.fromParts(invalidSex, validYear, validSerialNumber)
                 EidValidator.isValid(invalidEidDueToSex) shouldBe false
             }
@@ -68,7 +74,7 @@ class EIDTest : DescribeSpec({
 
         it("should be constructable from invalid full EID number") {
             val constructed = EID.fromCompleteIdentifier(12345678)
-            constructed.payload shouldBe EidPayload(123456)
+            constructed.payload shouldBe EidPayload.fromParts(1,23,456)
             constructed.controlKey shouldBe EidControlKey(78)
         }
 
@@ -89,7 +95,7 @@ class EIDTest : DescribeSpec({
                 payload modulo 97 = 123456 % 97 = 72
                 complement of payload modulo 97 = 97 - payload modulo 97 = 97 - 72 = 25
              */
-            EidPayload(123456).computeValidControlKey() shouldBe EidControlKey(25)
+            EidPayload.fromParts(1,23,456).computeValidControlKey() shouldBe EidControlKey(25)
         }
 
     }

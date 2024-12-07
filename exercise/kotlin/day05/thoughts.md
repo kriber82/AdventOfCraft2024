@@ -87,12 +87,14 @@
   - test for invalid sex first, as it's going to need new behavior
 - Test 8: Invalid EID due to sex > 3
 - Refactor: Separate EID payload & control key in order to construct EIDs with desired fields easier
+- Test 9: Invalid EID due to sex = 0
+  - finally forced me to introduce individual payload fields, things should be easier now
+  - was a rather big refactoring step
 
 - Open tests:
   - Valid EID for each Sex
   - EID: get birth year
   - EID: get serial number
-  - Invalid EID due to sex = 0
   - Valid EID for some or all years (property based?)
     - No invalid cases for years (at least, if digits of EID are restricted to numbers)
   - (Design choice: Are EIDs Strings or numbers? Or a number for each field?)
