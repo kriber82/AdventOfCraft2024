@@ -13,16 +13,14 @@ class EIDTest : DescribeSpec({
 
     describe("EidValidator") {
 
-        describe ("sample EID") {
-
-            it("should successfully validate") {
-                EidValidator.isValid(jercivalsValidSampleEid) shouldBe true
-            }
-
-            it("should compute valid control digits for payload digits") {
-                jercivalsEidPayload.computeValidControlKey() shouldBe jercivalsEidControlKey
-            }
+        it("should successfully validate sample EID") {
+            EidValidator.isValid(jercivalsValidSampleEid) shouldBe true
         }
+
+        describe("control key validation") {
+
+        }
+
 
         describe ("EID 12345678 - invalid due to control digits") {
 
@@ -63,31 +61,25 @@ class EIDTest : DescribeSpec({
     }
 
     describe("EID") {
-        describe("sample EID") {
-            it("should extract payload digits") {
-                jercivalsValidSampleEid.payload shouldBe jercivalsEidPayload
-            }
-
-            it("should extract control digits") {
-                jercivalsValidSampleEid.controlKey shouldBe jercivalsEidControlKey
-            }
-
-        }
-
-        describe("EID 12345678") {
-            it("should extract payload digits") {
-                EID.fromCompleteIdentifier(12345678).payload shouldBe EidPayload(123456)
-            }
-
-            it("should extract control digits") {
-                EID.fromCompleteIdentifier(12345678).controlKey shouldBe EidControlKey(78)
-            }
-        }
-
-        describe("should be constructable from individual parts") {
+        it("should be constructable from individual parts") {
             EID.fromParts(1, 98, 7, 67) shouldBe jercivalsValidSampleEid
             EID.fromParts(1, 23, 456, 78) shouldBe EID.fromCompleteIdentifier(12345678)
             EID.fromParts(1, 0, 0,1) shouldBe EID.fromCompleteIdentifier(10000001)
+        }
+
+        it("should be constructable from individual parts without explicitly providing control key") {
+            EID.fromParts(1, 98, 7) shouldBe jercivalsValidSampleEid
+        }
+
+        it("should be constructable from valid full EID number") {
+            jercivalsValidSampleEid.payload shouldBe jercivalsEidPayload
+            jercivalsValidSampleEid.controlKey shouldBe jercivalsEidControlKey
+        }
+
+        it("should be constructable from invalid full EID number") {
+            val constructed = EID.fromCompleteIdentifier(12345678)
+            constructed.payload shouldBe EidPayload(123456)
+            constructed.controlKey shouldBe EidControlKey(78)
         }
 
     }
@@ -95,6 +87,10 @@ class EIDTest : DescribeSpec({
     describe("EidPayload") {
         it("should return the elf sex") {
             jercivalsEidPayload.getGenderPart() shouldBe 1
+        }
+
+        it("should compute valid control digits for payload digits") {
+            jercivalsEidPayload.computeValidControlKey() shouldBe jercivalsEidControlKey
         }
     }
 })
