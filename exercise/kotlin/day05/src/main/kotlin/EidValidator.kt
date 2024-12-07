@@ -8,6 +8,13 @@ class EidValidator {
                 return false
             }
 
+            if (eid.payload.birthYear.year > 99) {
+                return false
+            }
+            if (eid.payload.birthYear.year < 0) {
+                return false
+            }
+
             return eid.controlKey == eid.payload.computeValidControlKey()
         }
 

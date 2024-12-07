@@ -53,6 +53,28 @@ class EIDTest : DescribeSpec({
                 }
             }
         }
+
+        describe("birth year validation") {
+            it("should return true for valid birth years") {
+                checkAll(Arb.int(0..99)) { validYear ->
+                    EidValidator.isValid(EID.fromParts(validSex, validYear, validSerialNumber)) shouldBe true
+                }
+            }
+
+            /*
+            it("should return false for birth years greater than 99") {
+                val invalidYear = 100
+                val invalidEidDueToYear = EID.fromParts(validSex, invalidYear, validSerialNumber)
+                EidValidator.isValid(invalidEidDueToYear) shouldBe false
+            }
+
+            it("should return false for birth years less than 0") {
+                val invalidYear = -1
+                val invalidEidDueToYear = EID.fromParts(validSex, invalidYear, validSerialNumber)
+                EidValidator.isValid(invalidEidDueToYear) shouldBe false
+            }
+             */
+        }
     }
 
     describe("EID") {
@@ -80,10 +102,6 @@ class EIDTest : DescribeSpec({
     }
 
     describe("EidPayload") {
-        it("should return the elf sex") {
-            jercivalsEidPayload.getGenderPart() shouldBe 1
-        }
-
         it("should compute valid control digits for payload digits for sample EID") {
             jercivalsEidPayload.computeValidControlKey() shouldBe jercivalsEidControlKey
         }

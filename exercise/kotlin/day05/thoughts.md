@@ -90,18 +90,24 @@
 - Test 9: Invalid EID due to sex = 0
   - finally forced me to introduce individual payload fields, things should be easier now
   - was a rather big refactoring step
+- Test 10: Valid EID for each Sex
+- Test 11: Valid EID for some or all years (property based?)
+  - thanks copilot, for generating a test case with negative birth year -> exception detected
+  - discovered new test class: all eid parts could be negative
+  - discovered new test: full eid could be negative
+
 
 - Open tests:
-  - Valid EID for each Sex
-  - EID: get birth year
-  - EID: get serial number
-  - Valid EID for some or all years (property based?)
-    - No invalid cases for years (at least, if digits of EID are restricted to numbers)
   - (Design choice: Are EIDs Strings or numbers? Or a number for each field?)
   - Valid EIDs with Valid Serial numbers (Some? all?, probably property based)
   - Invalid EID due to serial number = 0
   - Invalid EIDs due to more than 8 digits
   - Invalid EIDs due to less than 8 digits
+  - invalid: negative sex
+  - invalid: negative birth year
+  - invalid: negative full eid
+  - invalid: negative control key
   - fuzz test constructing valid EIDs and putting them through the validator
   - fuzz test constructing valid EIDs from parts and putting them through the validator
-  - fuzz test EIDs through constructor? (think it won't be easy to construct valid and invalid ones here, separately here) 
+  - fuzz test EIDs through constructor? (think it won't be easy to construct valid and invalid ones here, separately here)
+  - fuzz more tests
