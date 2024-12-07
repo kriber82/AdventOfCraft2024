@@ -4,7 +4,7 @@ import io.kotest.matchers.shouldBe
 
 class EIDTest : DescribeSpec({
     val jercivalsValidSampleEid = EID(19800767)
-    val jercivalsEidPayload = 198007
+    val jercivalsEidPayload = EidPayload(198007)
     val jercivalsEidControlKey = 67
 
     describe("EidValidator") {
@@ -65,16 +65,13 @@ class EIDTest : DescribeSpec({
     describe("EID") {
         describe("sample EID") {
             it("should extract payload digits") {
-                jercivalsValidSampleEid.getPayloadDigits() shouldBe jercivalsEidPayload
+                jercivalsValidSampleEid.getPayloadDigits() shouldBe jercivalsEidPayload.payload
             }
 
             it("should extract control digits") {
                 jercivalsValidSampleEid.getControlDigits() shouldBe jercivalsEidControlKey
             }
 
-            it("should return the elf identifier") {
-                jercivalsValidSampleEid.getGenderPart() shouldBe 1
-            }
         }
 
         describe("EID 12345678") {
@@ -93,5 +90,11 @@ class EIDTest : DescribeSpec({
             EID.fromParts(1, 0, 0,1) shouldBe EID(10000001)
         }
 
+    }
+
+    describe("EidPayload") {
+        it("should return the elf sex") {
+            jercivalsEidPayload.getGenderPart() shouldBe 1
+        }
     }
 })
