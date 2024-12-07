@@ -18,28 +18,18 @@ class EIDTest : DescribeSpec({
         }
 
         describe("control key validation") {
-
-        }
-
-
-        describe ("EID 12345678 - invalid due to control digits") {
-
-            it("should compute valid control digits for payload digits") {
-                /*
-                    eid payload = first six digits = 123456
-                    payload modulo 97 = 123456 % 97 = 72
-                    complement of payload modulo 97 = 97 - payload modulo 97 = 97 - 72 = 25
-                 */
-                EidPayload(123456).computeValidControlKey() shouldBe EidControlKey(25)
+            it("should return false for invalid control digits") {
+                val invalidControlKey = 99
+                val invalidEid = EID.fromParts(validSex, validYear, validSerialNumber, invalidControlKey)
+                EidValidator.isValid(invalidEid) shouldBe false
             }
 
-            it("should not validate due to control digits") {
-                EidValidator.isValid(EID.fromCompleteIdentifier(12345678)) shouldBe false
-
-                //test with valid control digits
-                EidValidator.isValid(EID.fromCompleteIdentifier(12345625)) shouldBe true
+            it ("should return true for valid control digits") {
+                val validEid = EID.fromParts(validSex, validYear, validSerialNumber)
+                EidValidator.isValid(validEid) shouldBe true
             }
         }
+
 
         describe("sex validation") {
             it("should return false for sexes greater than 3") {
@@ -89,8 +79,18 @@ class EIDTest : DescribeSpec({
             jercivalsEidPayload.getGenderPart() shouldBe 1
         }
 
-        it("should compute valid control digits for payload digits") {
+        it("should compute valid control digits for payload digits for sample EID") {
             jercivalsEidPayload.computeValidControlKey() shouldBe jercivalsEidControlKey
         }
+
+        it("should compute valid control digits for payload digits for arbitrary EID") {
+            /*
+                eid payload = first six digits = 123456
+                payload modulo 97 = 123456 % 97 = 72
+                complement of payload modulo 97 = 97 - payload modulo 97 = 97 - 72 = 25
+             */
+            EidPayload(123456).computeValidControlKey() shouldBe EidControlKey(25)
+        }
+
     }
 })
