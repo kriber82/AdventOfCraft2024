@@ -1,23 +1,43 @@
 class EidValidator {
     companion object {
         fun isValid(eid: EID): Boolean {
-            if (eid.payload.sex.key > 3U) {
-                return false
-            }
-            if (eid.payload.sex.key == 0U) {
-                return false
-            }
-
-            if (eid.payload.birthYear.year > 99U) {
-                return false
-            }
-
-            if (eid.payload.serialNumber.birthOrder > 999U) {
-                return false
-            }
-
-            return eid.controlKey == eid.payload.computeValidControlKey()
+            return isPayloadValid(eid.payload) && isControlKeyValid(eid)
         }
+
+        private fun isPayloadValid(eidPayload: EidPayload): Boolean {
+            return isSexValid(eidPayload.sex) &&
+                    isBirthYearValid(eidPayload.birthYear) &&
+                    isSerialNumberValid(eidPayload.serialNumber)
+        }
+
+        private fun isSerialNumberValid(eidSerialNumber: EidSerialNumber): Boolean {
+            if (eidSerialNumber.birthOrder > 999U) {
+                return false
+            }
+
+            return true
+        }
+
+        private fun isBirthYearValid(eidBirthYear: EidBirthYear): Boolean {
+            if (eidBirthYear.year > 99U) {
+                return false
+            }
+
+            return true
+        }
+
+        private fun isSexValid(eidSex: EidSex): Boolean {
+            if (eidSex.key > 3U) {
+                return false
+            }
+            if (eidSex.key == 0U) {
+                return false
+            }
+
+            return true
+        }
+
+        private fun isControlKeyValid(eid: EID) = eid.controlKey == eid.payload.computeValidControlKey()
 
     }
 }
