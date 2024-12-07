@@ -41,7 +41,7 @@ class EidPayload(val sex: EidSex, val birthYear: EidBirthYear, val serialNumber:
      */
 
     fun computeValidControlKey(): EidControlKey {
-        val payload = (sex.toString() + birthYear.toString() + serialNumber.toString()).toUInt()
+        val payload = (sex.toString() + birthYear.toString() + serialNumber.toString()).toUIntOrNull() ?: 0U
         val payloadModulo = payload % 97U
         val complementOfPayloadModulo = 97U - payloadModulo
         return EidControlKey(complementOfPayloadModulo)

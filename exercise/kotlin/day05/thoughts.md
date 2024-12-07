@@ -99,20 +99,20 @@
   - simplified some things
   - would have made the creation API of EIDs much less descriptive / type safe
   - would introduce need for additional validation tests
+  - not convinced => scratched
 - Scratch refactoring: Us Uints to represent individual parts of EID
-  - 
+  - like the result => kept
+- Test 12: Invalid EID due to birth year > 99 (discovered by copilot)
+  - new test discovered: invalid EID due to serial number > 999
+  - corner case: large individual fields -> NumberFormatException in control key calculation 
 
 
 - Open tests:
-  - (Design choice: Are EIDs Strings or numbers? Or a number for each field?)
   - Valid EIDs with Valid Serial numbers (Some? all?, probably property based)
+  - invalid EID due to serial number > 999
   - Invalid EID due to serial number = 0
   - Invalid EIDs due to more than 8 digits
   - Invalid EIDs due to less than 8 digits
-  - invalid: negative sex
-  - invalid: negative birth year
-  - invalid: negative full eid
-  - invalid: negative control key
   - fuzz test constructing valid EIDs and putting them through the validator
   - fuzz test constructing valid EIDs from parts and putting them through the validator
   - fuzz test EIDs through constructor? (think it won't be easy to construct valid and invalid ones here, separately here)

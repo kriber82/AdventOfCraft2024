@@ -62,19 +62,11 @@ class EIDTest : DescribeSpec({
                 }
             }
 
-            /*
             it("should return false for birth years greater than 99") {
-                val invalidYear = 100
-                val invalidEidDueToYear = EID.fromParts(validSex, invalidYear, validSerialNumber)
-                EidValidator.isValid(invalidEidDueToYear) shouldBe false
+                checkAll(Arb.uInt(100u..UInt.MAX_VALUE)) { invalidYear ->
+                    EidValidator.isValid(EID.fromParts(validSex, invalidYear, validSerialNumber)) shouldBe false
+                }
             }
-
-            it("should return false for birth years less than 0") {
-                val invalidYear = -1
-                val invalidEidDueToYear = EID.fromParts(validSex, invalidYear, validSerialNumber)
-                EidValidator.isValid(invalidEidDueToYear) shouldBe false
-            }
-             */
         }
     }
 
