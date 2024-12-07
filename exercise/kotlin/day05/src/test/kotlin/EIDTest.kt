@@ -1,5 +1,8 @@
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.int
+import io.kotest.property.checkAll
 
 
 class EIDTest : DescribeSpec({
@@ -44,15 +47,11 @@ class EIDTest : DescribeSpec({
                 EidValidator.isValid(invalidEidDueToSex) shouldBe false
             }
 
-            /*
             it("should return true for valid sexes") {
-                val validYear = 0
-                val validSerialNumber = 1
-                val invalidEid = EID.fromParts(1, validYear, validSerialNumber, 0)
-                val validEid = EID.fromParts(1, validYear, validSerialNumber, EidValidator.computeValidControlKey(invalidEid))
-                EidValidator.isValid(validEid) shouldBe true
+                checkAll(Arb.int(1..3)) { validSex ->
+                    EidValidator.isValid(EID.fromParts(validSex, validYear, validSerialNumber)) shouldBe true
+                }
             }
-             */
         }
     }
 
