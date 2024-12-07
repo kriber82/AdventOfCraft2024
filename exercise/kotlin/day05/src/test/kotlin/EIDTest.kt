@@ -76,11 +76,11 @@ class EIDTest : DescribeSpec({
 
         describe("EID 12345678") {
             it("should extract payload digits") {
-                EID(12345678).getPayloadDigits() shouldBe 123456
+                EID(12345678).payload shouldBe EidPayload(123456)
             }
 
             it("should extract control digits") {
-                EID(12345678).getControlDigits() shouldBe 78
+                EID(12345678).controlKey shouldBe EidControlKey(78)
             }
         }
 

@@ -2,14 +2,6 @@ class EID(elfIdentifier: Int) {
     val payload: EidPayload = EidPayload(elfIdentifier.toString().slice(0..5).toInt())
     val controlKey: EidControlKey = EidControlKey(elfIdentifier.toString().slice(6..7).toInt())
 
-    fun getPayloadDigits(): Int {
-        return payload.payload
-    }
-
-    fun getControlDigits(): Int {
-        return controlKey.controlKey
-    }
-
     override fun toString(): String {
         return payload.toString() + controlKey.toString().padStart(2, '0')
     }
