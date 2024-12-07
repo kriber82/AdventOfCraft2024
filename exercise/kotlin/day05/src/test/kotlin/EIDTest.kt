@@ -88,6 +88,21 @@ class EIDTest : DescribeSpec({
                 }
             }
         }
+
+        describe("invalid input format") {
+            it("should return false for EIDs with more than 8 digits") {
+                checkAll(Arb.uInt(100000000u..UInt.MAX_VALUE)) { invalidEidInput ->
+                    val invalidEid = EID.fromCompleteIdentifier(invalidEidInput)
+                    EidValidator.isValid(invalidEid) shouldBe false
+                }
+            }
+
+            it("should return false for EIDs with more than 8 digits (bug reproduction)") {
+                val invalidEid = EID.fromCompleteIdentifier(3025746633u)
+                EidValidator.isValid(invalidEid) shouldBe false
+            }
+
+        }
     }
 
     describe("EID") {

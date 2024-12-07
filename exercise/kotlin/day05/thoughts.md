@@ -120,9 +120,11 @@
 - Test 14: Invalid EID due to serial number = 0
   - observation: the few seconds of compilation due to gradle working in the background puts me slightly out of flow, when running the tests
 - Test 15: Valid EIDs with Valid Serial numbers
- 
+- Test 16: Invalid EIDs due to more than 8 digits
+  - actually helped discover a bug in creating EIDs keys from full EID number 
+
+
 - Open tests:
-  - Invalid EIDs due to more than 8 digits
   - Invalid EIDs due to less than 8 digits
   - fuzz test constructing valid EIDs and putting them through the validator
   - fuzz test constructing valid EIDs from parts and putting them through the validator

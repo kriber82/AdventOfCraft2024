@@ -15,7 +15,7 @@ class EID(val payload: EidPayload, val controlKey: EidControlKey) {
                 EidSex(eidString.slice(0..0).toUInt()),
                 EidBirthYear(eidString.slice(1..2).toUInt()),
                 EidSerialNumber(eidString.slice(3..5).toUInt()))
-            val controlKey = EidControlKey(elfIdentifier.toString().slice(6..7).toUInt())
+            val controlKey = EidControlKey(elfIdentifier.toString().substring(6).toUInt())
             return EID(payload, controlKey)
         }
 
