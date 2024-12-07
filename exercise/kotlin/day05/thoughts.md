@@ -72,6 +72,17 @@
 - Test x: Valid EID for each Sex (deferred)
   - formulating these tests without a way of constructing an EID from its parts is hard -> new test & deferred
 - Test 7: construct EID from parts
+  - observation: the many possibilities for invalid input are overwhelming
+    - when using individual numbers, string formatting would be necessary to construct full EID
+    - when using individual strings, non-numeric input would need to be handled
+    - idea: break down eid in parts that can validate themselves? 
+    - idea: don't validate individual inputs?
+    - => try string-formatting individual numbers
+  - do all valid EIDs end up having 8 digits with my representation?
+    - new fuzz test
+    - i think so, as sex can't be 0 and other parts are padded
+  - will things crash unexpectedly with invalid EIDs?
+    - new fuzz test
 
 - Open tests:
   - Valid EID for each Sex
@@ -86,3 +97,6 @@
   - Invalid EID due to serial number = 0
   - Invalid EIDs due to more than 8 digits
   - Invalid EIDs due to less than 8 digits
+  - fuzz test constructing valid EIDs and putting them through the validator
+  - fuzz test constructing valid EIDs from parts and putting them through the validator
+  - fuzz test EIDs through constructor? (think it won't be easy to construct valid and invalid ones here, separately here) 

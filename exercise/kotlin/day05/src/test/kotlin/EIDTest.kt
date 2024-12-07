@@ -1,6 +1,6 @@
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.mpp.Property
+
 
 class EIDTest : DescribeSpec({
     val jercivalsValidSampleEid = EID(19800767)
@@ -74,6 +74,12 @@ class EIDTest : DescribeSpec({
             it("should extract control digits") {
                 EID(12345678).getControlDigits() shouldBe 78
             }
+        }
+
+        describe("should be constructable from individual parts") {
+            EID.fromParts(1, 98, 7, 67) shouldBe jercivalsValidSampleEid
+            EID.fromParts(1, 23, 456, 78) shouldBe EID(12345678)
+            EID.fromParts(1, 0, 0,1) shouldBe EID(10000001)
         }
 
     }
