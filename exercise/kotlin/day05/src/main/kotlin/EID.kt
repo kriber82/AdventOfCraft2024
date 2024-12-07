@@ -1,7 +1,7 @@
 class EID(val payload: EidPayload, val controlKey: EidControlKey) {
 
     override fun toString(): String {
-        return payload.toString() + controlKey.toString().padStart(2, '0')
+        return "$payload $controlKey"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -9,21 +9,21 @@ class EID(val payload: EidPayload, val controlKey: EidControlKey) {
     }
 
     companion object {
-        fun fromCompleteIdentifier(elfIdentifier: Int): EID {
+        fun fromCompleteIdentifier(elfIdentifier: UInt): EID {
             val eidString = elfIdentifier.toString()
             val payload = EidPayload(
-                EidSex(eidString.slice(0..0).toInt()),
-                EidBirthYear(eidString.slice(1..2).toInt()),
-                EidSerialNumber(eidString.slice(3..5).toInt()))
-            val controlKey = EidControlKey(elfIdentifier.toString().slice(6..7).toInt())
+                EidSex(eidString.slice(0..0).toUInt()),
+                EidBirthYear(eidString.slice(1..2).toUInt()),
+                EidSerialNumber(eidString.slice(3..5).toUInt()))
+            val controlKey = EidControlKey(elfIdentifier.toString().slice(6..7).toUInt())
             return EID(payload, controlKey)
         }
 
         fun fromParts(
-            singleDigitSex: Int,
-            twoDigitYear: Int,
-            threeDigitsSerialNumber: Int,
-            twoDigitControlKey: Int? = null
+            singleDigitSex: UInt,
+            twoDigitYear: UInt,
+            threeDigitsSerialNumber: UInt,
+            twoDigitControlKey: UInt? = null
         ): EID {
             val payload = EidPayload.fromParts(singleDigitSex, twoDigitYear, threeDigitsSerialNumber)
             val controlKey = twoDigitControlKey?.let { EidControlKey(it) } ?: payload.computeValidControlKey()
@@ -33,7 +33,6 @@ class EID(val payload: EidPayload, val controlKey: EidControlKey) {
 }
 
 class EidPayload(val sex: EidSex, val birthYear: EidBirthYear, val serialNumber: EidSerialNumber) {
-    val payload = (sex.toString() + birthYear.toString() + serialNumber.toString()).toInt()
 
     /* TODO evaluate this Copilot suggestion
     init {
@@ -41,18 +40,15 @@ class EidPayload(val sex: EidSex, val birthYear: EidBirthYear, val serialNumber:
     }
      */
 
-    fun getGenderPart(): Int {
-        return sex.key
-    }
-
     fun computeValidControlKey(): EidControlKey {
-        val payloadModulo = payload % 97
-        val complementOfPayloadModulo = 97 - payloadModulo
+        val payload = (sex.toString() + birthYear.toString() + serialNumber.toString()).toUInt()
+        val payloadModulo = payload % 97U
+        val complementOfPayloadModulo = 97U - payloadModulo
         return EidControlKey(complementOfPayloadModulo)
     }
 
     override fun toString(): String {
-        return sex.toString() + birthYear.toString() + serialNumber.toString()
+        return "$sex $birthYear $serialNumber"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -60,17 +56,17 @@ class EidPayload(val sex: EidSex, val birthYear: EidBirthYear, val serialNumber:
     }
 
     override fun hashCode(): Int {
-        return sex.key + birthYear.year + serialNumber.birthOrder
+        return sex.hashCode() + birthYear.hashCode() + serialNumber.hashCode()
     }
 
     companion object {
-        fun fromParts(singleDigitSex: Int, twoDigitYear: Int, threeDigitsSerialNumber: Int): EidPayload {
+        fun fromParts(singleDigitSex: UInt, twoDigitYear: UInt, threeDigitsSerialNumber: UInt): EidPayload {
             return EidPayload(EidSex(singleDigitSex), EidBirthYear(twoDigitYear), EidSerialNumber(threeDigitsSerialNumber))
         }
     }
 }
 
-class EidSex(val key: Int) {
+class EidSex(val key: UInt) {
     override fun toString(): String {
         return key.toString()
     }
@@ -80,11 +76,11 @@ class EidSex(val key: Int) {
     }
 
     override fun hashCode(): Int {
-        return key
+        return key.hashCode()
     }
 }
 
-class EidBirthYear(val year: Int) {
+class EidBirthYear(val year: UInt) {
     override fun toString(): String {
         return year.toString().padStart(2, '0')
     }
@@ -94,11 +90,11 @@ class EidBirthYear(val year: Int) {
     }
 
     override fun hashCode(): Int {
-        return year
+        return year.hashCode()
     }
 }
 
-class EidSerialNumber(val birthOrder: Int) {
+class EidSerialNumber(val birthOrder: UInt) {
     override fun toString(): String {
         return birthOrder.toString().padStart(3, '0')
     }
@@ -108,11 +104,11 @@ class EidSerialNumber(val birthOrder: Int) {
     }
 
     override fun hashCode(): Int {
-        return birthOrder
+        return birthOrder.hashCode()
     }
 }
 
-class EidControlKey(val controlKey: Int) {
+class EidControlKey(val controlKey: UInt) {
     /* TODO evaluate this Copilot suggestion
     init {
         require(controlKey in 0..99) { "Control key must be a two-digit number" }
@@ -128,7 +124,7 @@ class EidControlKey(val controlKey: Int) {
     }
 
     override fun hashCode(): Int {
-        return controlKey
+        return controlKey.hashCode()
     }
 
 }

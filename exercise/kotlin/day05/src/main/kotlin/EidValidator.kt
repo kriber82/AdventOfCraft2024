@@ -1,17 +1,17 @@
 class EidValidator {
     companion object {
         fun isValid(eid: EID): Boolean {
-            if (eid.payload.getGenderPart() > 3) {
+            if (eid.payload.sex.key > 3U) {
                 return false
             }
-            if (eid.payload.getGenderPart() == 0) {
+            if (eid.payload.sex.key == 0U) {
                 return false
             }
 
-            if (eid.payload.birthYear.year > 99) {
+            if (eid.payload.birthYear.year > 99U) {
                 return false
             }
-            if (eid.payload.birthYear.year < 0) {
+            if (eid.payload.birthYear.year < 0U) {
                 return false
             }
 

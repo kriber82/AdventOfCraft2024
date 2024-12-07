@@ -2,17 +2,18 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.int
+import io.kotest.property.arbitrary.uInt
 import io.kotest.property.checkAll
 
 
 class EIDTest : DescribeSpec({
-    val jercivalsValidSampleEid = EID.fromCompleteIdentifier(19800767)
-    val jercivalsEidPayload = EidPayload.fromParts(1, 98, 7)
-    val jercivalsEidControlKey = EidControlKey(67)
+    val jercivalsValidSampleEid = EID.fromCompleteIdentifier(19800767u)
+    val jercivalsEidPayload = EidPayload.fromParts(1u, 98u, 7u)
+    val jercivalsEidControlKey = EidControlKey(67u)
 
-    val validSex = 1
-    val validYear = 0
-    val validSerialNumber = 1
+    val validSex = 1u
+    val validYear = 0u
+    val validSerialNumber = 1u
 
     describe("EidValidator") {
 
@@ -22,7 +23,7 @@ class EIDTest : DescribeSpec({
 
         describe("control key validation") {
             it("should return false for invalid control digits") {
-                val invalidControlKey = 99
+                val invalidControlKey = 99u
                 val invalidEid = EID.fromParts(validSex, validYear, validSerialNumber, invalidControlKey)
                 EidValidator.isValid(invalidEid) shouldBe false
             }
@@ -36,19 +37,19 @@ class EIDTest : DescribeSpec({
 
         describe("sex validation") {
             it("should return false for sexes greater than 3") {
-                val invalidSex = 4
+                val invalidSex = 4u
                 val invalidEidDueToSex = EID.fromParts(invalidSex, validYear, validSerialNumber)
                 EidValidator.isValid(invalidEidDueToSex) shouldBe false
             }
 
             it("should return false for sex 0") {
-                val invalidSex = 0
+                val invalidSex = 0u
                 val invalidEidDueToSex = EID.fromParts(invalidSex, validYear, validSerialNumber)
                 EidValidator.isValid(invalidEidDueToSex) shouldBe false
             }
 
             it("should return true for valid sexes") {
-                checkAll(Arb.int(1..3)) { validSex ->
+                checkAll(Arb.uInt(1u..3u)) { validSex ->
                     EidValidator.isValid(EID.fromParts(validSex, validYear, validSerialNumber)) shouldBe true
                 }
             }
@@ -56,7 +57,7 @@ class EIDTest : DescribeSpec({
 
         describe("birth year validation") {
             it("should return true for valid birth years") {
-                checkAll(Arb.int(0..99)) { validYear ->
+                checkAll(Arb.uInt(0u..99u)) { validYear ->
                     EidValidator.isValid(EID.fromParts(validSex, validYear, validSerialNumber)) shouldBe true
                 }
             }
@@ -79,13 +80,13 @@ class EIDTest : DescribeSpec({
 
     describe("EID") {
         it("should be constructable from individual parts") {
-            EID.fromParts(1, 98, 7, 67) shouldBe jercivalsValidSampleEid
-            EID.fromParts(1, 23, 456, 78) shouldBe EID.fromCompleteIdentifier(12345678)
-            EID.fromParts(1, 0, 0,1) shouldBe EID.fromCompleteIdentifier(10000001)
+            EID.fromParts(1u, 98u, 7u, 67u) shouldBe jercivalsValidSampleEid
+            EID.fromParts(1u, 23u, 456u, 78u) shouldBe EID.fromCompleteIdentifier(12345678u)
+            EID.fromParts(1u, 0u, 0u,1u) shouldBe EID.fromCompleteIdentifier(10000001u)
         }
 
         it("should be constructable from individual parts without explicitly providing control key") {
-            EID.fromParts(1, 98, 7) shouldBe jercivalsValidSampleEid
+            EID.fromParts(1u, 98u, 7u) shouldBe jercivalsValidSampleEid
         }
 
         it("should be constructable from valid full EID number") {
@@ -94,9 +95,9 @@ class EIDTest : DescribeSpec({
         }
 
         it("should be constructable from invalid full EID number") {
-            val constructed = EID.fromCompleteIdentifier(12345678)
-            constructed.payload shouldBe EidPayload.fromParts(1,23,456)
-            constructed.controlKey shouldBe EidControlKey(78)
+            val constructed = EID.fromCompleteIdentifier(12345678u)
+            constructed.payload shouldBe EidPayload.fromParts(1u,23u,456u)
+            constructed.controlKey shouldBe EidControlKey(78u)
         }
 
     }
@@ -112,7 +113,7 @@ class EIDTest : DescribeSpec({
                 payload modulo 97 = 123456 % 97 = 72
                 complement of payload modulo 97 = 97 - payload modulo 97 = 97 - 72 = 25
              */
-            EidPayload.fromParts(1,23,456).computeValidControlKey() shouldBe EidControlKey(25)
+            EidPayload.fromParts(1u,23u,456u).computeValidControlKey() shouldBe EidControlKey(25u)
         }
 
     }

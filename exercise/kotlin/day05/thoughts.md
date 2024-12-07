@@ -95,6 +95,12 @@
   - thanks copilot, for generating a test case with negative birth year -> exception detected
   - discovered new test class: all eid parts could be negative
   - discovered new test: full eid could be negative
+- Scractch refactoring: Use strings to represent individual parts of EID
+  - simplified some things
+  - would have made the creation API of EIDs much less descriptive / type safe
+  - would introduce need for additional validation tests
+- Scratch refactoring: Us Uints to represent individual parts of EID
+  - 
 
 
 - Open tests:
