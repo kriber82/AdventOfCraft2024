@@ -42,6 +42,12 @@ class EidPayload(val payload: Int) {
         return payload.toString().slice(0..0).toInt()
     }
 
+    fun computeValidControlKey(): Int {
+        val payloadModulo = payload % 97
+        val complementOfPayloadModulo = 97 - payloadModulo
+        return complementOfPayloadModulo
+    }
+
     override fun toString(): String {
         return payload.toString().padStart(6, '0')
     }

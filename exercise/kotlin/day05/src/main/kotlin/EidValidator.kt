@@ -5,14 +5,8 @@ class EidValidator {
                 return false
             }
 
-            return eid.getControlDigits() == computeValidControlKey(eid)
+            return eid.getControlDigits() == eid.payload.computeValidControlKey()
         }
 
-        fun computeValidControlKey(eid: EID): Int { // TODO should parameter be eid payload?
-            val payload = eid.getPayloadDigits()
-            val payloadModulo = payload % 97
-            val complementOfPayloadModulo = 97 - payloadModulo
-            return complementOfPayloadModulo
-        }
     }
 }

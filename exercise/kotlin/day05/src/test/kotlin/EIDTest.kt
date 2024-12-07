@@ -16,7 +16,7 @@ class EIDTest : DescribeSpec({
             }
 
             it("should compute valid control digits for payload digits") {
-                EidValidator.computeValidControlKey(jercivalsValidSampleEid) shouldBe jercivalsEidControlKey
+                jercivalsEidPayload.computeValidControlKey() shouldBe jercivalsEidControlKey
             }
         }
 
@@ -24,12 +24,11 @@ class EIDTest : DescribeSpec({
 
             it("should compute valid control digits for payload digits") {
                 /*
-                    eid = 12345678
                     eid payload = first six digits = 123456
                     payload modulo 97 = 123456 % 97 = 72
                     complement of payload modulo 97 = 97 - payload modulo 97 = 97 - 72 = 25
                  */
-                EidValidator.computeValidControlKey(EID(12345678)) shouldBe 25
+                EidPayload(123456).computeValidControlKey() shouldBe 25
             }
 
             it("should not validate due to control digits") {
@@ -46,7 +45,7 @@ class EIDTest : DescribeSpec({
                 val validYear = 0
                 val validSerialNumber = 1
                 val invalidEidWithInvalidControlKey = EID.fromParts(invalidSex, validYear, validSerialNumber, 0)
-                val invalidEidWithValidControlKey = EID.fromParts(invalidSex, validYear, validSerialNumber, EidValidator.computeValidControlKey(invalidEidWithInvalidControlKey))
+                val invalidEidWithValidControlKey = EID.fromParts(invalidSex, validYear, validSerialNumber, invalidEidWithInvalidControlKey.payload.computeValidControlKey())
                 EidValidator.isValid(invalidEidWithValidControlKey) shouldBe false
             }
 
