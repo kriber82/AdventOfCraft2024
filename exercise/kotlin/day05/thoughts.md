@@ -119,10 +119,9 @@
           - would looking at it as some sorte of DTO make validation fit in more nicely?  
 - Test 14: Invalid EID due to serial number = 0
   - observation: the few seconds of compilation due to gradle working in the background puts me slightly out of flow, when running the tests
-
+- Test 15: Valid EIDs with Valid Serial numbers
  
 - Open tests:
-  - Valid EIDs with Valid Serial numbers (Some? all?, probably property based)
   - Invalid EIDs due to more than 8 digits
   - Invalid EIDs due to less than 8 digits
   - fuzz test constructing valid EIDs and putting them through the validator

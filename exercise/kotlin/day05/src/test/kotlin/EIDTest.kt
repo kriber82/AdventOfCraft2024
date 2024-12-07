@@ -82,13 +82,11 @@ class EIDTest : DescribeSpec({
                 EidValidator.isValid(EID.fromParts(validSex, validYear, invalidSerialNumber)) shouldBe false
             }
 
-            /*
             it("should return true for valid serial numbers") {
                 checkAll(Arb.uInt(1u..999u)) { validSerialNumber ->
                     EidValidator.isValid(EID.fromParts(validSex, validYear, validSerialNumber)) shouldBe true
                 }
             }
-            */
         }
     }
 
