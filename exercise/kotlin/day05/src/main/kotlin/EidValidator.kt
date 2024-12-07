@@ -11,7 +11,8 @@ class EidValidator {
             if (eid.payload.birthYear.year > 99U) {
                 return false
             }
-            if (eid.payload.birthYear.year < 0U) {
+
+            if (eid.payload.serialNumber.birthOrder > 999U) {
                 return false
             }
 

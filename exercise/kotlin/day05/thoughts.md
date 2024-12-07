@@ -105,8 +105,9 @@
 - Test 12: Invalid EID due to birth year > 99 (discovered by copilot)
   - new test discovered: invalid EID due to serial number > 999
   - corner case: large individual fields -> NumberFormatException in control key calculation 
+- Test 13: Invalid EID due to serial number > 999
 
-
+ 
 - Open tests:
   - Valid EIDs with Valid Serial numbers (Some? all?, probably property based)
   - invalid EID due to serial number > 999

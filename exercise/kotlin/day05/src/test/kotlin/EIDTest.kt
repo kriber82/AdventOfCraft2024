@@ -68,6 +68,23 @@ class EIDTest : DescribeSpec({
                 }
             }
         }
+
+        describe("serial number validation") {
+
+            it("should return false for serial numbers greater than 999") {
+                checkAll(Arb.uInt(1000u..UInt.MAX_VALUE)) { invalidSerialNumber ->
+                    EidValidator.isValid(EID.fromParts(validSex, validYear, invalidSerialNumber)) shouldBe false
+                }
+            }
+
+            /*
+            it("should return true for valid serial numbers") {
+                checkAll(Arb.uInt(1u..999u)) { validSerialNumber ->
+                    EidValidator.isValid(EID.fromParts(validSex, validYear, validSerialNumber)) shouldBe true
+                }
+            }
+            */
+        }
     }
 
     describe("EID") {
