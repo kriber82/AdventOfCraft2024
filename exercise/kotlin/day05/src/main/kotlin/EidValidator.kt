@@ -1,6 +1,10 @@
 class EidValidator {
     companion object {
         fun isValid(eid: EID): Boolean {
+            if (eid.getGenderPart() > 3) {
+                return false
+            }
+
             return eid.getControlDigits() == computeValidControlKey(eid)
         }
 

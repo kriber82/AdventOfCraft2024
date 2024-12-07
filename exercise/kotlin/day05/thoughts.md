@@ -83,12 +83,15 @@
     - i think so, as sex can't be 0 and other parts are padded
   - will things crash unexpectedly with invalid EIDs?
     - new fuzz test
+- Test x: Valid EID for each Sex (deferred, again)
+  - test for invalid sex first, as it's going to need new behavior
+- Test 8: Invalid EID due to sex > 3
+  - TODO: need a way to construct EIDs with valid control keys from payload
 
 - Open tests:
   - Valid EID for each Sex
   - EID: get birth year
   - EID: get serial number
-  - Invalid EID due to sex > 3
   - Invalid EID due to sex = 0
   - Valid EID for some or all years (property based?)
     - No invalid cases for years (at least, if digits of EID are restricted to numbers)
