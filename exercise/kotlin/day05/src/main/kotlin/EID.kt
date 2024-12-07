@@ -20,19 +20,18 @@ class EID(elfIdentifier: Int) {
     }
 
     companion object {
-        fun fromParts(singleDigitSex: Int, twoDigitYear: Int, threeDigitsSerialNumber: Int, twoDigitControlKey: Int): EID {
-            val sexString = singleDigitSex.toString()
-            val yearString = twoDigitYear.toString().padStart(2, '0')
-            val serialNumberString = threeDigitsSerialNumber.toString().padStart(3, '0')
-            val controlKeyString = twoDigitControlKey.toString().padStart(2, '0')
-            val eidString = sexString + yearString + serialNumberString + controlKeyString
+        fun fromParts(singleDigitSex: Int, twoDigitYear: Int, threeDigitsSerialNumber: Int, twoDigitControlKey: Int? = null): EID {
+            val payload = EidPayload.fromParts(singleDigitSex, twoDigitYear, threeDigitsSerialNumber)
+            val controlKey = twoDigitControlKey ?: payload.computeValidControlKey()
+            val controlKeyString = controlKey.toString().padStart(2, '0')
+            val eidString = payload.toString() + controlKeyString
             return EID(eidString.toInt())
         }
     }
 }
 
 class EidPayload(val payload: Int) {
-    /* TODO evaluate Copilot suggestion
+    /* TODO evaluate this Copilot suggestion
     init {
         require(payload in 0..999999) { "Payload must be a six-digit number" }
     }
@@ -60,4 +59,13 @@ class EidPayload(val payload: Int) {
         return payload
     }
 
+    companion object {
+        fun fromParts(singleDigitSex: Int, twoDigitYear: Int, threeDigitsSerialNumber: Int): EidPayload {
+            val sexString = singleDigitSex.toString()
+            val yearString = twoDigitYear.toString().padStart(2, '0')
+            val serialNumberString = threeDigitsSerialNumber.toString().padStart(3, '0')
+            val payloadString = sexString + yearString + serialNumberString
+            return EidPayload(payloadString.toInt())
+        }
+    }
 }

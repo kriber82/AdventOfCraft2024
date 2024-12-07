@@ -7,6 +7,10 @@ class EIDTest : DescribeSpec({
     val jercivalsEidPayload = EidPayload(198007)
     val jercivalsEidControlKey = 67
 
+    val validSex = 1
+    val validYear = 0
+    val validSerialNumber = 1
+
     describe("EidValidator") {
 
         describe ("sample EID") {
@@ -42,11 +46,8 @@ class EIDTest : DescribeSpec({
         describe("sex validation") {
             it("should return false for sexes greater than 3") {
                 val invalidSex = 4
-                val validYear = 0
-                val validSerialNumber = 1
-                val invalidEidWithInvalidControlKey = EID.fromParts(invalidSex, validYear, validSerialNumber, 0)
-                val invalidEidWithValidControlKey = EID.fromParts(invalidSex, validYear, validSerialNumber, invalidEidWithInvalidControlKey.payload.computeValidControlKey())
-                EidValidator.isValid(invalidEidWithValidControlKey) shouldBe false
+                val invalidEidDueToSex = EID.fromParts(invalidSex, validYear, validSerialNumber)
+                EidValidator.isValid(invalidEidDueToSex) shouldBe false
             }
 
             /*

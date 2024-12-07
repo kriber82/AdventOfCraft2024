@@ -86,7 +86,7 @@
 - Test x: Valid EID for each Sex (deferred, again)
   - test for invalid sex first, as it's going to need new behavior
 - Test 8: Invalid EID due to sex > 3
-  - TODO: need a way to construct EIDs with valid control keys from payload
+- Refactor: Separate EID payload & control key in order to construct EIDs with desired fields easier
 
 - Open tests:
   - Valid EID for each Sex
