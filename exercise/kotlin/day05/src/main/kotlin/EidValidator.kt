@@ -11,7 +11,11 @@ class EidValidator {
         }
 
         private fun isSerialNumberValid(eidSerialNumber: EidSerialNumber): Boolean {
-            if (eidSerialNumber.birthOrder > 999U) {
+            if (eidSerialNumber.birthOrder > 999u) {
+                return false
+            }
+
+            if (eidSerialNumber.birthOrder == 0u) {
                 return false
             }
 
@@ -19,7 +23,7 @@ class EidValidator {
         }
 
         private fun isBirthYearValid(eidBirthYear: EidBirthYear): Boolean {
-            if (eidBirthYear.year > 99U) {
+            if (eidBirthYear.year > 99u) {
                 return false
             }
 

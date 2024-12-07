@@ -106,12 +106,23 @@
   - new test discovered: invalid EID due to serial number > 999
   - corner case: large individual fields -> NumberFormatException in control key calculation 
 - Test 13: Invalid EID due to serial number > 999
+- Refactor: Decomposed validation into payload & control key validation
+  - decomposed payload validation into individual field validation
+  - observation: most validation methods would fit into respective eid field classes nicely
+    - despite that, i like the idea of having them 
+      - collected in one place
+      - separated from the eid
+        - currently I think of the EID as an entity
+          - that's interesting, because i invested quite some effort in order to put as much info about validity into modelling the Eid classes and their field types!
+        - probably a value object would be more appropriate
+        - would looking at it as a value object change my view on where validation belongs?
+          - would looking at it as some sorte of DTO make validation fit in more nicely?  
+- Test 14: Invalid EID due to serial number = 0
+  - observation: the few seconds of compilation due to gradle working in the background puts me slightly out of flow, when running the tests
 
  
 - Open tests:
   - Valid EIDs with Valid Serial numbers (Some? all?, probably property based)
-  - invalid EID due to serial number > 999
-  - Invalid EID due to serial number = 0
   - Invalid EIDs due to more than 8 digits
   - Invalid EIDs due to less than 8 digits
   - fuzz test constructing valid EIDs and putting them through the validator

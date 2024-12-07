@@ -77,6 +77,11 @@ class EIDTest : DescribeSpec({
                 }
             }
 
+            it("should return false for serial numbers equal to 0") {
+                val invalidSerialNumber = 0u
+                EidValidator.isValid(EID.fromParts(validSex, validYear, invalidSerialNumber)) shouldBe false
+            }
+
             /*
             it("should return true for valid serial numbers") {
                 checkAll(Arb.uInt(1u..999u)) { validSerialNumber ->
