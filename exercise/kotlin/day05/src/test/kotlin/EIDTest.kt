@@ -137,7 +137,6 @@ class EIDTest : DescribeSpec({
                     EidValidator.isValid(validEid) shouldBe true
                 }
             }
-
         }
 
     }

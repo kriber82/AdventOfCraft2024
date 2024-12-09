@@ -1,5 +1,28 @@
 # Advent of Craft 2024 - Day 5
 
+## TL;DR - Thoughts after the session
+- Keep test list from Canon TDD! - very valuable. Helps to:
+  - Keep the risk (and fear) of forgetting cases at bay
+  - Stay focus on the task at hand
+- Keeping changesets small worked out well, despite not following the "3 laws of TDD"
+- Using a whole number as input for EIDs initially (despite having a bad feeling of complicating things) was not a good choice
+  - I still consider driving the interface from the tests a great idea in general
+  - Disregarding my gut feeling about implications on the implementation was not a good idea (in the context of this exercise)
+    - The exercise does not have realistic amounts and complexity of using code, which would make prioritizing simplicity of usage more sensible
+- Validation exercise was surprisingly hard, as each EID representation I could think of had impactful drawbacks
+  - Was I overthinking? -> maybe try again later, without elaborate data structures
+  - ! TODO maybe try again later, with most of the validation happening on construction of the EID and its components
+  - Realized, I don't have much validation experience. Should probably read about and practice this a little more.
+- Some of the fuzzed tests discovered interesting cases
+  - How much fuzzing / property based testing is sensible?
+  - Is there a good heuristic for finding good candidates for selective fuzzing?
+  - Is my approach of only being defensive on public APIs still valid with today's increased awareness for security?
+- Github copilot was a small efficiency boost, but didn't surprise me as much as GPT did
+  - nice that it helps reduce typing with good autocompletion suggestions in many cases
+  - much more helpful than IDEA's AI assistant - seems to have way more context
+  - stressfull, that it triggers when indenting lists
+  - Did not find a good way to use it as efficiently as GPT for high-level refactorings
+
 ## Before implementing
 
 - Skimmed through the Canon TDD article, but never read it fully and never tried -> love the opportunity
@@ -17,10 +40,9 @@
     - What about non-ternary gender?
     - Can Elves be older than 100 years? In that case, 2 digits for year of birth would not suffice to ensure uniqueness
       - Can elves die at all? 
-    - Are there Elf-Twins? How would birth order be handled in this case
-    - Can two Elves be born at the same time?
+    - Can two Elves be born at the same time? How would birth order be handled in this case
     - Is the birth number per year, or is the population of elves limited to 999?
-    - Are EIDs freed up on death, with some delay, or not at all? The latter would present a huge problem in 100 years!
+    - Are EIDs freed immediately up on death, with some delay, or not at all? The latter would present a huge problem in 100 years!
   - Back to validation (with a test list):
     - Valid EID for each Sex
     - Invalid EID due to sex > 3
@@ -40,7 +62,7 @@
         - maybe individual test for complement
         - might also be candidates for "fake it till you make it" / triangulation
     - Invalid EIDs due to control key not matching
-  - Will give github copilot a try, as ai assistant was very disappointing
+  - Will give github copilot a try, as IDEAs AI Assistant was very disappointing
 
 ## Implementation
 
@@ -125,9 +147,7 @@
 - Test 17: Invalid EIDs due to less than 8 digits
   - finding a good solution to handle less than 8 digits was surprisingly hard, although the solution I arrived at is rather straightforward
 - Test 18: Fuzz test constructing valid EIDs from parts and putting them through the validator
-
-
-- Open tests:
-  - fuzz test constructing valid EIDs and putting them through the validator
-  - fuzz test EIDs through constructor? (think it won't be easy to construct valid and invalid ones here, separately here)
-  - fuzz more tests
+Dropped tests (diminishing learing returns anticipated):
+- fuzz test constructing valid EIDs and putting them through the validator (skipped is it's hard to express in a sensible way)
+- fuzz test EIDs through constructor? (think it won't be easy to construct valid and invalid ones here, separately here)
+- fuzz more tests
