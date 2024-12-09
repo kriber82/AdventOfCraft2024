@@ -124,10 +124,10 @@
   - actually helped discover a bug in creating EIDs keys from full EID number 
 - Test 17: Invalid EIDs due to less than 8 digits
   - finding a good solution to handle less than 8 digits was surprisingly hard, although the solution I arrived at is rather straightforward
+- Test 18: Fuzz test constructing valid EIDs from parts and putting them through the validator
 
 
 - Open tests:
   - fuzz test constructing valid EIDs and putting them through the validator
-  - fuzz test constructing valid EIDs from parts and putting them through the validator
   - fuzz test EIDs through constructor? (think it won't be easy to construct valid and invalid ones here, separately here)
   - fuzz more tests
