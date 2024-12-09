@@ -1,0 +1,153 @@
+# Advent of Craft 2024 - Day 5
+
+## TL;DR - Thoughts after the session
+- Keep test list from Canon TDD! - very valuable. Helps to:
+  - Keep the risk (and fear) of forgetting cases at bay
+  - Stay focus on the task at hand
+- Keeping changesets small worked out well, despite not following the "3 laws of TDD"
+- Using a whole number as input for EIDs initially (despite having a bad feeling of complicating things) was not a good choice
+  - I still consider driving the interface from the tests a great idea in general
+  - Disregarding my gut feeling about implications on the implementation was not a good idea (in the context of this exercise)
+    - The exercise does not have realistic amounts and complexity of using code, which would make prioritizing simplicity of usage more sensible
+- Validation exercise was surprisingly hard, as each EID representation I could think of had impactful drawbacks
+  - Was I overthinking? -> maybe try again later, without elaborate data structures
+  - ! TODO maybe try again later, with most of the validation happening on construction of the EID and its components
+  - Realized, I don't have much validation experience. Should probably read about and practice this a little more.
+- Some of the fuzzed tests discovered interesting cases
+  - How much fuzzing / property based testing is sensible?
+  - Is there a good heuristic for finding good candidates for selective fuzzing?
+  - Is my approach of only being defensive on public APIs still valid with today's increased awareness for security?
+- Github copilot was a small efficiency boost, but didn't surprise me as much as GPT did
+  - nice that it helps reduce typing with good autocompletion suggestions in many cases
+  - much more helpful than IDEA's AI assistant - seems to have way more context
+  - stressfull, that it triggers when indenting lists
+  - Did not find a good way to use it as efficiently as GPT for high-level refactorings
+
+## Before implementing
+
+- Skimmed through the Canon TDD article, but never read it fully and never tried -> love the opportunity
+
+### Observations about Canon TDD:
+- Not used to working with a pre-written test list - curious how that turns out
+- Does not prescribe baby steps, as far as I can tell. Will try whole test as step-width
+- I like how interface/implementation split is highlighted. Will try to leak as little implementation into the red phase as possible
+
+### EID task:
+- I loved the other days focussing on refactoring or testing aspects without much prod implementation, but greenfield is great for a change :-D
+- Main task: *Validation* of Elf Ids (EID)
+  - Components of EID: Sex, Year of Birth, Serial # / Birth order, Control Key
+  - Several interesting questions about the EID come to my mind, but most have nothing to do with validation. Will list some here, for my own and your amusement ;-)
+    - What about non-ternary gender?
+    - Can Elves be older than 100 years? In that case, 2 digits for year of birth would not suffice to ensure uniqueness
+      - Can elves die at all? 
+    - Can two Elves be born at the same time? How would birth order be handled in this case
+    - Is the birth number per year, or is the population of elves limited to 999?
+    - Are EIDs freed immediately up on death, with some delay, or not at all? The latter would present a huge problem in 100 years!
+  - Back to validation (with a test list):
+    - Valid EID for each Sex
+    - Invalid EID due to sex > 3
+    - Invalid EID due to sex = 0
+    - Valid EID for some or all years (property based?)
+      - No invalid cases for years (at least, if digits of EID are restricted to numbers)
+    - (Design choice: Are EIDs Strings or numbers? Or a number for each field?)
+    - Valid EIDs with Valid Serial numbers (Some? all?, probably property based)
+    - Invalid EID due to serial number = 0
+    - Valid EIDs with control key matching previous digits modulo 97
+      - Might first need to test-drive forming the number of first 6 digits
+      - concept not entirely clear yet, checking example EID:
+        - 198007 % 97 = 30 => not just modulo
+        - complement to 97 => 97 - x => 97 - 30 = 67 ☑
+      - Some examples of calculating the control key
+        - maybe individual test for modulo 
+        - maybe individual test for complement
+        - might also be candidates for "fake it till you make it" / triangulation
+    - Invalid EIDs due to control key not matching
+  - Will give github copilot a try, as IDEAs AI Assistant was very disappointing
+
+## Implementation
+
+- New First test discovered: Sample EID is valid
+  - Choice: EID from individual fields numbers or string?
+    - individual numbers? feels complicated
+    - string? seems simpler, but opens up a plethora of failure modes
+      - take string now and introduce parsing code? seems complicated as well
+    - whole number? simplest external interface, but with fear of complicating implementation
+    - => lean into interface / impl separation and use whole number
+- Test x: Compute control key from first six digits (new, deferred)
+  - Which one? In order to craft more tests, being able to compute valid control keys would be nice
+  - Design question: What would be the input for computing the control key?
+    - Option: Split EID into data and validation?
+    - Option: Function for extracting first six digits from whole EID number?
+      - => Test for that first!
+  - New test discovered: Invalid EIDs due to more than 8 digits
+  - New test discovered: Invalid EIDs due to less than 8 digits
+- Test 2: Extract first six digits from full EID (new)
+  - observation: fluidly switching to testing an aspect I see on EID, rather than on the validator
+  - observation: reasoning about eid parts will need accessors for them -> new tests
+- Test 3: Compute control key from first six digits
+  - decided to experiment with nested tests in DescribeSpec
+  - split tests into EID and EidValidator ☑
+- Test 4: EID: get control key
+- Test 5: Invalid EIDs due to control key not matching
+- Test 6: EID: get gender
+  - observation: having the test list seems to reduce cognitive load :-)
+- Test x: Valid EID for each Sex (deferred)
+  - formulating these tests without a way of constructing an EID from its parts is hard -> new test & deferred
+- Test 7: construct EID from parts
+  - observation: the many possibilities for invalid input are overwhelming
+    - when using individual numbers, string formatting would be necessary to construct full EID
+    - when using individual strings, non-numeric input would need to be handled
+    - idea: break down eid in parts that can validate themselves? 
+    - idea: don't validate individual inputs?
+    - => try string-formatting individual numbers
+  - do all valid EIDs end up having 8 digits with my representation?
+    - new fuzz test
+    - i think so, as sex can't be 0 and other parts are padded
+  - will things crash unexpectedly with invalid EIDs?
+    - new fuzz test
+- Test x: Valid EID for each Sex (deferred, again)
+  - test for invalid sex first, as it's going to need new behavior
+- Test 8: Invalid EID due to sex > 3
+- Refactor: Separate EID payload & control key in order to construct EIDs with desired fields easier
+- Test 9: Invalid EID due to sex = 0
+  - finally forced me to introduce individual payload fields, things should be easier now
+  - was a rather big refactoring step
+- Test 10: Valid EID for each Sex
+- Test 11: Valid EID for some or all years (property based?)
+  - thanks copilot, for generating a test case with negative birth year -> exception detected
+  - discovered new test class: all eid parts could be negative
+  - discovered new test: full eid could be negative
+- Scractch refactoring: Use strings to represent individual parts of EID
+  - simplified some things
+  - would have made the creation API of EIDs much less descriptive / type safe
+  - would introduce need for additional validation tests
+  - not convinced => scratched
+- Scratch refactoring: Us Uints to represent individual parts of EID
+  - like the result => kept
+- Test 12: Invalid EID due to birth year > 99 (discovered by copilot)
+  - new test discovered: invalid EID due to serial number > 999
+  - corner case: large individual fields -> NumberFormatException in control key calculation 
+- Test 13: Invalid EID due to serial number > 999
+- Refactor: Decomposed validation into payload & control key validation
+  - decomposed payload validation into individual field validation
+  - observation: most validation methods would fit into respective eid field classes nicely
+    - despite that, i like the idea of having them 
+      - collected in one place
+      - separated from the eid
+        - currently I think of the EID as an entity
+          - that's interesting, because i invested quite some effort in order to put as much info about validity into modelling the Eid classes and their field types!
+        - probably a value object would be more appropriate
+        - would looking at it as a value object change my view on where validation belongs?
+          - would looking at it as some sorte of DTO make validation fit in more nicely?  
+- Test 14: Invalid EID due to serial number = 0
+  - observation: the few seconds of compilation due to gradle working in the background puts me slightly out of flow, when running the tests
+- Test 15: Valid EIDs with Valid Serial numbers
+- Test 16: Invalid EIDs due to more than 8 digits
+  - actually helped discover a bug in creating EIDs keys from full EID number 
+- Test 17: Invalid EIDs due to less than 8 digits
+  - finding a good solution to handle less than 8 digits was surprisingly hard, although the solution I arrived at is rather straightforward
+- Test 18: Fuzz test constructing valid EIDs from parts and putting them through the validator
+Dropped tests (diminishing learing returns anticipated):
+- fuzz test constructing valid EIDs and putting them through the validator (skipped is it's hard to express in a sensible way)
+- fuzz test EIDs through constructor? (think it won't be easy to construct valid and invalid ones here, separately here)
+- fuzz more tests
