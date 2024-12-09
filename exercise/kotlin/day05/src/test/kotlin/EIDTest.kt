@@ -1,13 +1,12 @@
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
-import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.uInt
 import io.kotest.property.checkAll
 
 
 class EIDTest : DescribeSpec({
-    val jercivalsValidSampleEid = EID.fromCompleteIdentifier(19800767u)
+    val jercivalsValidSampleEid = EID.fromCompleteIdentifier(19800767u).get()
     val jercivalsEidPayload = EidPayload.fromParts(1u, 98u, 7u)
     val jercivalsEidControlKey = EidControlKey(67u)
 
@@ -102,14 +101,31 @@ class EIDTest : DescribeSpec({
                 EidValidator.isValid(invalidEid) shouldBe false
             }
 
+            it("should return false for EIDs with less than 8 digits") {
+                checkAll(Arb.uInt(0u..9999999u)) { invalidEidInput ->
+                    println(invalidEidInput)
+                    val invalidEid = EID.fromCompleteIdentifier(invalidEidInput)
+                    EidValidator.isValid(invalidEid) shouldBe false
+                }
+            }
+
+            it("should return false without crashing for EIDs with no digits") {
+                val invalidEid = EID.fromCompleteIdentifier(0u)
+                EidValidator.isValid(invalidEid) shouldBe false
+            }
+
+            it("should return false without crashing for EIDs with less than 8 digits (bug reproduction)") {
+                val invalidEid = EID.fromCompleteIdentifier(2931313u)
+                EidValidator.isValid(invalidEid) shouldBe false
+            }
         }
     }
 
     describe("EID") {
         it("should be constructable from individual parts") {
             EID.fromParts(1u, 98u, 7u, 67u) shouldBe jercivalsValidSampleEid
-            EID.fromParts(1u, 23u, 456u, 78u) shouldBe EID.fromCompleteIdentifier(12345678u)
-            EID.fromParts(1u, 0u, 0u,1u) shouldBe EID.fromCompleteIdentifier(10000001u)
+            EID.fromParts(1u, 23u, 456u, 78u) shouldBe EID.fromCompleteIdentifier(12345678u).get()
+            EID.fromParts(1u, 0u, 0u,1u) shouldBe EID.fromCompleteIdentifier(10000001u).get()
         }
 
         it("should be constructable from individual parts without explicitly providing control key") {
@@ -122,7 +138,7 @@ class EIDTest : DescribeSpec({
         }
 
         it("should be constructable from invalid full EID number") {
-            val constructed = EID.fromCompleteIdentifier(12345678u)
+            val constructed = EID.fromCompleteIdentifier(12345678u).get()
             constructed.payload shouldBe EidPayload.fromParts(1u,23u,456u)
             constructed.controlKey shouldBe EidControlKey(78u)
         }

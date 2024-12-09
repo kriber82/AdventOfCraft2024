@@ -1,7 +1,17 @@
+import java.util.*
+
 class EidValidator {
     companion object {
         fun isValid(eid: EID): Boolean {
             return isPayloadValid(eid.payload) && isControlKeyValid(eid)
+        }
+
+        fun isValid(optionalEid: Optional<EID>): Boolean {
+            if (optionalEid.isEmpty) {
+                return false
+            }
+
+            return isValid(optionalEid.get())
         }
 
         private fun isPayloadValid(eidPayload: EidPayload): Boolean {
