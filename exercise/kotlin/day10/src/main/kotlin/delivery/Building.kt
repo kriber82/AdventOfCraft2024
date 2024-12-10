@@ -2,7 +2,6 @@ package delivery
 
 object Building {
     fun whichFloor(instructions: String): Int {
-        val valList = mutableListOf<Pair<Char, Int>>()
         var result = 0
 
         for (i in instructions.indices) {
@@ -20,10 +19,6 @@ object Building {
             } else {
                 result += if (c == '(') 42 else -2
             }
-        }
-
-        for (kp in valList) {
-            result += kp.second
         }
 
         return result
