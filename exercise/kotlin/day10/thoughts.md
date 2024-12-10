@@ -32,5 +32,8 @@
 - Next: Refactor tests to include instructions in test instead of files (for clarity and speed)
   - Hopefully this was not some kind of BDD test, which Santa wants access to
 - Next: Split tests to reflect distinct cases of 🧝 presence
+- Next: Add some simple test cases, for easy demonstrating of the floor changing rules
+  - will not add test names, in the hope of not completely losing the elves
+  - maybe I should ask the elves to pair-program tomorrow, in order to develop a shared understanding of how they'd like to have their code structured 
 
 ## Open points
