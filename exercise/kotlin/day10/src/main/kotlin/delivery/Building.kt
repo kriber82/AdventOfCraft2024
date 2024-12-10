@@ -7,14 +7,15 @@ object Building {
         for (i in instructions.indices) {
             val c = instructions[i]
 
-            if (instructions.contains("🧝")) {
+            val inputContainsElf = instructions.contains("🧝")
+            if (inputContainsElf) {
                 val j = when (c) {
                     ')' -> 3
                     '(' -> -2
                     else -> 0
                 }
                 result += j
-            } else if (!instructions.contains("🧝")) {
+            } else if (!inputContainsElf) {
                 result += if (c == '(') 1 else -1
             } else {
                 result += if (c == '(') 42 else -2
