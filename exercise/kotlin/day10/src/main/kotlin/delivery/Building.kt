@@ -16,7 +16,11 @@ object Building {
                 }
                 result += j
             } else {
-                val j = if (c == '(') 1 else -1
+                val j = when (c) {
+                    '(' -> 1
+                    ')' -> -1
+                    else -> 0
+                }
                 result += j
             }
         }
