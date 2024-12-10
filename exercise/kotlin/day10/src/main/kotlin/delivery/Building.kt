@@ -9,8 +9,8 @@ object Building {
 
             val inputContainsElf = instructions.contains("🧝")
             val j: Int = when (c) {
-                    '(' -> if (inputContainsElf) -2 else 1
-                    ')' -> if (inputContainsElf) 3 else -1
+                    '(' -> floorChangeOpenParen(inputContainsElf)
+                    ')' -> floorChangeClosingParen(inputContainsElf)
                     else -> 0
                 }
             result += j
@@ -18,4 +18,7 @@ object Building {
 
         return result
     }
+
+    private fun floorChangeOpenParen(inputContainsElf: Boolean) = if (inputContainsElf) -2 else 1
+    private fun floorChangeClosingParen(inputContainsElf: Boolean) = if (inputContainsElf) 3 else -1
 }
