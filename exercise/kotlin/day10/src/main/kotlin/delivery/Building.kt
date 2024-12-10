@@ -6,16 +6,17 @@ object Building {
         ')' to 3
     )
 
-    private val floorChangeByCharacterWithoutElfPresent = mapOf(
+    private val floorChangeByCharacterDefault = mapOf(
         '(' to 1,
         ')' to -1
     )
 
     fun whichFloor(instructions: String): Int {
-        val floorChangeByCharacter = if (instructions.contains("🧝"))
-            floorChangeByCharacterWithElfPresent
-        else
-            floorChangeByCharacterWithoutElfPresent
+        val applyElfRules = instructions.contains("🧝")
+        val floorChangeByCharacter = when {
+            applyElfRules -> floorChangeByCharacterWithElfPresent
+            else -> floorChangeByCharacterDefault
+        }
 
         return instructions
             .map { floorChangeByCharacter[it] ?: 0 }
