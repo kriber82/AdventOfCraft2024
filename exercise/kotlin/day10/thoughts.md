@@ -29,7 +29,7 @@
   - I'm tempted to introduce some kind of strategy for increasing and decreasing based on presence of the 🧝, but for two cases this seems to be overkill
   - The idea with using a map turned out nice, no more need for a strategy
 - Next: Simplify for loop
+- Next: Refactor tests to include instructions in test instead of files (for clarity and speed)
+  - Hopefully this was not some kind of BDD test, which Santa wants access to
 
 ## Open points
-
-- [ ] Refactor tests to include instructions in test instead of files (for clarity and speed)
