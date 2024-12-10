@@ -10,8 +10,8 @@ object Building {
             val inputContainsElf = instructions.contains("🧝")
             if (inputContainsElf) {
                 val j = when (c) {
-                    ')' -> 3
                     '(' -> -2
+                    ')' -> 3
                     else -> 0
                 }
                 result += j
