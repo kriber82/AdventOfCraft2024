@@ -10,14 +10,14 @@ object Building {
             val inputContainsElf = instructions.contains("🧝")
             val j: Int = if (inputContainsElf) {
                 when (c) {
-                    '(' -> -2
-                    ')' -> 3
+                    '(' -> if (inputContainsElf) -2 else 1
+                    ')' -> if (inputContainsElf) 3 else -1
                     else -> 0
                 }
             } else {
                 when (c) {
-                    '(' -> 1
-                    ')' -> -1
+                    '(' -> if (inputContainsElf) -2 else 1
+                    ')' -> if (inputContainsElf) 3 else -1
                     else -> 0
                 }
             }
