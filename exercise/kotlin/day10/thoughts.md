@@ -26,6 +26,8 @@
 - Let's get rid of the unneccesary list first
 - Next: Check if we can remove the third branch
 - Next: Let's move the decision about floor steps out of the loop
+  - I'm tempted to introduce some kind of strategy for increasing and decreasing based on presence of the 🧝, but for two cases this seems to be overkill
+  - 
 
 ## Open points
 
