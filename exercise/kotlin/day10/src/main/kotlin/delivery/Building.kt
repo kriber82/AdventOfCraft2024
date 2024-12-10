@@ -9,7 +9,11 @@ object Building {
             val c = instructions[i]
 
             if (instructions.contains("🧝")) {
-                val j = if (c == ')') 3 else -2
+                val j = when (c) {
+                    ')' -> 3
+                    '(' -> -2
+                    else -> 0
+                }
                 valList.add(Pair(c, j))
             } else if (!instructions.contains("🧝")) {
                 valList.add(Pair(c, if (c == '(') 1 else -1))
