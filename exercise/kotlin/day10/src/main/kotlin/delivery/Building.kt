@@ -1,12 +1,12 @@
 package delivery
 
 object Building {
-    val floorChangeByCharacterWithElfPresent = mapOf(
+    private val floorChangeByCharacterWithElfPresent = mapOf(
         '(' to -2,
         ')' to 3
     )
 
-    val floorChangeByCharacterWithoutElfPresent = mapOf(
+    private val floorChangeByCharacterWithoutElfPresent = mapOf(
         '(' to 1,
         ')' to -1
     )
@@ -17,15 +17,9 @@ object Building {
         else
             floorChangeByCharacterWithoutElfPresent
 
-        var result = 0
-        for (char in instructions) {
-            val j = floorChangeByCharacter[char] ?: 0
-            result += j
-        }
-        result = instructions
+        return instructions
             .map { floorChangeByCharacter[it] ?: 0 }
             .sum()
-        return result
     }
 
 }
