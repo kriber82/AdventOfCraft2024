@@ -18,11 +18,13 @@ object Building {
             floorChangeByCharacterWithoutElfPresent
 
         var result = 0
-        for (i in instructions.indices) {
-            val c = instructions[i]
-            val j = floorChangeByCharacter[c] ?: 0
+        for (char in instructions) {
+            val j = floorChangeByCharacter[char] ?: 0
             result += j
         }
+        result = instructions
+            .map { floorChangeByCharacter[it] ?: 0 }
+            .sum()
         return result
     }
 
