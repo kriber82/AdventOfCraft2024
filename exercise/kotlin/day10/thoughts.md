@@ -1,5 +1,13 @@
 # Day 10: Fix a bug - Thoughts
 
+## TL;DR - My personal highlights
+
+- That was a fun one, and also pretty quick for me
+- Hope the elves don't mind all the "improvements" I made to their code
+- Extracting the floor change constants out of the loop with a chain of tiny, mainly automated refactorings was not as simple, as I think it should be. Probably I'm missing something here.
+  - Ask the others, if they found a simple, mostly automated way to do this
+  - Or try what ChatGPT would've done
+
 ## Before reading code
 
 - Finally, I find time to work on Advent of Craft again. Hope I didn't miss relevant skills or knowledge from the skipped days
@@ -23,7 +31,7 @@
     - Hunch: Maybe we need to ignore the 🧝 in the input
       - Let's try!
       - That's it! 🎉
-- Let's get rid of the unneccesary list first
+- Let's get rid of the unnecessary list first
 - Next: Check if we can remove the third branch
 - Next: Let's move the decision about floor steps out of the loop
   - I'm tempted to introduce some kind of strategy for increasing and decreasing based on presence of the 🧝, but for two cases this seems to be overkill
@@ -34,6 +42,7 @@
 - Next: Split tests to reflect distinct cases of 🧝 presence
 - Next: Add some simple test cases, for easy demonstrating of the floor changing rules
   - will not add test names, in the hope of not completely losing the elves
-  - maybe I should ask the elves to pair-program tomorrow, in order to develop a shared understanding of how they'd like to have their code structured 
+  - maybe I should ask the elves to pair-program tomorrow,
+    - that way we might develop a shared understanding of how they'd like to have their code structured 
 
 ## Open points
