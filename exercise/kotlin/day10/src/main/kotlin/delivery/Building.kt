@@ -12,19 +12,17 @@ object Building {
     )
 
     fun whichFloor(instructions: String): Int {
-        var result = 0
-
         val floorChangeByCharacter = if (instructions.contains("🧝"))
             floorChangeByCharacterWithElfPresent
         else
             floorChangeByCharacterWithoutElfPresent
 
+        var result = 0
         for (i in instructions.indices) {
             val c = instructions[i]
             val j = floorChangeByCharacter[c] ?: 0
             result += j
         }
-
         return result
     }
 
