@@ -15,7 +15,7 @@ object Building {
                     else -> 0
                 }
                 result += j
-            } else if (!inputContainsElf) {
+            } else if (true) {
                 result += if (c == '(') 1 else -1
             } else {
                 result += if (c == '(') 42 else -2
