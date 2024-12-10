@@ -25,6 +25,7 @@
       - That's it! 🎉
 - Let's get rid of the unneccesary list first
 - Next: Check if we can remove the third branch
+- Next: Let's move the decision about floor steps out of the loop
 
 ## Open points
 
