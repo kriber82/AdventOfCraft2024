@@ -46,3 +46,4 @@
     - that way we might develop a shared understanding of how they'd like to have their code structured 
 
 ## Open points
+- Delete the test files, if the elves are fine with the new tests
