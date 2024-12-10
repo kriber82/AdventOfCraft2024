@@ -8,19 +8,11 @@ object Building {
             val c = instructions[i]
 
             val inputContainsElf = instructions.contains("🧝")
-            val j: Int = if (inputContainsElf) {
-                when (c) {
+            val j: Int = when (c) {
                     '(' -> if (inputContainsElf) -2 else 1
                     ')' -> if (inputContainsElf) 3 else -1
                     else -> 0
                 }
-            } else {
-                when (c) {
-                    '(' -> if (inputContainsElf) -2 else 1
-                    ')' -> if (inputContainsElf) 3 else -1
-                    else -> 0
-                }
-            }
             result += j
         }
 
