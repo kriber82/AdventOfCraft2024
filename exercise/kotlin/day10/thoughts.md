@@ -23,6 +23,7 @@
         - Hunch: Maybe we need to ignore the 🧝 in the input
           - Let's try!
           - That's it! 🎉
+    - Let's get rid of the unneccesary list first
 
 ## Open points
 

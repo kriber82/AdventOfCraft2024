@@ -14,11 +14,11 @@ object Building {
                     '(' -> -2
                     else -> 0
                 }
-                valList.add(Pair(c, j))
+                result += j
             } else if (!instructions.contains("🧝")) {
-                valList.add(Pair(c, if (c == '(') 1 else -1))
+                result += if (c == '(') 1 else -1
             } else {
-                valList.add(Pair(c, if (c == '(') 42 else -2))
+                result += if (c == '(') 42 else -2
             }
         }
 
