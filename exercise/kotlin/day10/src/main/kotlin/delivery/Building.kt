@@ -19,19 +19,9 @@ object Building {
         else
             floorChangeByCharacterWithoutElfPresent
 
-        val inputContainsElf = instructions.contains("🧝")
-        val floorChangeOnOpeningParenthesis = if (inputContainsElf) -2 else 1
-        val floorChangeOnClosingParenthesise = if (inputContainsElf) 3 else -1
-
         for (i in instructions.indices) {
             val c = instructions[i]
-
-            var j: Int = when (c) {
-                '(' -> floorChangeOnOpeningParenthesis
-                ')' -> floorChangeOnClosingParenthesise
-                else -> 0
-            }
-            j = floorChangeByCharacter[c] ?: 0
+            val j = floorChangeByCharacter[c] ?: 0
             result += j
         }
 
