@@ -4,13 +4,16 @@ object Building {
     fun whichFloor(instructions: String): Int {
         var result = 0
 
+        val inputContainsElf = instructions.contains("🧝")
+        val floorChangeOnOpeningParenthesis = floorChangeOpenParen(inputContainsElf)
+        val floorChangeOnClosingParenthesise = floorChangeClosingParen(inputContainsElf)
+
         for (i in instructions.indices) {
             val c = instructions[i]
 
-            val inputContainsElf = instructions.contains("🧝")
             val j: Int = when (c) {
-                    '(' -> floorChangeOpenParen(inputContainsElf)
-                    ')' -> floorChangeClosingParen(inputContainsElf)
+                    '(' -> floorChangeOnOpeningParenthesis
+                    ')' -> floorChangeOnClosingParenthesise
                     else -> 0
                 }
             result += j
