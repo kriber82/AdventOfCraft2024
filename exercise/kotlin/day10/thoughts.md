@@ -31,5 +31,6 @@
 - Next: Simplify for loop
 - Next: Refactor tests to include instructions in test instead of files (for clarity and speed)
   - Hopefully this was not some kind of BDD test, which Santa wants access to
+- Next: Split tests to reflect distinct cases of 🧝 presence
 
 ## Open points
