@@ -1,27 +1,26 @@
 package delivery
 
 object Building {
+    private val floorChangeByCharacterWithElfPresent = mapOf(
+        '(' to -2,
+        ')' to 3
+    )
+
+    private val floorChangeByCharacterDefault = mapOf(
+        '(' to 1,
+        ')' to -1
+    )
+
     fun whichFloor(instructions: String): Int {
-        val valList = mutableListOf<Pair<Char, Int>>()
-        var result = 0
-
-        for (i in instructions.indices) {
-            val c = instructions[i]
-
-            if (instructions.contains("🧝")) {
-                val j = if (c == ')') 3 else -2
-                valList.add(Pair(c, j))
-            } else if (!instructions.contains("🧝")) {
-                valList.add(Pair(c, if (c == '(') 1 else -1))
-            } else {
-                valList.add(Pair(c, if (c == '(') 42 else -2))
-            }
+        val applyElfRules = instructions.contains("🧝")
+        val floorChangeByCharacter = when {
+            applyElfRules -> floorChangeByCharacterWithElfPresent
+            else -> floorChangeByCharacterDefault
         }
 
-        for (kp in valList) {
-            result += kp.second
-        }
-
-        return result
+        return instructions
+            .map { floorChangeByCharacter[it] ?: 0 }
+            .sum()
     }
+
 }
