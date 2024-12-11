@@ -84,7 +84,7 @@
                         <param>christmas.*</param> <!-- Adjust according to your test packages -->
                     </targetTests>
                     <mutators>
-                        <mutator>DEFAULT</mutator>
+                        <mutator>STRONGER</mutator>
                     </mutators>
                 </configuration>
                 <dependencies>

@@ -3,7 +3,6 @@ package christmas;
 import com.code_intelligence.jazzer.api.FuzzedDataProvider;
 import com.code_intelligence.jazzer.junit.FuzzTest;
 import net.datafaker.Faker;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -50,8 +49,11 @@ class PreparationTests {
             "EDUCATIONAL, 25, 100, true",
             "FUN, 30, 100, true",
             "CREATIVE, 20, 100, true",
+            "EDUCATIONAL, 249, 1000, false",
             "EDUCATIONAL, 20, 100, false",
+            "FUN, 299, 1000, false",
             "FUN, 29, 100, false",
+            "CREATIVE, 199, 1000, false",
             "CREATIVE, 15, 100, false"
     })
     void ensureToyBalance(ToyType toyType, int toysCount, int totalToys, boolean expected) {

@@ -20,3 +20,7 @@
 - toying with jazzer
   - found div by zero problems in several variations (+/- small constants, +/- other var) rather quickly
     - to introduce div by zero, i changed `(double) toysCount / totalToys` to variations of `(double) (toysCount / totalToys)`
+- more toying with pitest, trying to get it to detect the bad detection of double constant changes
+  - using STRONGER and ALL mutations did not help
+  - found no docs of more double mutators in arcmutate (paid extension), but didn't bother to try
+  - gave up and created additional testcases without a tool telling me to 
