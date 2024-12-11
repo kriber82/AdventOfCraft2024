@@ -1,11 +1,19 @@
 package christmas;
 
+import net.datafaker.Faker;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PreparationTests {
+
+    private static final Faker faker = new Faker();
 
     @ParameterizedTest
     @CsvSource({
@@ -47,5 +55,41 @@ class PreparationTests {
     void ensureToyBalance(ToyType toyType, int toysCount, int totalToys, boolean expected) {
         boolean result = Preparation.ensureToyBalance(toyType, toysCount, totalToys);
         assertThat(result).isEqualTo(expected);
+    }
+
+    // "Fuzz" tests using datafaker -> not that clever
+
+    @ParameterizedTest
+    @MethodSource
+    void prepareGiftsShouldNotCrashWithRandomInput(int numberOfGifts) {
+        Preparation.prepareGifts(numberOfGifts);
+    }
+
+    static Stream<Arguments> prepareGiftsShouldNotCrashWithRandomInput() {
+        return Stream.generate(() -> Arguments.of(faker.random().nextInt()))
+                .limit(10000);
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void categorizeGiftShouldNotCrashWithRandomInput(int age) {
+        Preparation.categorizeGift(age);
+    }
+
+    static Stream<Arguments> categorizeGiftShouldNotCrashWithRandomInput() {
+        return Stream.generate(() -> Arguments.of(faker.random().nextInt()))
+                .limit(10000);
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void ensureToyBalanceShouldNotCrashWithRandomInput(ToyType toyType, int toysCount, int totalToys) {
+        Preparation.ensureToyBalance(toyType, toysCount, totalToys);
+    }
+
+    static Stream<Arguments> ensureToyBalanceShouldNotCrashWithRandomInput() {
+        return Stream.generate(() ->
+                        Arguments.of(faker.options().option(ToyType.class), faker.random().nextInt(), faker.random().nextInt()))
+                .limit(10000);
     }
 }

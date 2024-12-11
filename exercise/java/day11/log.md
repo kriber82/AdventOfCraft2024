@@ -5,4 +5,16 @@
   - maven tests ran despite missing dep
   - failure output of pitest hard interpret
 - can call maven commands in intellij via button on top (despite no local installation of mvn)
-- 
+- pitest results:
+  - private constructor is not covered, but we'll leave that as is, as it prevents constructing the static class
+  - added some tests at the age boundaries for categorize gift
+- will try [datafaker](https://www.datafaker.net/) to add random data tests
+  - datafaker is pretty simple to set up and use with parameterized tests
+  - readability for more than one parameter via @MethodSource is not great
+  - suspected "division by 0" is not a problem for doubles
+  - finding edge cases like div by zero would take huge amounts of time with randomized values
+    - datafaker seems to be aimed more at anonymizing data, and maybe property based testing
+    - are fuzzing libs better at detecting corner cases?  
+- review of pitest findings:
+  - ! can alter doubles in ensureToyBalance without a test failing
+  - 
