@@ -1,0 +1,2 @@
+- totalToys == 0
+- age < 0

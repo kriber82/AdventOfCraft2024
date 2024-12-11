@@ -1,5 +1,5 @@
-import christmas.Preparation;
-import christmas.ToyType;
+package christmas;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -23,8 +23,11 @@ class PreparationTests {
     @ParameterizedTest
     @CsvSource({
             "1, Baby",
+            "2, Baby",
             "3, Toddler",
+            "5, Toddler",
             "6, Child",
+            "12, Child",
             "13, Teen"
     })
     void categorizeGift(int age, String expectedCategory) {
