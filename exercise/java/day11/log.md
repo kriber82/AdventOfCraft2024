@@ -1,2 +1,8 @@
 - totalToys == 0
 - age < 0
+- setup of pitest not straightforward
+  - failed due to junit-jupiter missing in dependencies
+  - maven tests ran despite missing dep
+  - failure output of pitest hard interpret
+- can call maven commands in intellij via button on top (despite no local installation of mvn)
+- 
