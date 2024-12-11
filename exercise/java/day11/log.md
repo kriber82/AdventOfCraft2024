@@ -17,4 +17,6 @@
     - are fuzzing libs better at detecting corner cases?  
 - review of pitest findings:
   - ! can alter doubles in ensureToyBalance without a test failing
-  - 
+- toying with jazzer
+  - found div by zero problems in several variations (+/- small constants, +/- other var) rather quickly
+    - to introduce div by zero, i changed `(double) toysCount / totalToys` to variations of `(double) (toysCount / totalToys)`

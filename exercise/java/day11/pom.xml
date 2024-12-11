@@ -49,6 +49,11 @@
             <version>2.4.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.code-intelligence</groupId>
+            <artifactId>jazzer-junit</artifactId>
+            <version>0.22.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -78,6 +83,9 @@
                     <targetTests>
                         <param>christmas.*</param> <!-- Adjust according to your test packages -->
                     </targetTests>
+                    <mutators>
+                        <mutator>DEFAULT</mutator>
+                    </mutators>
                 </configuration>
                 <dependencies>
                     <dependency>

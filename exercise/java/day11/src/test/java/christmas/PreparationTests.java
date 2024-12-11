@@ -1,5 +1,7 @@
 package christmas;
 
+import com.code_intelligence.jazzer.api.FuzzedDataProvider;
+import com.code_intelligence.jazzer.junit.FuzzTest;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -91,5 +93,13 @@ class PreparationTests {
         return Stream.generate(() ->
                         Arguments.of(faker.options().option(ToyType.class), faker.random().nextInt(), faker.random().nextInt()))
                 .limit(10000);
+    }
+
+    // hopefully better fuzz test using jazzer
+    @FuzzTest
+    void fuzzTest(FuzzedDataProvider data) {
+        Preparation.prepareGifts(data.consumeInt());
+        Preparation.categorizeGift(data.consumeInt());
+        Preparation.ensureToyBalance(data.pickValue(ToyType.values()), data.consumeInt(), data.consumeInt());
     }
 }
