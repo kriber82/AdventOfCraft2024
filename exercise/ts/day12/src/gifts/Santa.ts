@@ -1,7 +1,7 @@
 import { Toy } from './Toy';
 import {ChildrenRepository} from "./ChildrenRepository";
-import { Behavior } from './Behavior';
 import {Name} from "./Name";
+import {Behavior} from "./Behavior";
 
 export class Santa {
     private readonly childrenRepository: ChildrenRepository;
@@ -13,13 +13,13 @@ export class Santa {
     chooseToyForChild(childName: Name): Toy | undefined {
         const foundChild = this.childrenRepository.findByName(childName);
 
-        switch (foundChild.behavior) {
+        switch (foundChild.desires.behavior) {
             case Behavior.Naughty:
-                return foundChild.wishlist.getThirdChoice();
+                return foundChild.desires.wishlist.getThirdChoice();
             case Behavior.Nice:
-                return foundChild.wishlist.getSecondChoice();
+                return foundChild.desires.wishlist.getSecondChoice();
             case Behavior.VeryNice:
-                return foundChild.wishlist.getFirstChoice();
+                return foundChild.desires.wishlist.getFirstChoice();
             default:
                 return undefined;
         }

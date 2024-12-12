@@ -5,6 +5,7 @@ import {ChildrenRepository} from "../src/gifts/ChildrenRepository";
 import {Behavior} from "../src/gifts/Behavior";
 import {Wishlist} from "../src/gifts/Wishlist";
 import {Name} from "../src/gifts/Name";
+import {Desires} from "../src/gifts/Desires";
 
 describe("Santa's gift selection process", () => {
     const Playstation = new Toy('playstation');
@@ -22,7 +23,8 @@ describe("Santa's gift selection process", () => {
     })
 
     it('should give the third choice to a naughty child', () => {
-        const bobby = new Child(childName, Behavior.Naughty, wishlist);
+        const desires = new Desires(Behavior.Naughty, wishlist);
+        const bobby = new Child(childName, desires);
         childrenRepository.addChild(bobby);
         const santa = new Santa(childrenRepository);
 
@@ -30,7 +32,8 @@ describe("Santa's gift selection process", () => {
     });
 
     it('should give the second choice to a nice child', () => {
-        const bobby = new Child(childName, Behavior.Nice, wishlist);
+        const desires = new Desires(Behavior.Nice, wishlist);
+        const bobby = new Child(childName, desires);
         childrenRepository.addChild(bobby);
         const santa = new Santa(childrenRepository);
 
@@ -38,7 +41,8 @@ describe("Santa's gift selection process", () => {
     });
 
     it('should give the first choice to a very nice child', () => {
-        const bobby = new Child(childName, Behavior.VeryNice, wishlist);
+        const desires = new Desires(Behavior.VeryNice, wishlist);
+        const bobby = new Child(childName, desires);
         childrenRepository.addChild(bobby);
         const santa = new Santa(childrenRepository);
 
@@ -46,7 +50,8 @@ describe("Santa's gift selection process", () => {
     });
 
     it('currently returns undefined if a child has a unknown behavior', () => {
-        const bobby = new Child(childName, undefined, wishlist);
+        const desires = new Desires(undefined, wishlist);
+        const bobby = new Child(childName, desires);
         childrenRepository.addChild(bobby);
         const santa = new Santa(childrenRepository);
 
@@ -54,7 +59,8 @@ describe("Santa's gift selection process", () => {
     });
 
     it('should throw an exception if the child does not exist', () => {
-        const bobby = new Child(childName, Behavior.VeryNice, wishlist);
+        const desires = new Desires(Behavior.VeryNice, wishlist);
+        const bobby = new Child(childName, desires);
         childrenRepository.addChild(bobby);
         const santa = new Santa(childrenRepository);
 

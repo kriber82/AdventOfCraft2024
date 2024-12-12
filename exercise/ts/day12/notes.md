@@ -22,3 +22,5 @@
 - Contiue.dev with GPT-4o is crazy:
   - Prompt: make Child.behaviour not only introduced enum, but also resolved other TODOs (make childrenRepository a first-class collection)
   - Prompt: make Child.behaviour an enum, but don't resolve any TODOs (did as expected)
+- !!! Interesting: Desires lends itself very well for getting the granted toy by behavior
+  - Also strongly hinted at by the feature envy in Santa.chooseToyForChild
