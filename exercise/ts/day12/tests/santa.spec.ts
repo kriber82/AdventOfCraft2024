@@ -37,19 +37,19 @@ describe("Santa's gift selection process", () => {
         expect(santa.chooseToyForChild(bobby)).toBe(Playstation);
     });
 
-    it('currently returns undefined if a child has an unknown behavior', () => {
+    it('should throw an exception if the behavior of a child is unknown', () => { //TODO should we assume something instead?
         const santa = new SantaBuilder()
-            .withChild(bobby, undefined as unknown as Behavior, wishlist)
+            .withChild(bobby, undefined, wishlist)
             .build();
 
-        expect(santa.chooseToyForChild(bobby)).toBe(undefined);
+        expect(() => santa.chooseToyForChild(bobby)).toThrowError('No behavior record found for the child');
     });
 
-    it('should throw an exception if the child does not exist', () => {
+    it('should throw an exception if the childs whislist does not exist', () => {
         const santa = new SantaBuilder()
-            .withChild(bobby, Behavior.VeryNice, wishlist)
+            .withChild(bobby, Behavior.VeryNice, undefined)
             .build();
 
-        expect(() => santa.chooseToyForChild(new Name('alice'))).toThrowError('No such child found');
+        expect(() => santa.chooseToyForChild(bobby)).toThrowError('No wishlist found for this child');
     });
 });
