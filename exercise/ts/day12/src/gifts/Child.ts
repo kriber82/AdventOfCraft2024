@@ -1,8 +1,7 @@
 // src/gifts/Child.ts
-import {Name} from './Name';
-import {Wishlist} from './Wishlist';
+import { Name } from './Name';
 
 export class Child {
-    constructor(public name: Name, public wishlist: Wishlist) {
-    }
+    constructor(public name: Name) { }
 }
+

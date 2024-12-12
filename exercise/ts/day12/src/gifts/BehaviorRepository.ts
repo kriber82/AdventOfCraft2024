@@ -10,6 +10,14 @@ export class BehaviorRepository { //TODO this is the adapter for tests, introduc
     }
 
     findBehaviorByName(childName: Name): Behavior {
-        return this.behaviors.get(childName);
+        const behavior = this.behaviors.get(childName);
+
+        /* TODO adapt test
+        if (!behavior) {
+            throw new Error('No behavior record found for the child');
+        }
+         */
+
+        return behavior;
     }
 }

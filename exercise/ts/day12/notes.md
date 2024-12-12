@@ -32,3 +32,5 @@
     - Thinking of services that might provide Behavior and Wishlists sparks the idea of modelling them as ports & adapters
   - As our whole application / domain is focussed all around Christmas, on the other hand, Behavior and Wishlist could be modeled as inherent properties of a child
   - So many options...
+- Ok, this is wild: After introducing the BehaviorRepository and WishlistRepository, Santa no longer needs a ChildRepository (which felt weird to have in the first place...)
+  - Technically, even the Child class becomes unnecessary
