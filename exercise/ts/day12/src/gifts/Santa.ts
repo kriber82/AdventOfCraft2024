@@ -9,15 +9,17 @@ export class Santa {
     }
 
     chooseToyForChild(childName: string): Toy | undefined {
-            const foundChild = this.childrenRepository.findByName(childName);
+        const foundChild = this.childrenRepository.findByName(childName);
 
-
-        if (foundChild.behavior === 'naughty') {
+        switch (foundChild.behavior) {
+            case 'naughty':
             return foundChild.wishlist[2];
-        } else if (foundChild.behavior === 'nice') {
+            case 'nice':
             return foundChild.wishlist[1];
-        } else if (foundChild.behavior === 'very nice') {
+            case 'very nice':
             return foundChild.wishlist[0];
+            default:
+                return undefined;
         }
 
         return undefined;
