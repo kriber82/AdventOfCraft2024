@@ -25,3 +25,10 @@
 - !!! Interesting: Desires lends itself very well for getting the granted toy by behavior
   - Also strongly hinted at by the feature envy in Santa.chooseToyForChild
 - I'm unsure about SantaBuilder...
+- Desires.chooseToy makes much sense from an encapsulation perspective
+  - But, to me it feels the logic of choosing a present based an the child's behavior is misplaced in Child or any of the classes it owns
+  - Behavior (before Christmas) and Wishlist could be argued not to be inherent properties of a child. Therefore, it might be sensible to have one or two separate services or repos for them
+    - Also, it might be a good idea to separate them from each other, as observing and evaluating behavior would probably have a different stakeholder than processing wishlists and storing them
+    - Thinking of services that might provide Behavior and Wishlists sparks the idea of modelling them as ports & adapters
+  - As our whole application / domain is focussed all around Christmas, on the other hand, Behavior and Wishlist could be modeled as inherent properties of a child
+  - So many options...
