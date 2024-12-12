@@ -1,8 +1,9 @@
 // src/gifts/WishlistRepository.ts
-import { Wishlist } from './Wishlist';
-import { Name } from './Name';
+import { Name } from '../src/gifts/Name';
+import { Wishlist } from '../src/gifts/Wishlist';
+import { ForGettingWishlists } from '../src/gifts/ForGettingWishlists';
 
-export class WishlistRepository { //TODO this is the adapter for tests, introduce port without setter
+export class WishlistRepositoryForTest implements ForGettingWishlists {
     private readonly wishlists: Map<Name, Wishlist> = new Map();
 
     setWishlist(childName: Name, wishlist: Wishlist): void {

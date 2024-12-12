@@ -1,8 +1,9 @@
 // src/gifts/BehaviorRepository.ts
-import {Name} from './Name';
-import {Behavior} from './Behavior';
+import { Name } from '../src/gifts/Name';
+import { Behavior } from '../src/gifts/Behavior';
+import { ForAssessingChildrensBehavior } from '../src/gifts/ForAssessingChildrensBehavior';
 
-export class BehaviorRepository { //TODO this is the adapter for tests, introduce port without setter
+export class BehaviorAssessmentForTest implements ForAssessingChildrensBehavior {
     private readonly behaviors: Map<Name, Behavior> = new Map();
 
     setBehavior(childName: Name, behavior: Behavior): void {
@@ -19,3 +20,4 @@ export class BehaviorRepository { //TODO this is the adapter for tests, introduc
         return behavior;
     }
 }
+

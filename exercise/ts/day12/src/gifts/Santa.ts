@@ -2,21 +2,15 @@
 import { Toy } from './Toy';
 import { Name } from "./Name";
 import { Behavior } from "./Behavior";
-import { BehaviorRepository } from "./BehaviorRepository";
-import { WishlistRepository } from "./WishlistRepository";
-import {Wishlist} from "./Wishlist";
+import { ForAssessingChildrensBehavior } from './ForAssessingChildrensBehavior';
+import { ForGettingWishlists } from './ForGettingWishlists';
+import { Wishlist } from './Wishlist';
 
 export class Santa {
-    private readonly behaviorRepository: BehaviorRepository;
-    private readonly wishlistRepository: WishlistRepository;
-
     constructor(
-        behaviorRepository: BehaviorRepository,
-        wishlistRepository: WishlistRepository
-    ) {
-        this.behaviorRepository = behaviorRepository;
-        this.wishlistRepository = wishlistRepository;
-    }
+        private readonly behaviorRepository: ForAssessingChildrensBehavior,
+        private readonly wishlistRepository: ForGettingWishlists
+    ) {}
 
     chooseToyForChild(childName: Name): Toy | undefined {
         const behavior = this.behaviorRepository.findBehaviorByName(childName);
