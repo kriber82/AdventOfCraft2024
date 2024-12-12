@@ -14,11 +14,11 @@
   - Keep All Entities Small
   - No Classes With More Than Two Instance Variables
   - No Getters/Setters/Properties
-- TODO mob.sh
+- TODO set up mob.sh
 - why no return types in TS?
 - this. does not count towards OC, right?
 - what would this look like in TS idiomatic?
-- TODO should we throw in our santa method 
+- should we throw in our santa method -> the tests say it's expected
 - Contiue.dev with GPT-4o is crazy:
   - Prompt: make Child.behaviour not only introduced enum, but also resolved other TODOs (make childrenRepository a first-class collection)
   - Prompt: make Child.behaviour an enum, but don't resolve any TODOs (did as expected)
@@ -32,5 +32,10 @@
     - Thinking of services that might provide Behavior and Wishlists sparks the idea of modelling them as ports & adapters
   - As our whole application / domain is focussed all around Christmas, on the other hand, Behavior and Wishlist could be modeled as inherent properties of a child
   - So many options...
-- Ok, this is wild: After introducing the BehaviorRepository and WishlistRepository, Santa no longer needs a ChildRepository (which felt weird to have in the first place...)
+- !!! Ok, this is wild: After introducing the BehaviorRepository and WishlistRepository, Santa no longer needs a ChildRepository (which felt weird to have in the first place...)
   - Technically, even the Child class becomes unnecessary
+- I wonder if switches are allowed in Object Calisthenics...
+  - Could replace the switch by making Behavior a strategy. But that would create a strong coupling between the two, which I don't like.
+  - Another option: Switching on the Behavior enum, to create a strategy, but that would not get rid of the switch 
+  - Next option: Implementing something resembling a chain of responsibility, but that seems like overkill 
+- 

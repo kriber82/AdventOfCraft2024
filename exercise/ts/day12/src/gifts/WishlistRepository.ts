@@ -12,7 +12,7 @@ export class WishlistRepository { //TODO this is the adapter for tests, introduc
     findWishlistByChildName(childName: Name): Wishlist {
         const wishlist = this.wishlists.get(childName);
 
-        if (!wishlist) { // TODO write test
+        if (!wishlist) {
             throw new Error('No wishlist found for this child');
         }
 
