@@ -7,7 +7,13 @@ export class ChildrenRepository {
         this.childrenRepository.push(child);
     }
 
-    findByName(childName: string): Child | undefined {
-        return this.childrenRepository.find(child => child.name === childName);
+    findByName(childName: string): Child {
+        const foundChild = this.childrenRepository.find(child => child.name === childName);
+
+        if (!foundChild) {
+            throw new Error('No such child found');
+        }
+
+        return foundChild;
     }
 }

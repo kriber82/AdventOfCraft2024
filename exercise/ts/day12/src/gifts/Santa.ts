@@ -1,24 +1,16 @@
-import { Child } from './Child';
 import { Toy } from './Toy';
 import {ChildrenRepository} from "./ChildrenRepository";
 
 export class Santa {
-    private readonly childrenRepository: ChildrenRepository = new ChildrenRepository()
+    private readonly childrenRepository: ChildrenRepository;
 
     constructor(childrenRepository: ChildrenRepository) {
         this.childrenRepository = childrenRepository
     }
 
-    addChild(child: Child): void {
-        this.childrenRepository.addChild(child);
-    }
-
     chooseToyForChild(childName: string): Toy | undefined {
-        const foundChild = this.childrenRepository.findByName(childName);
+            const foundChild = this.childrenRepository.findByName(childName);
 
-        if (!foundChild) {
-            throw new Error('No such child found');
-        }
 
         if (foundChild.behavior === 'naughty') {
             return foundChild.wishlist[2];

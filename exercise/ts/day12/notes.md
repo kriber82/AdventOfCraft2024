@@ -18,3 +18,4 @@
 - why no return types in TS?
 - this. does not count towards OC, right?
 - what would this look like in TS idiomatic?
+- TODO should we throw in our santa method 
