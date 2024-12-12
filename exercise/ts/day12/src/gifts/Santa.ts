@@ -14,15 +14,13 @@ export class Santa {
 
         switch (foundChild.behavior) {
             case Behavior.Naughty:
-                return foundChild.wishlist[2];
+                return foundChild.wishlist.getThirdChoice();
             case Behavior.Nice:
-                return foundChild.wishlist[1];
+                return foundChild.wishlist.getSecondChoice();
             case Behavior.VeryNice:
-                return foundChild.wishlist[0];
+                return foundChild.wishlist.getFirstChoice();
             default:
                 return undefined;
         }
-
-        return undefined;
     }
 }
