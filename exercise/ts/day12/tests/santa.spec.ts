@@ -37,6 +37,16 @@ describe("Santa's gift selection process", () => {
         expect(santa.chooseToyForChild('bobby')).toBe(Playstation);
     });
 
+    it('currently returns undefined if a child has a unknown behavior', () => {
+        const bobby = new Child('bobby', 'quite nice');
+        bobby.setWishlist(Playstation, Plush, Ball);
+
+        const santa = new Santa();
+        santa.addChild(bobby);
+
+        expect(santa.chooseToyForChild('bobby')).toBe(undefined);
+    });
+
     it('should throw an exception if the child does not exist', () => {
         const santa = new Santa();
         const bobby = new Child('bobby', 'very nice');
