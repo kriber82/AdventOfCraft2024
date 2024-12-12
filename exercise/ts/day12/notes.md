@@ -1,0 +1,20 @@
+- trying mob.sh
+- ChildrenRepository sounds ethically incorrect
+- Is child name unique?
+- mix undefined & Error
+- early returns in long method
+- behaviour should be enum -> no more undefined
+- object calisthenics [source](https://williamdurand.fr/2013/06/03/object-calisthenics/#tldr)
+  - Only One Level Of Indentation Per Method
+  - Don’t Use The ELSE Keyword
+  - Wrap All Primitives And Strings
+  - First Class Collections
+  - One Dot Per Line
+  - Don’t Abbreviate
+  - Keep All Entities Small
+  - No Classes With More Than Two Instance Variables
+  - No Getters/Setters/Properties
+- TODO mob.sh
+- why no return types in TS?
+- this. does not count towards OC, right?
+- what would this look like in TS idiomatic?
