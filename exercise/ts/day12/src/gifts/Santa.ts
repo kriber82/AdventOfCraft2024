@@ -1,6 +1,7 @@
 import { Toy } from './Toy';
 import {ChildrenRepository} from "./ChildrenRepository";
 import { Behavior } from './Behavior';
+import {Name} from "./Name";
 
 export class Santa {
     private readonly childrenRepository: ChildrenRepository;
@@ -9,7 +10,7 @@ export class Santa {
         this.childrenRepository = childrenRepository;
     }
 
-    chooseToyForChild(childName: string): Toy | undefined {
+    chooseToyForChild(childName: Name): Toy | undefined {
         const foundChild = this.childrenRepository.findByName(childName);
 
         switch (foundChild.behavior) {

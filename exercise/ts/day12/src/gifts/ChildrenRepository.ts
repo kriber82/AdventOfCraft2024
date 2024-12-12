@@ -1,4 +1,5 @@
 import {Child} from "./Child";
+import {Name} from "./Name";
 
 export class ChildrenRepository {
     private readonly childrenRepository: Child[] = [];
@@ -7,7 +8,7 @@ export class ChildrenRepository {
         this.childrenRepository.push(child);
     }
 
-    findByName(childName: string): Child {
+    findByName(childName: Name): Child {
         const foundChild = this.childrenRepository.find(child => child.name === childName);
 
         if (!foundChild) {
