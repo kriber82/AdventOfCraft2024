@@ -1,1 +1,2 @@
 .cifuzz-corpus/**
+/.jqwik-database

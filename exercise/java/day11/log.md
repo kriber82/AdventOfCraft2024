@@ -23,4 +23,7 @@
 - more toying with pitest, trying to get it to detect the bad detection of double constant changes
   - using STRONGER and ALL mutations did not help
   - found no docs of more double mutators in arcmutate (paid extension), but didn't bother to try
-  - gave up and created additional testcases without a tool telling me to 
+  - gave up and created additional testcases without a tool telling me to
+- tried again with jqwik
+  - dead simple to setup
+  - nice detection of several non-trivial div by zero bugs 

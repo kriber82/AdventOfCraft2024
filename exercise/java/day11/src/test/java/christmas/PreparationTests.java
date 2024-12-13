@@ -3,12 +3,10 @@ package christmas;
 import com.code_intelligence.jazzer.api.FuzzedDataProvider;
 import com.code_intelligence.jazzer.junit.FuzzTest;
 import net.datafaker.Faker;
+import net.jqwik.api.ForAll;
+import net.jqwik.api.Property;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,7 +60,7 @@ class PreparationTests {
     }
 
     // "Fuzz" tests using datafaker -> not that clever
-
+    /*
     @ParameterizedTest
     @MethodSource
     void prepareGiftsShouldNotCrashWithRandomInput(int numberOfGifts) {
@@ -96,6 +94,7 @@ class PreparationTests {
                         Arguments.of(faker.options().option(ToyType.class), faker.random().nextInt(), faker.random().nextInt()))
                 .limit(10000);
     }
+     */
 
     // hopefully better fuzz test using jazzer
     @FuzzTest
@@ -104,4 +103,21 @@ class PreparationTests {
         Preparation.categorizeGift(data.consumeInt());
         Preparation.ensureToyBalance(data.pickValue(ToyType.values()), data.consumeInt(), data.consumeInt());
     }
+
+    @Property
+    void prepareGiftsShouldNotCrashWithRandomInput(@ForAll int numberOfGifts) {
+        Preparation.prepareGifts(numberOfGifts);
+    }
+
+    @Property
+    void categorizeGiftShouldNotCrashWithRandomInput(@ForAll int age) {
+        Preparation.categorizeGift(age);
+    }
+
+    //detected div by zero in 100000 iterations on the following variant: double typePercentage = toysCount / (totalToys + (toysCount + 5) * 2 - 100);
+    @Property(tries = 100000)
+    void ensureToyBalanceShouldNotCrashWithRandomInput(@ForAll ToyType toyType, @ForAll int toysCount, @ForAll int totalToys) {
+        Preparation.ensureToyBalance(toyType, toysCount, totalToys);
+    }
+
 }
