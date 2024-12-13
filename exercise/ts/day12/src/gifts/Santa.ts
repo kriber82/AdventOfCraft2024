@@ -1,28 +1,32 @@
-import { Child } from './Child';
+// src/gifts/Santa.ts
 import { Toy } from './Toy';
+import { Name } from "./Name";
+import { Behavior } from "./Behavior";
+import { ForAssessingChildrensBehavior } from './ForAssessingChildrensBehavior';
+import { ForGettingWishlists } from './ForGettingWishlists';
+import { Wishlist } from './Wishlist';
 
 export class Santa {
-    private readonly childrenRepository: Child[] = [];
+    constructor(
+        private readonly behaviorRepository: ForAssessingChildrensBehavior,
+        private readonly wishlistRepository: ForGettingWishlists
+    ) {}
 
-    addChild(child: Child): void {
-        this.childrenRepository.push(child);
+    chooseToyForChild(childName: Name): Toy | undefined {
+        const behavior = this.behaviorRepository.findBehaviorByName(childName);
+        const wishlist = this.wishlistRepository.findWishlistByChildName(childName);
+        return Santa.selectPresentBasedOnBehavior(wishlist, behavior);
     }
 
-    chooseToyForChild(childName: string): Toy | undefined {
-        const foundChild = this.childrenRepository.find(child => child.name === childName);
-
-        if (!foundChild) {
-            throw new Error('No such child found');
+    private static selectPresentBasedOnBehavior(wishlist: Wishlist, behavior: Behavior) {
+        switch (behavior) {
+            case Behavior.Naughty:
+                return wishlist.getThirdChoice();
+            case Behavior.Nice:
+                return wishlist.getSecondChoice();
+            case Behavior.VeryNice:
+                return wishlist.getFirstChoice();
         }
-
-        if (foundChild.behavior === 'naughty') {
-            return foundChild.wishlist[2];
-        } else if (foundChild.behavior === 'nice') {
-            return foundChild.wishlist[1];
-        } else if (foundChild.behavior === 'very nice') {
-            return foundChild.wishlist[0];
-        }
-
-        return undefined;
     }
 }
+

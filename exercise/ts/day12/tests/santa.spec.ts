@@ -1,49 +1,55 @@
-import {Toy} from "../src/gifts/Toy";
-import {Child} from "../src/gifts/Child";
-import {Santa} from "../src/gifts/Santa";
+import { Toy } from "../src/gifts/Toy";
+import { Behavior } from "../src/gifts/Behavior";
+import { SantaBuilder } from "./SantaBuilder";
+import { Wishlist } from "../src/gifts/Wishlist";
+import { Name } from "../src/gifts/Name";
 
 describe("Santa's gift selection process", () => {
     const Playstation = new Toy('playstation');
     const Ball = new Toy('ball');
     const Plush = new Toy('plush');
 
+    const bobby = new Name('bobby');
+
+    let wishlist: Wishlist = new Wishlist(Playstation, Plush, Ball);
+
     it('should give the third choice to a naughty child', () => {
-        const bobby = new Child('bobby', 'naughty');
-        bobby.setWishlist(Playstation, Plush, Ball);
+        const santa = new SantaBuilder()
+            .withChild(bobby, Behavior.Naughty, wishlist)
+            .build();
 
-        const santa = new Santa();
-        santa.addChild(bobby);
-
-        expect(santa.chooseToyForChild('bobby')).toBe(Ball);
+        expect(santa.chooseToyForChild(bobby)).toBe(Ball);
     });
 
     it('should give the second choice to a nice child', () => {
-        const bobby = new Child('bobby', 'nice');
-        bobby.setWishlist(Playstation, Plush, Ball);
+        const santa = new SantaBuilder()
+            .withChild(bobby, Behavior.Nice, wishlist)
+            .build();
 
-        const santa = new Santa();
-        santa.addChild(bobby);
-
-        expect(santa.chooseToyForChild('bobby')).toBe(Plush);
+        expect(santa.chooseToyForChild(bobby)).toBe(Plush);
     });
 
     it('should give the first choice to a very nice child', () => {
-        const bobby = new Child('bobby', 'very nice');
-        bobby.setWishlist(Playstation, Plush, Ball);
+        const santa = new SantaBuilder()
+            .withChild(bobby, Behavior.VeryNice, wishlist)
+            .build();
 
-        const santa = new Santa();
-        santa.addChild(bobby);
-
-        expect(santa.chooseToyForChild('bobby')).toBe(Playstation);
+        expect(santa.chooseToyForChild(bobby)).toBe(Playstation);
     });
 
-    it('should throw an exception if the child does not exist', () => {
-        const santa = new Santa();
-        const bobby = new Child('bobby', 'very nice');
-        bobby.setWishlist(Playstation, Plush, Ball);
+    it('should throw an exception if the behavior of a child is unknown', () => { //TODO should we assume something instead?
+        const santa = new SantaBuilder()
+            .withChild(bobby, undefined, wishlist)
+            .build();
 
-        santa.addChild(bobby);
+        expect(() => santa.chooseToyForChild(bobby)).toThrowError('No behavior record found for the child');
+    });
 
-        expect(() => santa.chooseToyForChild('alice')).toThrowError('No such child found');
+    it('should throw an exception if the childs whislist does not exist', () => {
+        const santa = new SantaBuilder()
+            .withChild(bobby, Behavior.VeryNice, undefined)
+            .build();
+
+        expect(() => santa.chooseToyForChild(bobby)).toThrowError('No wishlist found for this child');
     });
 });
