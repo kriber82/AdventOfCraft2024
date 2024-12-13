@@ -38,4 +38,4 @@
   - Could replace the switch by making Behavior a strategy. But that would create a strong coupling between the two, which I don't like.
   - Another option: Switching on the Behavior enum, to create a strategy, but that would not get rid of the switch 
   - Next option: Implementing something resembling a chain of responsibility, but that seems like overkill 
-- 
+- Observation: Technically, usages of the SantaBuilder are violating OneDotPerLine. But it could be written in several lines & is way more readable like this. 
