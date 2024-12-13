@@ -1,4 +1,31 @@
-- trying mob.sh
+## TL;DR - My highlights
+
+- Object Calisthenics:
+  - is a very nice SW-design challenge
+  - acted as a design catalyst for me, leading to an unexpected and very pleasing chain of refactorings (read on to learn more)
+  - Builder pattern was very helpful to limit refactoring impact on tests
+  - Continue.dev with GPT 4o keeps impressing me, wonder at which points it'll start to fail miserably 
+
+## After finishing
+
+- Object Calisthenics
+  - Question to other SW-Crafters: Would you think Object Calisthenics allow switch statements? 
+  - is quite a challenging set of constraints
+  - seems like a catalyst for SW-design choices to me
+  - triggered a very unexpected chain of refactorings, first pushing things down the object tree, to pull them way up in the end:
+    - After extracting a `Desires` class, containing a child's wishes and behavior, the present-selection part of `Santa.chooseToyForChild` had a strong feature envy smell, prompting us to extract that part to `Desires`
+    - The `Desires` class didn't feel right from the start
+      - Decided to introduce independent repositories for wishlists and behaviors in a [Scratch Refactoring](https://xp123.com/scratch-refactoring/)
+    - Ended up keeping the scratch refactoring as the design finally felt right and allowed to remove the `ChildRepository` alltogether
+- Builder pattern helps enormously to ease refactoring of setup-code for tests
+- Contiue.dev with GPT-4o was crazy-good with high-level refactorings
+  - will probably fail with bigger projects
+  - IDE integration is way better than in browser (ease of setting context)
+  - IDE integration is still lacking (UI bugs & accepting of inline edits is fragile to say the least)
+
+## During work
+
+- trying mob.sh -> didn't work due to missing updates on system -> manual git handover
 - ChildrenRepository sounds ethically incorrect
 - Is child name unique?
 - mix undefined & Error
