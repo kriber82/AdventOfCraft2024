@@ -1,16 +1,18 @@
 package children
 
+/*
 import children.db2.X5T78
 import children.dtos.Address
 import children.dtos.Gender
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import org.approvaltests.Approvals
 import java.util.*
 
 class ChildMapperTest : StringSpec({
     val mapper = ChildMapper.INSTANCE
 
-    "should map X5T78 to Child for a girl" {
+    "should map X5T78 to Child for a girl - old" {
         val db2Child = X5T78(
             id = UUID.randomUUID().toString(),
             n1 = "Alice",
@@ -63,3 +65,5 @@ class ChildMapperTest : StringSpec({
         child.address shouldBe Address("9", "Oak Street", "Paradise", 98988)
     }
 })
+
+ */
