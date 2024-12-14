@@ -1,5 +1,14 @@
 # Day 14
 
+## TL/DR - Thoughts afterward
+
+- Neither web search, nor LLMs brought up approval testing as a potential solution
+- I think approval testing is a nice fit here. Considerations:
+  - Depends on Child.toString() returning a complete & stable representation of the object.
+    - For normal classes, I wouldn't want to count on that.
+    - For a data class with only data class children, I think that might work
+  - Will lead to test failures on valid rename refactorings -> acceptable as those should be obvious to fix 
+
 ## Before looking at the code:
 
 - Test that mapping back & forth produces an equal result
@@ -22,3 +31,6 @@
   - approvals kotlin sample project works, when dowgrading kotest jvm to 1.8.0
   - out of ideas for now
   - moving tests out of default package
+- Assuming the current implementation and tests were correct.
+  - Did some quick exploratory testing to ensure this is the case 
+  - Could us mutation testing to be extra sure, but won't today

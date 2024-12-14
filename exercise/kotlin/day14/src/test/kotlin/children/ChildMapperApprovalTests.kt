@@ -1,10 +1,6 @@
 package children
 
-import children.ChildMapper
 import children.db2.X5T78
-import children.dtos.Address
-import children.dtos.Gender
-import io.kotest.matchers.shouldBe
 import org.approvaltests.Approvals
 import org.junit.jupiter.api.Test
 import java.util.*
