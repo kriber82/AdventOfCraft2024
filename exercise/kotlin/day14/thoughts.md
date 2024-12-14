@@ -3,6 +3,7 @@
 ## TL/DR - Thoughts afterward
 
 - Neither web search, nor LLMs brought up approval testing as a potential solution
+- Struggling again to get a java testing library to work in kotlin, wondering if it's worth the hassle...
 - I think approval testing is a nice fit here. Considerations:
   - Depends on Child.toString() returning a complete & stable representation of the object.
     - For normal classes, I wouldn't want to count on that.
