@@ -18,9 +18,9 @@ abstract class Offer(val product: Product) {
     ): Discount? {
         val itemsInCartAsInt = itemsInCart.toInt()
         return if (itemsInCartAsInt >= discountBundleItemAmount) {
-            val undiscountedPrice = unitPrice * discountBundlePrice
+            val undiscountedTotal = unitPrice * itemsInCart
             val discountAmount =
-                undiscountedPrice - (discountBundlePrice * (itemsInCartAsInt / discountBundleItemAmount) + itemsInCartAsInt % discountBundleItemAmount * unitPrice)
+                undiscountedTotal - (discountBundlePrice * (itemsInCartAsInt / discountBundleItemAmount) + itemsInCartAsInt % discountBundleItemAmount * unitPrice)
             Discount(this.product, discountDescription, -discountAmount)
         } else null
     }

@@ -10,11 +10,11 @@ class TenPercentOffer(product: Product, private val percentOff: Double) :
         unitPrice: Double,
         itemsInCart: Double
     ): Discount {
-        val undiscountedPrice = unitPrice * itemsInCart
+        val undiscountedTotal = unitPrice * itemsInCart
         return Discount(
             product,
             "$percentOff% off",
-            -undiscountedPrice * percentOff / 100.0
+            -undiscountedTotal * percentOff / 100.0
         )
     }
 
