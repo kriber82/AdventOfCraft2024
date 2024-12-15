@@ -31,8 +31,8 @@
             - [x] 1.1.5.1 pull `discount =` out of branch
         - [x] 1.1.6 Improve names for extracted code
         - [x] 1.1.7 Use extracted method where possible
-        - [ ] 1.1.? ?
-        - [ ] 1.1.? Separate X for Y logic from other discounts
+        - [x] 1.1.8 Separate X for Y logic from other discounts
+        - [ ] 1.1.9 introduce discount strategy (replacing offer.offerType)
     - [ ] 👍 1.2 Implement the `Two for one` discount computation
         - [ ] ...
     - [ ] 👍 1.3Refactor the existing code to use the `X for Y` discount computation method with the `Three for two` discount
