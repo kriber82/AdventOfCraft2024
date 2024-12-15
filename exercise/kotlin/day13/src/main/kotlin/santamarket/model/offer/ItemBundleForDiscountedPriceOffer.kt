@@ -3,8 +3,8 @@ package santamarket.model.offer
 import santamarket.model.Discount
 import santamarket.model.Product
 
-class FiveForAmountOffer(product: Product, argument: Double) :
-    Offer(product, argument) {
+class ItemBundleForDiscountedPriceOffer(product: Product, bundlePrice: Double, private val bundleItemsAmount: Int) :
+    Offer(product, bundlePrice) {
 
     override fun getDiscount(unitPrice: Double, itemsInCart: Double): Discount? =
         getFiveForAmountDiscount(itemsInCart, unitPrice)
@@ -13,7 +13,7 @@ class FiveForAmountOffer(product: Product, argument: Double) :
         itemsInCart: Double,
         unitPrice: Double
     ): Discount? {
-        val discountItemsGiven = 5
+        val discountItemsGiven = bundleItemsAmount
         val priceForGivenItems = this.argument
         val product = this.product
         return getDiscountWithReducedPriceForMultipleItems(

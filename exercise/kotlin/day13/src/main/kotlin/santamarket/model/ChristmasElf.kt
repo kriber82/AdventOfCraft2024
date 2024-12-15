@@ -8,8 +8,8 @@ class ChristmasElf(private val catalog: SantamarketCatalog) {
     fun addSpecialOffer(offerType: SpecialOfferType, product: Product, argument: Double) {
         val offer = when (offerType) {
                 SpecialOfferType.TEN_PERCENT_DISCOUNT -> TenPercentOffer(product, argument)
-                SpecialOfferType.TWO_FOR_AMOUNT -> TwoForAmountOffer(product, argument)
-                SpecialOfferType.FIVE_FOR_AMOUNT -> FiveForAmountOffer(product, argument)
+                SpecialOfferType.TWO_FOR_AMOUNT -> ItemBundleForDiscountedPriceOffer(product, argument, 2)
+                SpecialOfferType.FIVE_FOR_AMOUNT -> ItemBundleForDiscountedPriceOffer(product, argument, 5)
                 SpecialOfferType.THREE_FOR_TWO -> ThreeForTwoOffer(product, argument)
             }
         offers[product] = offer
