@@ -23,10 +23,9 @@ class ShoppingSleigh {
                 val unitPrice = catalog.getUnitPrice(product)
                 var discount: Discount? = null
 
-                val undiscountedPrice = getUndiscountedPrice(unitPrice, itemsInCart)
                 when (offer.offerType) {
                     SpecialOfferType.TEN_PERCENT_DISCOUNT -> {
-                        discount = getTenPercentDiscount(product, offer, undiscountedPrice)
+                        discount = getTenPercentDiscount(product, offer, unitPrice, itemsInCart)
                     }
 
                     SpecialOfferType.THREE_FOR_TWO -> {
@@ -49,9 +48,10 @@ class ShoppingSleigh {
     private fun getTenPercentDiscount(
         product: Product,
         offer: Offer,
-        undiscountedPrice: Double
+        unitPrice: Double,
+        itemsInCart: Double,
     ): Discount {
-        return Discount(product, "${offer.argument}% off", -undiscountedPrice * offer.argument / 100.0)
+        return Discount(product, "${offer.argument}% off", -getUndiscountedPrice(unitPrice, itemsInCart) * offer.argument / 100.0)
     }
 
     private fun getThreeForTwoDiscount(
