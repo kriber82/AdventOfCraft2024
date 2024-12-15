@@ -26,53 +26,86 @@ class ShoppingSleigh {
                 val undiscountedPrice = getUndiscountedPrice(unitPrice, itemsInCart)
                 when (offer.offerType) {
                     SpecialOfferType.TEN_PERCENT_DISCOUNT -> {
-                        discount =
-                            Discount(product, "${offer.argument}% off", -undiscountedPrice * offer.argument / 100.0)
+                        discount = getTenPercentDiscount(product, offer, undiscountedPrice)
                     }
 
                     SpecialOfferType.THREE_FOR_TWO -> {
-                        val discountItemsGiven = 3
-                        val discountItemsPaid = 2
-                        val priceForGivenItems = unitPrice * discountItemsPaid
-                        discount = getDiscountWithReducedPriceForMultipleItems(
-                            itemsInCart,
-                            product,
-                            unitPrice,
-                            discountItemsGiven,
-                            priceForGivenItems,
-                            "$discountItemsGiven for $discountItemsPaid"
-                        )
+                        discount = getThreeForTwoDiscount(unitPrice, itemsInCart, product)
                     }
 
                     SpecialOfferType.TWO_FOR_AMOUNT -> {
-                        val discountItemsGiven = 2
-                        val priceForGivenItems = offer.argument
-                        discount = getDiscountWithReducedPriceForMultipleItems(
-                            itemsInCart,
-                            product,
-                            unitPrice,
-                            discountItemsGiven,
-                            priceForGivenItems,
-                            "$discountItemsGiven for $priceForGivenItems"
-                        )
+                        discount = getTwoForAmountDiscount(offer, itemsInCart, product, unitPrice)
                     }
 
                     SpecialOfferType.FIVE_FOR_AMOUNT -> {
-                        val discountItemsGiven = 5
-                        val priceForGivenItems = offer.argument
-                        discount = getDiscountWithReducedPriceForMultipleItems(
-                            itemsInCart,
-                            product,
-                            unitPrice,
-                            discountItemsGiven,
-                            priceForGivenItems,
-                            "$discountItemsGiven for $priceForGivenItems"
-                        )
+                        discount = getFiveForAmountDiscount(offer, itemsInCart, product, unitPrice)
                     }
                 }
                 discount?.let { receipt.addDiscount(it) }
             }
         }
+    }
+
+    private fun getTenPercentDiscount(
+        product: Product,
+        offer: Offer,
+        undiscountedPrice: Double
+    ): Discount {
+        return Discount(product, "${offer.argument}% off", -undiscountedPrice * offer.argument / 100.0)
+    }
+
+    private fun getThreeForTwoDiscount(
+        unitPrice: Double,
+        itemsInCart: Double,
+        product: Product
+    ): Discount? {
+        val discountItemsGiven = 3
+        val discountItemsPaid = 2
+        val priceForGivenItems = unitPrice * discountItemsPaid
+        return getDiscountWithReducedPriceForMultipleItems(
+            itemsInCart,
+            product,
+            unitPrice,
+            discountItemsGiven,
+            priceForGivenItems,
+            "$discountItemsGiven for $discountItemsPaid"
+        )
+    }
+
+    private fun getTwoForAmountDiscount(
+        offer: Offer,
+        itemsInCart: Double,
+        product: Product,
+        unitPrice: Double
+    ): Discount? {
+        val discountItemsGiven = 2
+        val priceForGivenItems = offer.argument
+        return getDiscountWithReducedPriceForMultipleItems(
+            itemsInCart,
+            product,
+            unitPrice,
+            discountItemsGiven,
+            priceForGivenItems,
+            "$discountItemsGiven for $priceForGivenItems"
+        )
+    }
+
+    private fun getFiveForAmountDiscount(
+        offer: Offer,
+        itemsInCart: Double,
+        product: Product,
+        unitPrice: Double
+    ): Discount? {
+        val discountItemsGiven = 5
+        val priceForGivenItems = offer.argument
+        return getDiscountWithReducedPriceForMultipleItems(
+            itemsInCart,
+            product,
+            unitPrice,
+            discountItemsGiven,
+            priceForGivenItems,
+            "$discountItemsGiven for $priceForGivenItems"
+        )
     }
 
     private fun getUndiscountedPrice(unitPrice: Double, itemsInCart: Double) = unitPrice * itemsInCart
