@@ -4,7 +4,7 @@ import santamarket.model.Discount
 import santamarket.model.Product
 
 class TenPercentOffer(private val product: Product, private val percentOff: Double) :
-    Offer() {
+    Offer {
 
     override fun getDiscount(
         unitPrice: Double,

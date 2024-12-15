@@ -32,11 +32,11 @@
         - [x] 1.1.6 Improve names for extracted code
         - [x] 1.1.7 Use extracted method where possible
         - [x] 1.1.8 Separate X for Y logic from other discounts
-        - [ ] 1.1.9 introduce discount strategy (replacing offer.offerType)
+        - [x] 1.1.9 introduce discount strategy (replacing offer.offerType)
           - [x] get rid of offerType in Offer 
           - [x] combine TwoForAmountOffer and FiveForAmountOffer
           - [x] where to put helper method currently residing in offer?
-          - [ ] make offer an interface
+          - [x] make offer an interface
     - [ ] 👍 1.2 Implement the `Two for one` discount computation
         - [ ] ...
     - [ ] 👍 1.3Refactor the existing code to use the `X for Y` discount computation method with the `Three for two` discount
@@ -70,4 +70,5 @@ Starting with 1.1:
   - => new items
 - 1.1.6:
   - Will stop recording whole tree, as value of the tree structure has been very limited so far, in this case
-  - will keep recording things I want to remember for later as an unstructured list 
+  - will keep recording things I want to remember for later as an unstructured list
+- chose not to inherit ThreeForTwoOffer from ItemBundleForDiscountedPriceOffer, as the discounts feel different from the outside
