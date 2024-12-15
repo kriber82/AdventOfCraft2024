@@ -49,21 +49,29 @@ class ShoppingSleigh {
                     SpecialOfferType.TWO_FOR_AMOUNT -> {
                         val discountItemsGiven = 2
                         val priceForGivenItems = offer.argument
-                        discount = if (quantityAsInt >= discountItemsGiven) {
-                            val discountAmount =
-                                undiscountedPrice - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
-                            Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
-                        } else null
+                        discount = getDiscountWithReducedPriceForMultipleItems(
+                            quantityAsInt,
+                            discountItemsGiven,
+                            unitPrice,
+                            undiscountedPrice,
+                            priceForGivenItems,
+                            product,
+                            "$discountItemsGiven for $priceForGivenItems"
+                        )
                     }
 
                     SpecialOfferType.FIVE_FOR_AMOUNT -> {
                         val discountItemsGiven = 5
                         val priceForGivenItems = offer.argument
-                        discount = if (quantityAsInt >= discountItemsGiven) {
-                            val discountAmount =
-                                undiscountedPrice - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
-                            Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
-                        } else null
+                        discount = getDiscountWithReducedPriceForMultipleItems(
+                            quantityAsInt,
+                            discountItemsGiven,
+                            unitPrice,
+                            undiscountedPrice,
+                            priceForGivenItems,
+                            product,
+                            "$discountItemsGiven for $priceForGivenItems"
+                        )
                     }
                 }
                 discount?.let { receipt.addDiscount(it) }

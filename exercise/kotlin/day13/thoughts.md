@@ -30,7 +30,7 @@
         - [x] 1.1.5 Extract common logic for X_FOR_AMOUNT
             - [x] 1.1.5.1 pull `discount =` out of branch
         - [x] 1.1.6 Improve names for extracted code
-        - [ ] 1.1.7 Use extracted method where possible
+        - [x] 1.1.7 Use extracted method where possible
         - [ ] 1.1.? ?
         - [ ] 1.1.? Separate X for Y logic from other discounts
     - [ ] 👍 1.2 Implement the `Two for one` discount computation
