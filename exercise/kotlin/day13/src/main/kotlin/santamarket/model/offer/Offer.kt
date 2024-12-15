@@ -13,14 +13,19 @@ abstract class Offer(val product: Product) {
         itemsInCart: Double,
         unitPrice: Double,
         discountBundleItemAmount: Int,
-        discountBundlePrice: Double,
+        pricePerDiscountedBundle: Double,
         discountDescription: String
     ): Discount? {
         val itemsInCartAsInt = itemsInCart.toInt()
         return if (itemsInCartAsInt >= discountBundleItemAmount) {
             val undiscountedTotal = unitPrice * itemsInCart
-            val discountAmount =
-                undiscountedTotal - (discountBundlePrice * (itemsInCartAsInt / discountBundleItemAmount) + itemsInCartAsInt % discountBundleItemAmount * unitPrice)
+
+            val amountOfDiscountedBundles = itemsInCartAsInt / discountBundleItemAmount
+            val amountOfItemsOutsideOfDiscountedBundles = itemsInCartAsInt % discountBundleItemAmount
+            val discountedTotal =
+                amountOfDiscountedBundles * pricePerDiscountedBundle + amountOfItemsOutsideOfDiscountedBundles * unitPrice
+
+            val discountAmount = undiscountedTotal - discountedTotal
             Discount(this.product, discountDescription, -discountAmount)
         } else null
     }
