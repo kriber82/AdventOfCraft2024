@@ -23,7 +23,9 @@
           - [x] 1.1.4.4 Reorder terms in first variant equation to see if all equations are equal  
           - [x] 1.1.4.5 Rename terms to follow the same naming
           - [x] 1.1.4.6 Check potential bug due to additional * unitPrice in THREE_FOR_TWO
-          - [ ] 1.1.4.7 Adapt THREE_FOR_TWO code to be able to use X_FOR_AMOUNT logic (introduce priceForAmount or similar)
+          - [ ] 1.1.4.7 Adapt THREE_FOR_TWO code to be able to use X_FOR_AMOUNT logic
+            - [x] 1.1.4.7.1 introduce priceForAmount or similar priceForGivenItems
+            - [ ] 1.1.4.7.2 Eliminate misleading discountItemsPaid in X_FOR_AMOUNT cases
           - [ ] 1.1.4.8 Extract common logic for X_FOR_AMOUNT
           - [ ] 1.1.4.9 Improve names for extracted code
           - [ ] 1.1.4.? ?

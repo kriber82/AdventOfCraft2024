@@ -34,8 +34,9 @@ class ShoppingSleigh {
                         val discountItemsGiven = 3
                         val discountItemsPaid = 2
                         if (quantityAsInt >= discountItemsGiven) {
+                            val priceForGivenItems = unitPrice * discountItemsPaid
                             val discountAmount =
-                                unitPrice * quantity - (discountItemsPaid * (quantityAsInt / discountItemsGiven) * unitPrice + quantityAsInt % discountItemsGiven * unitPrice)
+                                unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
                             discount = Discount(product, "$discountItemsGiven for $discountItemsPaid", -discountAmount)
                         }
                     }
@@ -44,9 +45,10 @@ class ShoppingSleigh {
                         val discountItemsGiven = 2
                         val discountItemsPaid = offer.argument
                         if (quantityAsInt >= discountItemsGiven) {
+                            val priceForGivenItems = discountItemsPaid
                             val discountAmount =
-                                unitPrice * quantity - (discountItemsPaid * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
-                            discount = Discount(product, "$discountItemsGiven for $discountItemsPaid", -discountAmount)
+                                unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
+                            discount = Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
                         }
                     }
 
@@ -54,9 +56,10 @@ class ShoppingSleigh {
                         val discountItemsGiven = 5
                         val discountItemsPaid = offer.argument
                         if (quantityAsInt >= discountItemsGiven) {
+                            val priceForGivenItems = discountItemsPaid
                             val discountAmount =
-                                unitPrice * quantity - (discountItemsPaid * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
-                            discount = Discount(product, "$discountItemsGiven for $discountItemsPaid", -discountAmount)
+                                unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
+                            discount = Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
                         }
                     }
                 }
