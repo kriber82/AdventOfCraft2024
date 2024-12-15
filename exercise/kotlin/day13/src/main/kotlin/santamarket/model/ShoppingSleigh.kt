@@ -36,10 +36,10 @@ class ShoppingSleigh {
                         val priceForGivenItems = unitPrice * discountItemsPaid
                         discount = getDiscountWithReducedPriceForMultipleItems(
                             itemsInCart,
-                            discountItemsGiven,
-                            unitPrice,
-                            priceForGivenItems,
                             product,
+                            unitPrice,
+                            discountItemsGiven,
+                            priceForGivenItems,
                             "$discountItemsGiven for $discountItemsPaid"
                         )
                     }
@@ -49,10 +49,10 @@ class ShoppingSleigh {
                         val priceForGivenItems = offer.argument
                         discount = getDiscountWithReducedPriceForMultipleItems(
                             itemsInCart,
-                            discountItemsGiven,
-                            unitPrice,
-                            priceForGivenItems,
                             product,
+                            unitPrice,
+                            discountItemsGiven,
+                            priceForGivenItems,
                             "$discountItemsGiven for $priceForGivenItems"
                         )
                     }
@@ -62,10 +62,10 @@ class ShoppingSleigh {
                         val priceForGivenItems = offer.argument
                         discount = getDiscountWithReducedPriceForMultipleItems(
                             itemsInCart,
-                            discountItemsGiven,
-                            unitPrice,
-                            priceForGivenItems,
                             product,
+                            unitPrice,
+                            discountItemsGiven,
+                            priceForGivenItems,
                             "$discountItemsGiven for $priceForGivenItems"
                         )
                     }
@@ -79,10 +79,10 @@ class ShoppingSleigh {
 
     private fun getDiscountWithReducedPriceForMultipleItems(
         itemsInCart: Double,
-        discountBundleItemAmount: Int,
-        unitPrice: Double,
-        discountBundlePrice: Double,
         product: Product,
+        unitPrice: Double,
+        discountBundleItemAmount: Int,
+        discountBundlePrice: Double,
         discountDescription: String
     ): Discount? {
         val itemsInCartAsInt = itemsInCart.toInt()
