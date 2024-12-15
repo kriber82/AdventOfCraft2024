@@ -22,7 +22,10 @@
           - [x] 1.1.4.3 Inline variables so that all variants have the same equation
           - [x] 1.1.4.4 Reorder terms in first variant equation to see if all equations are equal  
           - [x] 1.1.4.5 Rename terms to follow the same naming
-          - [ ] 1.1.4.6 Check potential bug due to additional * unitPrice in THREE_FOR_TWO
+          - [x] 1.1.4.6 Check potential bug due to additional * unitPrice in THREE_FOR_TWO
+          - [ ] 1.1.4.7 Adapt THREE_FOR_TWO code to be able to use X_FOR_AMOUNT logic (introduce priceForAmount or similar)
+          - [ ] 1.1.4.8 Extract common logic for X_FOR_AMOUNT
+          - [ ] 1.1.4.9 Improve names for extracted code
           - [ ] 1.1.4.? ?
         - [ ] 1.1.? Extract similarities
         - [ ] 1.1.3 Separate X for Y logic from other discounts
@@ -31,6 +34,8 @@
     - [ ] 👍 1.3Refactor the existing code to use the `X for Y` discount computation method with the `Three for two` discount
 - [ ] 2 Parking-Lot (any change with no direct impact on the main goal)
     - [ ] 2.1 Individual tests look very long
+    - [ ] 2.2 Improve (internal) discount names to reflect new understanding of discount types better
+    - [ ] 2.3 Talk to PO whether we can also improve external discount names & printouts
 
 Starting with 1.1:
 - Tests look exhaustive at first sight
@@ -46,3 +51,9 @@ Starting with 1.1:
   - Discount logic is implemented in ShoppingSleigh
 - Analysis for 1.3
   - Seems unnecessary for refactoring of X for Y -> deferred
+- Analysis for 1.1.4.6
+  - TWO_FOR_AMOUNT and FIVE_FOR_AMOUNT have a different semantic than TWO_FOR_THREE
+    - X_FOR_AMOUNT: AMOUNT is placeholder for discounted price
+    - TWO_FOR_THREE: THREE is the amount of items gained when paying for TWO items
+  - TWO_FOR_THREE is a special case of X_FOR_AMOUNT, where AMOUNT is a multiple of the unit price
+  - => new items

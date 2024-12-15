@@ -78,6 +78,32 @@ class SantamarketTest : StringSpec({
         receipt.getDiscounts() shouldContainExactly listOf(expectedDiscount)
     }
 
+    "threeForTwoDiscount price other than 1.0" {
+        val catalog = FakeCatalog()
+        val teddyBear = Product("teddyBear", ProductUnit.EACH)
+        val teddyBearPrice = 2.0
+        catalog.addProduct(teddyBear, teddyBearPrice)
+
+        val elf = ChristmasElf(catalog)
+        elf.addSpecialOffer(SpecialOfferType.THREE_FOR_TWO, teddyBear, 0.0)
+
+        val sleigh = ShoppingSleigh()
+        val numberOfTeddyBears = 3
+        sleigh.addItemQuantity(teddyBear, numberOfTeddyBears.toDouble())
+
+        val receipt = elf.checksOutArticlesFrom(sleigh)
+
+        val expectedNonDiscountedPrice = numberOfTeddyBears * teddyBearPrice
+        val expectedTotalPrice = 2 * teddyBearPrice
+        val expectedReceiptItem =
+            ReceiptItem(teddyBear, numberOfTeddyBears.toDouble(), teddyBearPrice, expectedNonDiscountedPrice)
+        val expectedDiscount = Discount(teddyBear, "3 for 2", expectedTotalPrice - expectedNonDiscountedPrice)
+
+        receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
+        receipt.getItems() shouldContainExactly listOf(expectedReceiptItem)
+        receipt.getDiscounts() shouldContainExactly listOf(expectedDiscount)
+    }
+
     "twoForAmountDiscount" {
         val catalog = FakeCatalog()
         val teddyBear = Product("teddyBear", ProductUnit.EACH)
@@ -86,6 +112,37 @@ class SantamarketTest : StringSpec({
 
         val elf = ChristmasElf(catalog)
         val discountedPriceForTwoTeddyBears = 1.6
+        elf.addSpecialOffer(SpecialOfferType.TWO_FOR_AMOUNT, teddyBear, discountedPriceForTwoTeddyBears)
+
+        val sleigh = ShoppingSleigh()
+        val numberOfTeddyBears = 2
+        sleigh.addItemQuantity(teddyBear, numberOfTeddyBears.toDouble())
+
+        val receipt = elf.checksOutArticlesFrom(sleigh)
+
+        val expectedNonDiscountedPrice = numberOfTeddyBears * teddyBearPrice
+        val expectedTotalPrice = discountedPriceForTwoTeddyBears
+        val expectedReceiptItem =
+            ReceiptItem(teddyBear, numberOfTeddyBears.toDouble(), teddyBearPrice, expectedNonDiscountedPrice)
+        val expectedDiscount = Discount(
+            teddyBear,
+            "2 for $discountedPriceForTwoTeddyBears",
+            expectedTotalPrice - expectedNonDiscountedPrice
+        )
+
+        receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
+        receipt.getItems() shouldContainExactly listOf(expectedReceiptItem)
+        receipt.getDiscounts() shouldContainExactly listOf(expectedDiscount)
+    }
+
+    "twoForAmountDiscount - price other than 1.0" {
+        val catalog = FakeCatalog()
+        val teddyBear = Product("teddyBear", ProductUnit.EACH)
+        val teddyBearPrice = 2.0
+        catalog.addProduct(teddyBear, teddyBearPrice)
+
+        val elf = ChristmasElf(catalog)
+        val discountedPriceForTwoTeddyBears = 3.6
         elf.addSpecialOffer(SpecialOfferType.TWO_FOR_AMOUNT, teddyBear, discountedPriceForTwoTeddyBears)
 
         val sleigh = ShoppingSleigh()
