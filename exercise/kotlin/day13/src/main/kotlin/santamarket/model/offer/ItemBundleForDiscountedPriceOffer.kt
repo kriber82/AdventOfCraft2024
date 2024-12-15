@@ -8,6 +8,7 @@ class ItemBundleForDiscountedPriceOffer(product: Product, private val bundlePric
 
     override fun getDiscount(unitPrice: Double, itemsInCart: Double): Discount? {
         return getDiscountWithReducedPriceForMultipleItems(
+            product,
             itemsInCart,
             unitPrice,
             bundleItemsAmount,
@@ -16,5 +17,28 @@ class ItemBundleForDiscountedPriceOffer(product: Product, private val bundlePric
         )
     }
 
+    companion object {
+        internal fun getDiscountWithReducedPriceForMultipleItems(
+            product: Product,
+            itemsInCart: Double,
+            unitPrice: Double,
+            discountBundleItemAmount: Int,
+            pricePerDiscountedBundle: Double,
+            discountDescription: String
+        ): Discount? {
+            val itemsInCartAsInt = itemsInCart.toInt()
+            return if (itemsInCartAsInt >= discountBundleItemAmount) {
+                val undiscountedTotal = unitPrice * itemsInCart
+
+                val amountOfDiscountedBundles = itemsInCartAsInt / discountBundleItemAmount
+                val amountOfItemsOutsideOfDiscountedBundles = itemsInCartAsInt % discountBundleItemAmount
+                val discountedTotal =
+                    amountOfDiscountedBundles * pricePerDiscountedBundle + amountOfItemsOutsideOfDiscountedBundles * unitPrice
+
+                val discountAmount = undiscountedTotal - discountedTotal
+                Discount(product, discountDescription, -discountAmount)
+            } else null
+        }
+    }
 
 }

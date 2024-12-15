@@ -10,7 +10,8 @@ class ThreeForTwoOffer(product: Product) :
         val discountItemsGiven = 3
         val discountItemsPaid = 2
         val priceForGivenItems = unitPrice * discountItemsPaid
-        return getDiscountWithReducedPriceForMultipleItems(
+        return ItemBundleForDiscountedPriceOffer.getDiscountWithReducedPriceForMultipleItems(
+            product,
             itemsInCart,
             unitPrice,
             discountItemsGiven,
