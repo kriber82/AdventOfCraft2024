@@ -54,9 +54,9 @@ class ShoppingSleigh {
                         val discountItemsGiven = 5
                         val discountItemsPaid = offer.argument
                         if (quantityAsInt >= discountItemsGiven) {
-                            val discountTotal =
+                            val discountAmount =
                                 unitPrice * quantity - (discountItemsPaid * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
-                            discount = Discount(product, "$discountItemsGiven for $discountItemsPaid", -discountTotal)
+                            discount = Discount(product, "$discountItemsGiven for $discountItemsPaid", -discountAmount)
                         }
                     }
                 }

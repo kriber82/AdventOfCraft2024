@@ -21,7 +21,7 @@
           - [x] 1.1.4.2 Use discountItemsGiven & discountItemsPaid
           - [x] 1.1.4.3 Inline variables so that all variants have the same equation
           - [x] 1.1.4.4 Reorder terms in first variant equation to see if all equations are equal  
-          - [ ] 1.1.4.5 Rename terms to follow the same naming
+          - [x] 1.1.4.5 Rename terms to follow the same naming
           - [ ] 1.1.4.6 Check potential bug due to additional * unitPrice in THREE_FOR_TWO
           - [ ] 1.1.4.? ?
         - [ ] 1.1.? Extract similarities
