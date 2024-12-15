@@ -19,7 +19,8 @@
         - [ ] 1.1.4 Make different X for Y logics as similar as possible
           - [x] 1.1.4.1 Introduce discountItemsGiven & discountItemsPaid
           - [x] 1.1.4.2 Use discountItemsGiven & discountItemsPaid
-          - [ ] 1.1.4.3 Inline variables so that all variants have the same equation
+          - [x] 1.1.4.3 Inline variables so that all variants have the same equation
+          - [ ] 1.1.4.4 Reorder terms in first variant equation to see if all equations are equal  
           - [ ] 1.1.4.? ?
         - [ ] 1.1.? Extract similarities
         - [ ] 1.1.3 Separate X for Y logic from other discounts
