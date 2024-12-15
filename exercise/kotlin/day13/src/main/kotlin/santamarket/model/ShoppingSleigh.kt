@@ -18,12 +18,12 @@ class ShoppingSleigh {
     }
 
     fun handleOffers(receipt: Receipt, offers: Map<Product, Offer>, catalog: SantamarketCatalog) {
-        productQuantities.forEach { (product, quantity) ->
+        productQuantities.forEach { (product, itemsInCart) ->
             offers[product]?.let { offer ->
                 val unitPrice = catalog.getUnitPrice(product)
                 var discount: Discount? = null
 
-                val undiscountedPrice = unitPrice * quantity
+                val undiscountedPrice = unitPrice * itemsInCart
                 when (offer.offerType) {
                     SpecialOfferType.TEN_PERCENT_DISCOUNT -> {
                         discount =
@@ -35,7 +35,7 @@ class ShoppingSleigh {
                         val discountItemsPaid = 2
                         val priceForGivenItems = unitPrice * discountItemsPaid
                         discount = getDiscountWithReducedPriceForMultipleItems(
-                            quantity,
+                            itemsInCart,
                             discountItemsGiven,
                             unitPrice,
                             undiscountedPrice,
@@ -49,7 +49,7 @@ class ShoppingSleigh {
                         val discountItemsGiven = 2
                         val priceForGivenItems = offer.argument
                         discount = getDiscountWithReducedPriceForMultipleItems(
-                            quantity,
+                            itemsInCart,
                             discountItemsGiven,
                             unitPrice,
                             undiscountedPrice,
@@ -63,7 +63,7 @@ class ShoppingSleigh {
                         val discountItemsGiven = 5
                         val priceForGivenItems = offer.argument
                         discount = getDiscountWithReducedPriceForMultipleItems(
-                            quantity,
+                            itemsInCart,
                             discountItemsGiven,
                             unitPrice,
                             undiscountedPrice,
