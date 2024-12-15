@@ -2,9 +2,8 @@ package santamarket.model.offer
 
 import santamarket.model.Discount
 import santamarket.model.Product
-import santamarket.model.SpecialOfferType
 
-abstract class Offer(val offerType: SpecialOfferType, val product: Product, val argument: Double) {
+abstract class Offer(val product: Product, val argument: Double) {
     abstract fun getDiscount(
         unitPrice: Double,
         itemsInCart: Double

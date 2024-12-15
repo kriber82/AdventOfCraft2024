@@ -2,10 +2,9 @@ package santamarket.model.offer
 
 import santamarket.model.Discount
 import santamarket.model.Product
-import santamarket.model.SpecialOfferType
 
-class TenPercentOffer(offerType: SpecialOfferType, product: Product, argument: Double) :
-    Offer(offerType, product, argument) {
+class TenPercentOffer(product: Product, argument: Double) :
+    Offer(product, argument) {
 
     override fun getDiscount(
         unitPrice: Double,
