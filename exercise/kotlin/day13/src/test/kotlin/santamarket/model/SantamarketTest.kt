@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.doubles.plusOrMinus
 import io.kotest.matchers.shouldBe
+import santamarket.model.offer.SpecialOfferType
 
 class SantamarketTest : StringSpec({
     "noDiscount" {
@@ -98,6 +99,32 @@ class SantamarketTest : StringSpec({
         val expectedReceiptItem =
             ReceiptItem(teddyBear, numberOfTeddyBears.toDouble(), teddyBearPrice, expectedNonDiscountedPrice)
         val expectedDiscount = Discount(teddyBear, "3 for 2", expectedTotalPrice - expectedNonDiscountedPrice)
+
+        receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
+        receipt.getItems() shouldContainExactly listOf(expectedReceiptItem)
+        receipt.getDiscounts() shouldContainExactly listOf(expectedDiscount)
+    }
+
+    "twoForOneDiscount" {
+        val catalog = FakeCatalog()
+        val teddyBear = Product("teddyBear", ProductUnit.EACH)
+        val teddyBearPrice = 1.0
+        catalog.addProduct(teddyBear, teddyBearPrice)
+
+        val elf = ChristmasElf(catalog)
+        elf.addSpecialOffer(SpecialOfferType.TWO_FOR_ONE, teddyBear, 0.0)
+
+        val sleigh = ShoppingSleigh()
+        val numberOfTeddyBears = 2
+        sleigh.addItemQuantity(teddyBear, numberOfTeddyBears.toDouble())
+
+        val receipt = elf.checksOutArticlesFrom(sleigh)
+
+        val expectedNonDiscountedPrice = numberOfTeddyBears * teddyBearPrice
+        val expectedTotalPrice = 1 * teddyBearPrice
+        val expectedReceiptItem =
+            ReceiptItem(teddyBear, numberOfTeddyBears.toDouble(), teddyBearPrice, expectedNonDiscountedPrice)
+        val expectedDiscount = Discount(teddyBear, "2 for 1", expectedTotalPrice - expectedNonDiscountedPrice)
 
         receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
         receipt.getItems() shouldContainExactly listOf(expectedReceiptItem)

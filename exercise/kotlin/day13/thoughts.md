@@ -37,16 +37,17 @@
           - [x] combine TwoForAmountOffer and FiveForAmountOffer
           - [x] where to put helper method currently residing in offer?
           - [x] make offer an interface
-    - [ ] 👍 1.2 Implement the `Two for one` discount computation
+    - [x] 👍 1.2 Implement the `Two for one` discount computation
         - [ ] ...
-    - [ ] 👍 1.3 Refactor the existing code to use the `X for Y` discount computation method with the `Three for two` discount
+    - [x] 👍 1.3 Refactor the existing code to use the `X for Y` discount computation method with the `Three for two` discount
 - [ ] 2 Parking-Lot (any change with no direct impact on the main goal)
     - [ ] 2.1 Individual tests look very long
-    - [ ] 2.2 Improve (internal) discount names to reflect new understanding of discount types better
+    - [x] 2.2 Improve (internal) discount names to reflect new understanding of discount types better
     - [ ] 2.3 Talk to PO whether we can also improve external discount names & printouts
-    - [ ] Reformulate discounts with polymorphism?
+    - [x] Reformulate discounts with polymorphism?
     - [ ] add more expressive way of creating & adding offers to ChristmasElf 
       - [ ] deprecate ChristmasElf.addSpecialOffer
+    - [ ] add tests for bundle offers (reduced price and reduced items to pay that don't match bundle size)  
 
 Starting with 1.1:
 - Tests look exhaustive at first sight
