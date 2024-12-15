@@ -46,8 +46,9 @@
     - [ ] 2.3 Talk to PO whether we can also improve external discount names & printouts
     - [x] Reformulate discounts with polymorphism?
     - [ ] add more expressive way of creating & adding offers to ChristmasElf 
-      - [ ] deprecate ChristmasElf.addSpecialOffer
-    - [ ] add tests for bundle offers (reduced price and reduced items to pay that don't match bundle size)  
+      - [x] deprecate ChristmasElf.addSpecialOffer
+      - [ ] test new ChristmasElf.addOffer
+    - [ ] add tests for bundle offers (reduced price and reduced items to pay) that don't match bundle size  
 
 Starting with 1.1:
 - Tests look exhaustive at first sight

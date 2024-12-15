@@ -5,6 +5,11 @@ import santamarket.model.offer.*
 class ChristmasElf(private val catalog: SantamarketCatalog) {
     private val offers = mutableMapOf<Product, Offer>()
 
+    fun addSpecialOffer(offer: Offer) {
+        offers[offer.product] = offer
+    }
+
+    @Deprecated("Use Offer implementations instead. SpecialOfferType have been misunderstood too often.")
     fun addSpecialOffer(offerType: SpecialOfferType, product: Product, argument: Double) {
         val offer = when (offerType) {
                 SpecialOfferType.TEN_PERCENT_DISCOUNT -> TenPercentOffer(product, argument)
