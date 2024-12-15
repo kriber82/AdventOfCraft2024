@@ -10,7 +10,7 @@ class ItemBundleForPriceOfLessItems(override val product: Product, private val d
         val discountItemsGiven = discountBundleItemsAmount
         val discountItemsPaid = discountBundItemsToPay
         val priceForGivenItems = unitPrice * discountItemsPaid
-        return ItemBundleForDiscountedPriceOffer.getDiscountWithReducedPriceForMultipleItems(
+        return ItemBundleForDiscountedPrice.getDiscountWithReducedPriceForMultipleItems(
             product,
             itemsInCart,
             unitPrice,

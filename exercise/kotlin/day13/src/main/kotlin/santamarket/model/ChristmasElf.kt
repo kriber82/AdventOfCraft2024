@@ -9,12 +9,12 @@ class ChristmasElf(private val catalog: SantamarketCatalog) {
         offers[offer.product] = offer
     }
 
-    @Deprecated("Use Offer implementations instead. SpecialOfferType have been misunderstood too often.")
+    @Deprecated("Use addSpecialOffer(offer: Offer) with Offer implementations instead. SpecialOfferType have been misunderstood too often.")
     fun addSpecialOffer(offerType: SpecialOfferType, product: Product, argument: Double) {
         val offer = when (offerType) {
-                SpecialOfferType.TEN_PERCENT_DISCOUNT -> TenPercentOffer(product, argument)
-                SpecialOfferType.TWO_FOR_AMOUNT -> ItemBundleForDiscountedPriceOffer(product, argument, 2)
-                SpecialOfferType.FIVE_FOR_AMOUNT -> ItemBundleForDiscountedPriceOffer(product, argument, 5)
+                SpecialOfferType.TEN_PERCENT_DISCOUNT -> TenPercentOff(product, argument)
+                SpecialOfferType.TWO_FOR_AMOUNT -> ItemBundleForDiscountedPrice(product, 2, argument)
+                SpecialOfferType.FIVE_FOR_AMOUNT -> ItemBundleForDiscountedPrice(product, 5, argument)
                 SpecialOfferType.THREE_FOR_TWO -> ItemBundleForPriceOfLessItems(product, 3, 2)
                 SpecialOfferType.TWO_FOR_ONE -> ItemBundleForPriceOfLessItems(product, 2, 1)
             }

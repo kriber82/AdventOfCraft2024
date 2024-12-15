@@ -48,7 +48,8 @@
     - [ ] add more expressive way of creating & adding offers to ChristmasElf 
       - [x] deprecate ChristmasElf.addSpecialOffer
       - [ ] test new ChristmasElf.addOffer
-    - [ ] add tests for bundle offers (reduced price and reduced items to pay) that don't match bundle size  
+    - [ ] add tests for bundle offers (reduced price and reduced items to pay) that don't match bundle size
+    - [ ] check rest of codebase for possible improvements
 
 Starting with 1.1:
 - Tests look exhaustive at first sight
