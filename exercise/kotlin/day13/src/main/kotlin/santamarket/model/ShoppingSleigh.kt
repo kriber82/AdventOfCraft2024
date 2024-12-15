@@ -34,11 +34,15 @@ class ShoppingSleigh {
                         val discountItemsGiven = 3
                         val discountItemsPaid = 2
                         val priceForGivenItems = unitPrice * discountItemsPaid
-                        discount = if (quantityAsInt >= discountItemsGiven) {
-                            val discountAmount =
-                                unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
-                            Discount(product, "$discountItemsGiven for $discountItemsPaid", -discountAmount)
-                        } else null
+                        discount = getDiscountWithReducedPriceForMultipleItems(
+                            quantityAsInt,
+                            discountItemsGiven,
+                            unitPrice,
+                            quantity,
+                            priceForGivenItems,
+                            product,
+                            "$discountItemsGiven for $discountItemsPaid"
+                        )
                     }
 
                     SpecialOfferType.TWO_FOR_AMOUNT -> {
@@ -64,5 +68,21 @@ class ShoppingSleigh {
                 discount?.let { receipt.addDiscount(it) }
             }
         }
+    }
+
+    private fun getDiscountWithReducedPriceForMultipleItems(
+        quantityAsInt: Int,
+        discountItemsGiven: Int,
+        unitPrice: Double,
+        quantity: Double,
+        priceForGivenItems: Double,
+        product: Product,
+        discountDescription: String
+    ): Discount? {
+        return if (quantityAsInt >= discountItemsGiven) {
+            val discountAmount =
+                unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
+            Discount(product, discountDescription, -discountAmount)
+        } else null
     }
 }

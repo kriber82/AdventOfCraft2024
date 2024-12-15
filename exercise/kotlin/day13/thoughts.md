@@ -27,7 +27,7 @@
             - [x] 1.1.4.7.1 introduce priceForAmount or similar priceForGivenItems
             - [x] 1.1.4.7.2 Eliminate misleading discountItemsPaid in X_FOR_AMOUNT cases
             - [x] 1.1.4.7.3 Move priceForGivenItems out of if
-          - [ ] 1.1.4.8 Extract common logic for X_FOR_AMOUNT
+          - [x] 1.1.4.8 Extract common logic for X_FOR_AMOUNT
             - [x] 1.1.4.8.1 pull `discount =` out of branch
           - [ ] 1.1.4.9 Improve names for extracted code
           - [ ] 1.1.4.? ?
