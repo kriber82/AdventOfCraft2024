@@ -34,31 +34,31 @@ class ShoppingSleigh {
                         val discountItemsGiven = 3
                         val discountItemsPaid = 2
                         val priceForGivenItems = unitPrice * discountItemsPaid
-                        if (quantityAsInt >= discountItemsGiven) {
+                        discount = if (quantityAsInt >= discountItemsGiven) {
                             val discountAmount =
                                 unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
-                            discount = Discount(product, "$discountItemsGiven for $discountItemsPaid", -discountAmount)
-                        }
+                            Discount(product, "$discountItemsGiven for $discountItemsPaid", -discountAmount)
+                        } else null
                     }
 
                     SpecialOfferType.TWO_FOR_AMOUNT -> {
                         val discountItemsGiven = 2
                         val priceForGivenItems = offer.argument
-                        if (quantityAsInt >= discountItemsGiven) {
+                        discount = if (quantityAsInt >= discountItemsGiven) {
                             val discountAmount =
                                 unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
-                            discount = Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
-                        }
+                            Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
+                        } else null
                     }
 
                     SpecialOfferType.FIVE_FOR_AMOUNT -> {
                         val discountItemsGiven = 5
                         val priceForGivenItems = offer.argument
-                        if (quantityAsInt >= discountItemsGiven) {
+                        discount = if (quantityAsInt >= discountItemsGiven) {
                             val discountAmount =
                                 unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
-                            discount = Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
-                        }
+                            Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
+                        } else null
                     }
                 }
                 discount?.let { receipt.addDiscount(it) }

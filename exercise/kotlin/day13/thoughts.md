@@ -17,17 +17,18 @@
         - [x] 1.1.1 Merge "x" into other when branches
         - [x] 1.1.2 Push x into individual branches, to reduce dependencies between branches
         - [ ] 1.1.4 Make different X for Y logics as similar as possible
-          - [x] 1.1.4.1 Introduce discountItemsGiven & discountItemsPaid
-          - [x] 1.1.4.2 Use discountItemsGiven & discountItemsPaid
+          - [x] 1.1.4.1 Introduce `discountItemsGiven` & `discountItemsPaid`
+          - [x] 1.1.4.2 Use `discountItemsGiven` & `discountItemsPaid`
           - [x] 1.1.4.3 Inline variables so that all variants have the same equation
           - [x] 1.1.4.4 Reorder terms in first variant equation to see if all equations are equal  
           - [x] 1.1.4.5 Rename terms to follow the same naming
-          - [x] 1.1.4.6 Check potential bug due to additional * unitPrice in THREE_FOR_TWO
-          - [ ] 1.1.4.7 Adapt THREE_FOR_TWO code to be able to use X_FOR_AMOUNT logic
+          - [x] 1.1.4.6 Check potential bug due to additional `* unitPrice` in THREE_FOR_TWO
+          - [x] 1.1.4.7 Adapt THREE_FOR_TWO code to be able to use X_FOR_AMOUNT logic
             - [x] 1.1.4.7.1 introduce priceForAmount or similar priceForGivenItems
             - [x] 1.1.4.7.2 Eliminate misleading discountItemsPaid in X_FOR_AMOUNT cases
             - [x] 1.1.4.7.3 Move priceForGivenItems out of if
           - [ ] 1.1.4.8 Extract common logic for X_FOR_AMOUNT
+            - [x] 1.1.4.8.1 pull `discount =` out of branch
           - [ ] 1.1.4.9 Improve names for extracted code
           - [ ] 1.1.4.? ?
         - [ ] 1.1.? Extract similarities
