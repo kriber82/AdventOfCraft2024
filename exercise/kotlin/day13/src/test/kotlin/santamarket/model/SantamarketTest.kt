@@ -4,6 +4,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.doubles.plusOrMinus
 import io.kotest.matchers.shouldBe
+import santamarket.model.offer.ItemBundleForDiscountedPrice
 import santamarket.model.offer.SpecialOfferType
 
 class SantamarketTest : StringSpec({
@@ -260,4 +261,37 @@ class SantamarketTest : StringSpec({
         receipt.getItems() shouldContainExactly listOf(teddyBearReceiptItem, turkeyReceiptItem)
         receipt.getDiscounts() shouldContainExactly listOf(expectedDiscount)
     }
+
+    "newAddSpecialOfferMethod" {
+        val catalog = FakeCatalog()
+        val teddyBear = Product("teddyBear", ProductUnit.EACH)
+        val teddyBearPrice = 1.0
+        catalog.addProduct(teddyBear, teddyBearPrice)
+
+        val elf = ChristmasElf(catalog)
+        val discountedPriceForFiveTeddyBears = 4.0
+        elf.addSpecialOffer(ItemBundleForDiscountedPrice(teddyBear, 5, discountedPriceForFiveTeddyBears))
+
+        val sleigh = ShoppingSleigh()
+        val numberOfTeddyBears = 6
+        repeat(numberOfTeddyBears) {
+            sleigh.addItem(teddyBear)
+        }
+
+        val receipt = elf.checksOutArticlesFrom(sleigh)
+
+        val expectedNonDiscountedPrice = numberOfTeddyBears * teddyBearPrice
+        val expectedTotalPrice = discountedPriceForFiveTeddyBears + teddyBearPrice
+        val expectedReceiptItem = ReceiptItem(teddyBear, 1.0, teddyBearPrice, teddyBearPrice)
+        val expectedDiscount = Discount(
+            teddyBear,
+            "5 for $discountedPriceForFiveTeddyBears",
+            expectedTotalPrice - expectedNonDiscountedPrice
+        )
+
+        receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
+        receipt.getItems() shouldContainExactly List(numberOfTeddyBears) { expectedReceiptItem }
+        receipt.getDiscounts() shouldContainExactly listOf(expectedDiscount)
+    }
+
 })

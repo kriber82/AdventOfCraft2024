@@ -45,9 +45,9 @@
     - [x] 2.2 Improve (internal) discount names to reflect new understanding of discount types better
     - [ ] 2.3 Talk to PO whether we can also improve external discount names & printouts
     - [x] Reformulate discounts with polymorphism?
-    - [ ] add more expressive way of creating & adding offers to ChristmasElf 
+    - [x] add more expressive way of creating & adding offers to ChristmasElf 
       - [x] deprecate ChristmasElf.addSpecialOffer
-      - [ ] test new ChristmasElf.addOffer
+      - [x] test new ChristmasElf.addOffer
     - [ ] add tests for bundle offers (reduced price and reduced items to pay) that don't match bundle size
     - [ ] check rest of codebase for possible improvements
 
@@ -75,3 +75,4 @@ Starting with 1.1:
   - Will stop recording whole tree, as value of the tree structure has been very limited so far, in this case
   - will keep recording things I want to remember for later as an unstructured list
 - chose not to inherit ThreeForTwoOffer from ItemBundleForDiscountedPriceOffer, as the discounts feel different from the outside
+- will call it a day, as main task is done - was fun, would like to continue, but it's getting late
