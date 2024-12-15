@@ -41,6 +41,8 @@
     - [ ] 2.2 Improve (internal) discount names to reflect new understanding of discount types better
     - [ ] 2.3 Talk to PO whether we can also improve external discount names & printouts
     - [ ] Reformulate discounts with polymorphism?
+    - [ ] add more expressive way of creating & adding offers to ChristmasElf 
+      - [ ] deprecate ChristmasElf.addSpecialOffer
 
 Starting with 1.1:
 - Tests look exhaustive at first sight

@@ -21,24 +21,11 @@ class ShoppingSleigh {
         productQuantities.forEach { (product, itemsInCart) ->
             offers[product]?.let { offer ->
                 val unitPrice = catalog.getUnitPrice(product)
-                var discount: Discount? = null
-
-                when (offer.offerType) {
-                    SpecialOfferType.TEN_PERCENT_DISCOUNT -> {
-                        discount = getTenPercentDiscount(offer, unitPrice, itemsInCart)
-                    }
-
-                    SpecialOfferType.THREE_FOR_TWO -> {
-                        discount = getThreeForTwoDiscount(unitPrice, itemsInCart, offer)
-                    }
-
-                    SpecialOfferType.TWO_FOR_AMOUNT -> {
-                        discount = getTwoForAmountDiscount(offer, itemsInCart, unitPrice)
-                    }
-
-                    SpecialOfferType.FIVE_FOR_AMOUNT -> {
-                        discount = getFiveForAmountDiscount(offer, itemsInCart, unitPrice)
-                    }
+                val discount = when (offer.offerType) {
+                    SpecialOfferType.TEN_PERCENT_DISCOUNT -> getTenPercentDiscount(offer, unitPrice, itemsInCart)
+                    SpecialOfferType.THREE_FOR_TWO -> getThreeForTwoDiscount(unitPrice, itemsInCart, offer)
+                    SpecialOfferType.TWO_FOR_AMOUNT -> getTwoForAmountDiscount(offer, itemsInCart, unitPrice)
+                    SpecialOfferType.FIVE_FOR_AMOUNT -> getFiveForAmountDiscount(offer, itemsInCart, unitPrice)
                 }
                 discount?.let { receipt.addDiscount(it) }
             }
