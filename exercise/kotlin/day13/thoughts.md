@@ -17,9 +17,10 @@
         - [x] 1.1.1 Merge "x" into other when branches
         - [x] 1.1.2 Push x into individual branches, to reduce dependencies between branches
         - [ ] 1.1.4 Make different X for Y logics as similar as possible
-          - [ ] 1.1.4.1 Introduce discountItemsGiven & discountItemsPaid
-          - [ ] 1.1.4.2 Use discountItemsGiven & discountItemsPaid
-          - ?
+          - [x] 1.1.4.1 Introduce discountItemsGiven & discountItemsPaid
+          - [x] 1.1.4.2 Use discountItemsGiven & discountItemsPaid
+          - [ ] 1.1.4.3 Inline variables so that all variants have the same equation
+          - [ ] 1.1.4.? ?
         - [ ] 1.1.? Extract similarities
         - [ ] 1.1.3 Separate X for Y logic from other discounts
     - [ ] 👍 1.2 Implement the `Two for one` discount computation
