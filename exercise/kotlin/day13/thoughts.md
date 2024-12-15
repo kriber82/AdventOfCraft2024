@@ -16,7 +16,10 @@
     - [ ] 👍 1.1 Prepare the code for an easy addition of the `X for Y` discount type family
         - [x] 1.1.1 Merge "x" into other when branches
         - [x] 1.1.2 Push x into individual branches, to reduce dependencies between branches
-        - [ ] 1.1.? Make different X for Y logics as similar as possible
+        - [ ] 1.1.4 Make different X for Y logics as similar as possible
+          - [ ] 1.1.4.1 Introduce discountItemsGiven & discountItemsPaid
+          - [ ] 1.1.4.2 Use discountItemsGiven & discountItemsPaid
+          - ?
         - [ ] 1.1.? Extract similarities
         - [ ] 1.1.3 Separate X for Y logic from other discounts
     - [ ] 👍 1.2 Implement the `Two for one` discount computation

@@ -31,6 +31,8 @@ class ShoppingSleigh {
                     }
 
                     SpecialOfferType.THREE_FOR_TWO -> {
+                        val discountItemsGiven = 3
+                        val discountItemsPaid = 2
                         if (quantityAsInt > 2) {
                             val discountAmount =
                                 quantity * unitPrice - ((quantityAsInt / 3) * 2 * unitPrice + quantityAsInt % 3 * unitPrice)
@@ -39,6 +41,8 @@ class ShoppingSleigh {
                     }
 
                     SpecialOfferType.TWO_FOR_AMOUNT -> {
+                        val discountItemsGiven = 2
+                        val discountItemsPaid = offer.argument
                         if (quantityAsInt >= 2) {
                             val total = offer.argument * (quantityAsInt / 2) + quantityAsInt % 2 * unitPrice
                             val discountAmount = unitPrice * quantity - total
@@ -47,6 +51,8 @@ class ShoppingSleigh {
                     }
 
                     SpecialOfferType.FIVE_FOR_AMOUNT -> {
+                        val discountItemsGiven = 5
+                        val discountItemsPaid = offer.argument
                         val numberOfXs = quantityAsInt / 5
                         if (quantityAsInt >= 5) {
                             val discountTotal =
