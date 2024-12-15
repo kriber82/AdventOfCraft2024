@@ -25,17 +25,17 @@ class ShoppingSleigh {
                 var discount: Discount? = null
 
                 when (offer.offerType) {
+                    SpecialOfferType.TEN_PERCENT_DISCOUNT -> {
+                        discount =
+                            Discount(product, "${offer.argument}% off", -quantity * unitPrice * offer.argument / 100.0)
+                    }
+
                     SpecialOfferType.THREE_FOR_TWO -> {
                         if (quantityAsInt > 2) {
                             val discountAmount =
                                 quantity * unitPrice - ((quantityAsInt / 3) * 2 * unitPrice + quantityAsInt % 3 * unitPrice)
                             discount = Discount(product, "3 for 2", -discountAmount)
                         }
-                    }
-
-                    SpecialOfferType.TEN_PERCENT_DISCOUNT -> {
-                        discount =
-                            Discount(product, "${offer.argument}% off", -quantity * unitPrice * offer.argument / 100.0)
                     }
 
                     SpecialOfferType.TWO_FOR_AMOUNT -> {

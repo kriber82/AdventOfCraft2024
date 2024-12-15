@@ -14,11 +14,11 @@
 
 - [ ] 👍 1 Deploy a generic method to compute the `X for Y` discount offers, covering `Three for two` and `Two for one` offers
     - [ ] 👍 1.1 Prepare the code for an easy addition of the `X for Y` discount type family
-        - [ ] 1.1.1 Merge "x" into other when branches
-        - [ ] 1.1.2 Push x into individual branches, to reduce dependencies between branches
-        - [ ] 1.1.? Separate X for Y logic from other accounts
+        - [x] 1.1.1 Merge "x" into other when branches
+        - [x] 1.1.2 Push x into individual branches, to reduce dependencies between branches
         - [ ] 1.1.? Make different X for Y logics as similar as possible
         - [ ] 1.1.? Extract similarities
+        - [ ] 1.1.3 Separate X for Y logic from other discounts
     - [ ] 👍 1.2 Implement the `Two for one` discount computation
         - [ ] ...
     - [ ] 👍 1.3Refactor the existing code to use the `X for Y` discount computation method with the `Three for two` discount
@@ -37,4 +37,5 @@ Starting with 1.1:
     - works in vs code now, but not in IDEA
 - Analysis for 1.1
   - Discount logic is implemented in ShoppingSleigh
-  - 
+- Analysis for 1.3
+  - Seems unnecessary for refactoring of X for Y -> deferred
