@@ -33,6 +33,7 @@
         - [x] 1.1.7 Use extracted method where possible
         - [x] 1.1.8 Separate X for Y logic from other discounts
         - [ ] 1.1.9 introduce discount strategy (replacing offer.offerType)
+          - [ ] combine TwoForAmountOffer and FiveForAmountOffer 
           - [ ] make offer an interface
     - [ ] 👍 1.2 Implement the `Two for one` discount computation
         - [ ] ...
@@ -68,4 +69,3 @@ Starting with 1.1:
 - 1.1.6:
   - Will stop recording whole tree, as value of the tree structure has been very limited so far, in this case
   - will keep recording things I want to remember for later as an unstructured list 
-- YAY - backed out of creating TenPercentOffer class in order to move the when to offer creation in ChristmasElf

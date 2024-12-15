@@ -10,7 +10,6 @@ open class Offer(val offerType: SpecialOfferType, val product: Product, val argu
         itemsInCart: Double
     ) = when (this.offerType) {
         SpecialOfferType.THREE_FOR_TWO -> getThreeForTwoDiscount(unitPrice, itemsInCart)
-        SpecialOfferType.TWO_FOR_AMOUNT -> getTwoForAmountDiscount(itemsInCart, unitPrice)
         SpecialOfferType.FIVE_FOR_AMOUNT -> getFiveForAmountDiscount(itemsInCart, unitPrice)
         else -> null
     }
@@ -33,23 +32,6 @@ open class Offer(val offerType: SpecialOfferType, val product: Product, val argu
         )
     }
 
-    private fun getTwoForAmountDiscount(
-        itemsInCart: Double,
-        unitPrice: Double
-    ): Discount? {
-        val discountItemsGiven = 2
-        val priceForGivenItems = this.argument
-        val product = this.product
-        return getDiscountWithReducedPriceForMultipleItems(
-            itemsInCart,
-            product,
-            unitPrice,
-            discountItemsGiven,
-            priceForGivenItems,
-            "$discountItemsGiven for $priceForGivenItems"
-        )
-    }
-
     private fun getFiveForAmountDiscount(
         itemsInCart: Double,
         unitPrice: Double
@@ -69,7 +51,7 @@ open class Offer(val offerType: SpecialOfferType, val product: Product, val argu
 
     protected fun getUndiscountedPrice(unitPrice: Double, itemsInCart: Double) = unitPrice * itemsInCart
 
-    private fun getDiscountWithReducedPriceForMultipleItems(
+    protected fun getDiscountWithReducedPriceForMultipleItems(
         itemsInCart: Double,
         product: Product,
         unitPrice: Double,
