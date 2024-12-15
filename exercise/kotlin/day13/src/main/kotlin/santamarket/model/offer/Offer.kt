@@ -4,32 +4,11 @@ import santamarket.model.Discount
 import santamarket.model.Product
 import santamarket.model.SpecialOfferType
 
-open class Offer(val offerType: SpecialOfferType, val product: Product, val argument: Double) {
-    open fun getDiscount(
+abstract class Offer(val offerType: SpecialOfferType, val product: Product, val argument: Double) {
+    abstract fun getDiscount(
         unitPrice: Double,
         itemsInCart: Double
-    ) = when (this.offerType) {
-        SpecialOfferType.THREE_FOR_TWO -> getThreeForTwoDiscount(unitPrice, itemsInCart)
-        else -> null
-    }
-
-    private fun getThreeForTwoDiscount(
-        unitPrice: Double,
-        itemsInCart: Double
-    ): Discount? {
-        val discountItemsGiven = 3
-        val discountItemsPaid = 2
-        val product = this.product
-        val priceForGivenItems = unitPrice * discountItemsPaid
-        return getDiscountWithReducedPriceForMultipleItems(
-            itemsInCart,
-            product,
-            unitPrice,
-            discountItemsGiven,
-            priceForGivenItems,
-            "$discountItemsGiven for $discountItemsPaid"
-        )
-    }
+    ) : Discount?
 
     protected fun getUndiscountedPrice(unitPrice: Double, itemsInCart: Double) = unitPrice * itemsInCart
 
