@@ -33,8 +33,8 @@
         - [x] 1.1.7 Use extracted method where possible
         - [x] 1.1.8 Separate X for Y logic from other discounts
         - [ ] 1.1.9 introduce discount strategy (replacing offer.offerType)
-          - [ ] get rid of offerType in Offer 
-          - [ ] combine TwoForAmountOffer and FiveForAmountOffer
+          - [x] get rid of offerType in Offer 
+          - [x] combine TwoForAmountOffer and FiveForAmountOffer
           - [ ] where to put helper method currently residing in offer?
           - [ ] make offer an interface
     - [ ] 👍 1.2 Implement the `Two for one` discount computation

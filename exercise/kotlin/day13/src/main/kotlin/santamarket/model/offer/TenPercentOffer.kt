@@ -9,10 +9,13 @@ class TenPercentOffer(product: Product, private val percentOff: Double) :
     override fun getDiscount(
         unitPrice: Double,
         itemsInCart: Double
-    ) = Discount(
-        product,
-        "$percentOff% off",
-        -getUndiscountedPrice(unitPrice, itemsInCart) * percentOff / 100.0
-    )
+    ): Discount {
+        val undiscountedPrice = unitPrice * itemsInCart
+        return Discount(
+            product,
+            "$percentOff% off",
+            -undiscountedPrice * percentOff / 100.0
+        )
+    }
 
 }
