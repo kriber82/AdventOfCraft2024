@@ -24,10 +24,11 @@ class ShoppingSleigh {
                 val quantityAsInt = quantity.toInt()
                 var discount: Discount? = null
 
+                val undiscountedPrice = unitPrice * quantity
                 when (offer.offerType) {
                     SpecialOfferType.TEN_PERCENT_DISCOUNT -> {
                         discount =
-                            Discount(product, "${offer.argument}% off", -quantity * unitPrice * offer.argument / 100.0)
+                            Discount(product, "${offer.argument}% off", -undiscountedPrice * offer.argument / 100.0)
                     }
 
                     SpecialOfferType.THREE_FOR_TWO -> {
@@ -38,7 +39,7 @@ class ShoppingSleigh {
                             quantityAsInt,
                             discountItemsGiven,
                             unitPrice,
-                            quantity,
+                            undiscountedPrice,
                             priceForGivenItems,
                             product,
                             "$discountItemsGiven for $discountItemsPaid"
@@ -50,7 +51,7 @@ class ShoppingSleigh {
                         val priceForGivenItems = offer.argument
                         discount = if (quantityAsInt >= discountItemsGiven) {
                             val discountAmount =
-                                unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
+                                undiscountedPrice - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
                             Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
                         } else null
                     }
@@ -60,7 +61,7 @@ class ShoppingSleigh {
                         val priceForGivenItems = offer.argument
                         discount = if (quantityAsInt >= discountItemsGiven) {
                             val discountAmount =
-                                unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
+                                undiscountedPrice - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
                             Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
                         } else null
                     }
@@ -74,14 +75,14 @@ class ShoppingSleigh {
         itemsInCartAsInt: Int,
         discountBundleItemAmount: Int,
         unitPrice: Double,
-        itemsInCart: Double,
+        undiscountedPrice: Double,
         discountBundlePrice: Double,
         product: Product,
         discountDescription: String
     ): Discount? {
         return if (itemsInCartAsInt >= discountBundleItemAmount) {
             val discountAmount =
-                unitPrice * itemsInCart - (discountBundlePrice * (itemsInCartAsInt / discountBundleItemAmount) + itemsInCartAsInt % discountBundleItemAmount * unitPrice)
+                undiscountedPrice - (discountBundlePrice * (itemsInCartAsInt / discountBundleItemAmount) + itemsInCartAsInt % discountBundleItemAmount * unitPrice)
             Discount(product, discountDescription, -discountAmount)
         } else null
     }
