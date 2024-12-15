@@ -10,7 +10,7 @@ class ChristmasElf(private val catalog: SantamarketCatalog) {
                 SpecialOfferType.TEN_PERCENT_DISCOUNT -> TenPercentOffer(product, argument)
                 SpecialOfferType.TWO_FOR_AMOUNT -> ItemBundleForDiscountedPriceOffer(product, argument, 2)
                 SpecialOfferType.FIVE_FOR_AMOUNT -> ItemBundleForDiscountedPriceOffer(product, argument, 5)
-                SpecialOfferType.THREE_FOR_TWO -> ThreeForTwoOffer(product)
+                SpecialOfferType.THREE_FOR_TWO -> ItemBundleForPriceOfLessItems(product, 3, 2)
             }
         offers[product] = offer
     }

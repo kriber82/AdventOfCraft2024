@@ -39,7 +39,7 @@
           - [x] make offer an interface
     - [ ] 👍 1.2 Implement the `Two for one` discount computation
         - [ ] ...
-    - [ ] 👍 1.3Refactor the existing code to use the `X for Y` discount computation method with the `Three for two` discount
+    - [ ] 👍 1.3 Refactor the existing code to use the `X for Y` discount computation method with the `Three for two` discount
 - [ ] 2 Parking-Lot (any change with no direct impact on the main goal)
     - [ ] 2.1 Individual tests look very long
     - [ ] 2.2 Improve (internal) discount names to reflect new understanding of discount types better

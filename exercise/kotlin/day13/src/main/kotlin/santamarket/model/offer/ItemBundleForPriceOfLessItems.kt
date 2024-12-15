@@ -3,12 +3,12 @@ package santamarket.model.offer
 import santamarket.model.Discount
 import santamarket.model.Product
 
-class ThreeForTwoOffer(private val product: Product) :
+class ItemBundleForPriceOfLessItems(private val product: Product, private val discountBundleItemsAmount: Int, private val discountBundItemsToPay: Int) :
     Offer {
 
     override fun getDiscount(unitPrice: Double, itemsInCart: Double): Discount? {
-        val discountItemsGiven = 3
-        val discountItemsPaid = 2
+        val discountItemsGiven = discountBundleItemsAmount
+        val discountItemsPaid = discountBundItemsToPay
         val priceForGivenItems = unitPrice * discountItemsPaid
         return ItemBundleForDiscountedPriceOffer.getDiscountWithReducedPriceForMultipleItems(
             product,
