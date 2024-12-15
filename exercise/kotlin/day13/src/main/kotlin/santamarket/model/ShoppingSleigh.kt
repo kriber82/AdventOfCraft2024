@@ -1,5 +1,7 @@
 package santamarket.model
 
+import santamarket.model.offer.Offer
+
 class ShoppingSleigh {
     private val items = mutableListOf<ProductQuantity>()
     private val productQuantities = mutableMapOf<Product, Double>()

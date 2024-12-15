@@ -1,10 +1,18 @@
 package santamarket.model
 
+import santamarket.model.offer.Offer
+import santamarket.model.offer.TenPercentOffer
+
 class ChristmasElf(private val catalog: SantamarketCatalog) {
     private val offers = mutableMapOf<Product, Offer>()
 
     fun addSpecialOffer(offerType: SpecialOfferType, product: Product, argument: Double) {
-        offers[product] = Offer(offerType, product, argument)
+        val offer =
+        if (offerType == SpecialOfferType.TEN_PERCENT_DISCOUNT)
+            TenPercentOffer(offerType, product, argument)
+        else
+            Offer(offerType, product, argument)
+        offers[product] = offer
     }
 
     fun checksOutArticlesFrom(sleigh: ShoppingSleigh): Receipt {
