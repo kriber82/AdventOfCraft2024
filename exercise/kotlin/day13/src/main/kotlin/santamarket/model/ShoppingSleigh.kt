@@ -71,17 +71,17 @@ class ShoppingSleigh {
     }
 
     private fun getDiscountWithReducedPriceForMultipleItems(
-        quantityAsInt: Int,
-        discountItemsGiven: Int,
+        itemsInCartAsInt: Int,
+        discountBundleItemAmount: Int,
         unitPrice: Double,
-        quantity: Double,
-        priceForGivenItems: Double,
+        itemsInCart: Double,
+        discountBundlePrice: Double,
         product: Product,
         discountDescription: String
     ): Discount? {
-        return if (quantityAsInt >= discountItemsGiven) {
+        return if (itemsInCartAsInt >= discountBundleItemAmount) {
             val discountAmount =
-                unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
+                unitPrice * itemsInCart - (discountBundlePrice * (itemsInCartAsInt / discountBundleItemAmount) + itemsInCartAsInt % discountBundleItemAmount * unitPrice)
             Discount(product, discountDescription, -discountAmount)
         } else null
     }

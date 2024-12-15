@@ -27,12 +27,12 @@
             - [x] 1.1.4.7.1 introduce priceForAmount or similar priceForGivenItems
             - [x] 1.1.4.7.2 Eliminate misleading discountItemsPaid in X_FOR_AMOUNT cases
             - [x] 1.1.4.7.3 Move priceForGivenItems out of if
-          - [x] 1.1.4.8 Extract common logic for X_FOR_AMOUNT
-            - [x] 1.1.4.8.1 pull `discount =` out of branch
-          - [ ] 1.1.4.9 Improve names for extracted code
-          - [ ] 1.1.4.? ?
-        - [ ] 1.1.? Extract similarities
-        - [ ] 1.1.3 Separate X for Y logic from other discounts
+        - [x] 1.1.5 Extract common logic for X_FOR_AMOUNT
+            - [x] 1.1.5.1 pull `discount =` out of branch
+        - [x] 1.1.6 Improve names for extracted code
+        - [ ] 1.1.7 Use extracted method where possible
+        - [ ] 1.1.? ?
+        - [ ] 1.1.? Separate X for Y logic from other discounts
     - [ ] 👍 1.2 Implement the `Two for one` discount computation
         - [ ] ...
     - [ ] 👍 1.3Refactor the existing code to use the `X for Y` discount computation method with the `Three for two` discount
@@ -40,6 +40,7 @@
     - [ ] 2.1 Individual tests look very long
     - [ ] 2.2 Improve (internal) discount names to reflect new understanding of discount types better
     - [ ] 2.3 Talk to PO whether we can also improve external discount names & printouts
+    - [ ] Reformulate discounts with polymorphism?
 
 Starting with 1.1:
 - Tests look exhaustive at first sight
@@ -61,3 +62,6 @@ Starting with 1.1:
     - TWO_FOR_THREE: THREE is the amount of items gained when paying for TWO items
   - TWO_FOR_THREE is a special case of X_FOR_AMOUNT, where AMOUNT is a multiple of the unit price
   - => new items
+- 1.1.6:
+  - Will stop recording whole tree, as value of the tree structure has been very limited so far, in this case
+  - will keep recording things I want to remember for later as an unstructured list 
