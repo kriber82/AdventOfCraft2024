@@ -15,9 +15,10 @@
 - [ ] 👍 1 Deploy a generic method to compute the `X for Y` discount offers, covering `Three for two` and `Two for one` offers
     - [ ] 👍 1.1 Prepare the code for an easy addition of the `X for Y` discount type family
         - [ ] 1.1.1 Merge "x" into other when branches
-        - [ ] 1.1.2 Separate X for Y logic from other accounts
-        - [ ] 1.1.3 Make different X for Y logics as similar as possible
-        - [ ] 1.1.4 Extract similarities
+        - [ ] 1.1.2 Push x into individual branches, to reduce dependencies between branches
+        - [ ] 1.1.? Separate X for Y logic from other accounts
+        - [ ] 1.1.? Make different X for Y logics as similar as possible
+        - [ ] 1.1.? Extract similarities
     - [ ] 👍 1.2 Implement the `Two for one` discount computation
         - [ ] ...
     - [ ] 👍 1.3Refactor the existing code to use the `X for Y` discount computation method with the `Three for two` discount
