@@ -20,7 +20,6 @@ class ThreeForTwoOffer(product: Product, argument: Double) :
         val priceForGivenItems = unitPrice * discountItemsPaid
         return getDiscountWithReducedPriceForMultipleItems(
             itemsInCart,
-            product,
             unitPrice,
             discountItemsGiven,
             priceForGivenItems,
