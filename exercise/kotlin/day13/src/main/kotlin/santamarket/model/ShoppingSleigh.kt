@@ -23,7 +23,7 @@ class ShoppingSleigh {
                 val unitPrice = catalog.getUnitPrice(product)
                 var discount: Discount? = null
 
-                val undiscountedPrice = unitPrice * itemsInCart
+                val undiscountedPrice = getUndiscountedPrice(unitPrice, itemsInCart)
                 when (offer.offerType) {
                     SpecialOfferType.TEN_PERCENT_DISCOUNT -> {
                         discount =
@@ -38,7 +38,6 @@ class ShoppingSleigh {
                             itemsInCart,
                             discountItemsGiven,
                             unitPrice,
-                            undiscountedPrice,
                             priceForGivenItems,
                             product,
                             "$discountItemsGiven for $discountItemsPaid"
@@ -52,7 +51,6 @@ class ShoppingSleigh {
                             itemsInCart,
                             discountItemsGiven,
                             unitPrice,
-                            undiscountedPrice,
                             priceForGivenItems,
                             product,
                             "$discountItemsGiven for $priceForGivenItems"
@@ -66,7 +64,6 @@ class ShoppingSleigh {
                             itemsInCart,
                             discountItemsGiven,
                             unitPrice,
-                            undiscountedPrice,
                             priceForGivenItems,
                             product,
                             "$discountItemsGiven for $priceForGivenItems"
@@ -78,11 +75,12 @@ class ShoppingSleigh {
         }
     }
 
+    private fun getUndiscountedPrice(unitPrice: Double, itemsInCart: Double) = unitPrice * itemsInCart
+
     private fun getDiscountWithReducedPriceForMultipleItems(
-        itemsInCart:Double,
+        itemsInCart: Double,
         discountBundleItemAmount: Int,
         unitPrice: Double,
-        undiscountedPrice: Double,
         discountBundlePrice: Double,
         product: Product,
         discountDescription: String
@@ -90,7 +88,7 @@ class ShoppingSleigh {
         val itemsInCartAsInt = itemsInCart.toInt()
         return if (itemsInCartAsInt >= discountBundleItemAmount) {
             val discountAmount =
-                undiscountedPrice - (discountBundlePrice * (itemsInCartAsInt / discountBundleItemAmount) + itemsInCartAsInt % discountBundleItemAmount * unitPrice)
+                getUndiscountedPrice(unitPrice, itemsInCart) - (discountBundlePrice * (itemsInCartAsInt / discountBundleItemAmount) + itemsInCartAsInt % discountBundleItemAmount * unitPrice)
             Discount(product, discountDescription, -discountAmount)
         } else null
     }
