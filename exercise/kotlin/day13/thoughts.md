@@ -35,7 +35,7 @@
         - [ ] 1.1.9 introduce discount strategy (replacing offer.offerType)
           - [x] get rid of offerType in Offer 
           - [x] combine TwoForAmountOffer and FiveForAmountOffer
-          - [ ] where to put helper method currently residing in offer?
+          - [x] where to put helper method currently residing in offer?
           - [ ] make offer an interface
     - [ ] 👍 1.2 Implement the `Two for one` discount computation
         - [ ] ...

@@ -3,8 +3,8 @@ package santamarket.model.offer
 import santamarket.model.Discount
 import santamarket.model.Product
 
-class TenPercentOffer(product: Product, private val percentOff: Double) :
-    Offer(product) {
+class TenPercentOffer(private val product: Product, private val percentOff: Double) :
+    Offer() {
 
     override fun getDiscount(
         unitPrice: Double,
