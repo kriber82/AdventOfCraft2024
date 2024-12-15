@@ -43,9 +43,8 @@ class ShoppingSleigh {
 
                     SpecialOfferType.TWO_FOR_AMOUNT -> {
                         val discountItemsGiven = 2
-                        val discountItemsPaid = offer.argument
+                        val priceForGivenItems = offer.argument
                         if (quantityAsInt >= discountItemsGiven) {
-                            val priceForGivenItems = discountItemsPaid
                             val discountAmount =
                                 unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
                             discount = Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
@@ -54,9 +53,8 @@ class ShoppingSleigh {
 
                     SpecialOfferType.FIVE_FOR_AMOUNT -> {
                         val discountItemsGiven = 5
-                        val discountItemsPaid = offer.argument
+                        val priceForGivenItems = offer.argument
                         if (quantityAsInt >= discountItemsGiven) {
-                            val priceForGivenItems = discountItemsPaid
                             val discountAmount =
                                 unitPrice * quantity - (priceForGivenItems * (quantityAsInt / discountItemsGiven) + quantityAsInt % discountItemsGiven * unitPrice)
                             discount = Discount(product, "$discountItemsGiven for $priceForGivenItems", -discountAmount)
