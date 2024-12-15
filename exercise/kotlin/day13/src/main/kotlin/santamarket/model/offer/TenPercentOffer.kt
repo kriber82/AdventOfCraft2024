@@ -3,20 +3,16 @@ package santamarket.model.offer
 import santamarket.model.Discount
 import santamarket.model.Product
 
-class TenPercentOffer(product: Product, argument: Double) :
-    Offer(product, argument) {
+class TenPercentOffer(product: Product, private val percentOff: Double) :
+    Offer(product) {
 
     override fun getDiscount(
         unitPrice: Double,
         itemsInCart: Double
-    ) = getTenPercentDiscount(unitPrice, itemsInCart)
-
-    private fun getTenPercentDiscount(
-        unitPrice: Double,
-        itemsInCart: Double,
-    ): Discount {
-        val product = this.product
-        return Discount(product, "${this.argument}% off", -getUndiscountedPrice(unitPrice, itemsInCart) * this.argument / 100.0)
-    }
+    ) = Discount(
+        product,
+        "$percentOff% off",
+        -getUndiscountedPrice(unitPrice, itemsInCart) * percentOff / 100.0
+    )
 
 }

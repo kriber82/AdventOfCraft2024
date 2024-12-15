@@ -4,7 +4,7 @@ import santamarket.model.Discount
 import santamarket.model.Product
 
 class ThreeForTwoOffer(product: Product, argument: Double) :
-    Offer(product, argument) {
+    Offer(product) {
 
     override fun getDiscount(unitPrice: Double, itemsInCart: Double): Discount? {
         return getThreeForTwoDiscount(unitPrice, itemsInCart)
@@ -16,7 +16,6 @@ class ThreeForTwoOffer(product: Product, argument: Double) :
     ): Discount? {
         val discountItemsGiven = 3
         val discountItemsPaid = 2
-        val product = this.product
         val priceForGivenItems = unitPrice * discountItemsPaid
         return getDiscountWithReducedPriceForMultipleItems(
             itemsInCart,
