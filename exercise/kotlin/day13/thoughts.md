@@ -57,7 +57,8 @@
     - [ ] improve expressiveness of assertions
     - [ ] introduce a concept for ProductInSleight (might simplify both prod & test code)
     - [ ] express tests in a way that better highlights the different tested featuers
-      - [ ] total
+      - [x] sleigh items & total 
+      - [x] total
       - [ ] receipt items
         - [ ] without discounts
         - [ ] unchanged by discounts
@@ -67,6 +68,7 @@
         - [ ] reduced price
       - [ ] new addSpecialOffer (might be sufficient to test with one offer type)
       - [ ] there can only be one special offer per product
+      - [ ] maybe introduce FakeOffer for simpler testing of other aspects of the code
     - [ ] check rest of codebase for possible improvements
 
 Starting with 1.1:

@@ -126,6 +126,72 @@ class SantamarketTestDescribe : DescribeSpec({
                 Pair(turkey, 4.0),)
         }
     }
+
+    describe("ChristmasElf fills recipe") {
+        describe("total") {
+            it("should be 0 without items in sleigh") {
+                val scenario = TestScenarioBuilder().build()
+
+                val receipt = scenario.checkout()
+
+                receipt.getTotalPrice() shouldBe (0.0 plusOrMinus 0.001)
+            }
+
+            it("should contain price of single item in sleigh") {
+                val scenario = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddybear", 1, ProductUnit.EACH, 5.0)
+                    .build()
+
+                val receipt = scenario.checkout()
+
+                receipt.getTotalPrice() shouldBe (5.0 plusOrMinus 0.001)
+            }
+
+            it("should multiply unit price for multiple items of same type in sleigh") {
+                val scenario = TestScenarioBuilder()
+                    .withProduct("teddybear", 2.0, ProductUnit.EACH, 5.0)
+                    .build()
+
+                val receipt = scenario.checkout()
+
+                receipt.getTotalPrice() shouldBe (2.0 * 5.0 plusOrMinus 0.001)
+            }
+
+            it("should contain sum of multiplied unit prices for several items in sleigh") {
+                val scenario = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddybear", 2, ProductUnit.EACH, 5.0)
+                    .withProduct("turkey", 3.0, ProductUnit.KILO, 2.5)
+                    .withProduct("turkey", 1.5, ProductUnit.KILO, 2.5)
+                    .build()
+
+                val receipt = scenario.checkout()
+
+                val expectedTotalPrice = 2.0 * 5.0 + 3.0 * 2.5 + 1.5 * 2.5
+                receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
+            }
+
+            it("should subtract discount from undiscounted total") {
+                val scenario = TestScenarioBuilder()
+                    .withProduct("turkey", 2.0, ProductUnit.KILO, 2.5)
+                    .withTenPercentDiscount("turkey")
+                    .build()
+
+                val receipt = scenario.checkout()
+
+                val expectedNonDiscountedPrice = 2.0 * 2.5
+                val expectedTotalPrice = expectedNonDiscountedPrice * 0.9
+                receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
+            }
+        }
+
+        describe("list of items") {
+
+        }
+
+        describe("list of discounts") {
+
+        }
+    }
 })
 
 class SantamarketTest : StringSpec({
