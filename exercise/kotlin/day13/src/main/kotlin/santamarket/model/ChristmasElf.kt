@@ -23,11 +23,8 @@ class ChristmasElf(private val catalog: SantamarketCatalog) {
 
     fun checksOutArticlesFrom(sleigh: ShoppingSleigh): Receipt {
         val receipt = Receipt()
-        val productQuantities = sleigh.getItems()
 
-        productQuantities.forEach { pq ->
-            val product = pq.product
-            val quantity = pq.quantity
+        sleigh.getItems().forEach { (product, quantity) ->
             val unitPrice = catalog.getUnitPrice(product)
             val price = quantity * unitPrice
             receipt.addProduct(product, quantity, unitPrice, price)
