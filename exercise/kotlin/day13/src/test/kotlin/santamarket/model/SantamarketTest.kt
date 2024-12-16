@@ -29,28 +29,56 @@ class SantamarketTest : StringSpec({
         receipt.getItems() shouldContainExactly listOf(expectedReceiptItem)
     }
 
+    class TestScenario(val catalog: FakeCatalog, val sleigh: ShoppingSleigh) {
+        fun checkout(): Receipt {
+            return elf.checksOutArticlesFrom(sleigh)
+        }
+
+        val elf: ChristmasElf = ChristmasElf(catalog)
+    }
+
+    class TestScenarioBuilder {
+        private val catalog = FakeCatalog()
+        private val sleigh = ShoppingSleigh()
+
+        fun withProduct(name: String, quantity: Double, unit: ProductUnit, price: Double): TestScenarioBuilder {
+            val product = Product(name, unit)
+            catalog.addProduct(product, price)
+            sleigh.addItemQuantity(product, quantity)
+            return this
+        }
+
+        fun withTenPercentDiscount(productName: String): TestScenarioBuilder {
+            val elf = ChristmasElf(catalog)
+            elf.addSpecialOffer(SpecialOfferType.TEN_PERCENT_DISCOUNT, catalog.product(productName)!!, 10.0)
+            return this
+        }
+
+        fun build(): TestScenario {
+            return TestScenario(catalog, sleigh)
+        }
+    }
+
     "tenPercentDiscount" {
-        val catalog = FakeCatalog()
-        val turkey = Product("turkey", ProductUnit.KILO)
-        val turkeyPrice = 2.0
-        catalog.addProduct(turkey, turkeyPrice)
-
-        val sleigh = ShoppingSleigh()
         val turkeyQuantity = 2.0
-        sleigh.addItemQuantity(turkey, turkeyQuantity)
+        val turkeyPrice = 2.0
 
-        val elf = ChristmasElf(catalog)
-        elf.addSpecialOffer(SpecialOfferType.TEN_PERCENT_DISCOUNT, turkey, 10.0)
+        val scenario = TestScenarioBuilder()
+            .withProduct("turkey", turkeyQuantity, ProductUnit.KILO, turkeyPrice)
+            .withTenPercentDiscount("turkey")
+            .build()
+        val turkey = scenario.catalog.product("turkey")!!
 
-        val receipt = elf.checksOutArticlesFrom(sleigh)
+        val receipt = scenario.checkout()
 
         val expectedNonDiscountedPrice = turkeyQuantity * turkeyPrice
         val expectedTotalPrice = expectedNonDiscountedPrice * 0.9
-        val expectedReceiptItem = ReceiptItem(turkey, turkeyQuantity, turkeyPrice, expectedNonDiscountedPrice)
-        val expectedDiscount = Discount(turkey, "10.0% off", expectedTotalPrice - expectedNonDiscountedPrice)
-
         receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
+
+        val expectedReceiptItem = ReceiptItem(turkey, turkeyQuantity, turkeyPrice, expectedNonDiscountedPrice)
         receipt.getItems() shouldContainExactly listOf(expectedReceiptItem)
+
+        val expectedDiscount = Discount(turkey, "10.0% off", expectedTotalPrice - expectedNonDiscountedPrice)
         receipt.getDiscounts() shouldContainExactly listOf(expectedDiscount)
     }
 
