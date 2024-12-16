@@ -23,8 +23,19 @@ class SantamarketTest : StringSpec({
 
         fun withProduct(name: String, quantity: Double, unit: ProductUnit, price: Double): TestScenarioBuilder {
             val product = Product(name, unit)
-            catalog.addProduct(product, price)
+            if (catalog.product(name) == null)
+                catalog.addProduct(product, price)
             sleigh.addItemQuantity(product, quantity)
+            return this
+        }
+
+        fun withRepeatedSingleProduct(name: String, repetitions: Int, unit: ProductUnit, price: Double): TestScenarioBuilder {
+            val product = Product(name, unit)
+            if (catalog.product(name) == null)
+                catalog.addProduct(product, price)
+            repeat(repetitions) {
+                sleigh.addItem(product)
+            }
             return this
         }
 
@@ -211,22 +222,17 @@ class SantamarketTest : StringSpec({
     }
 
     "fiveForAmountDiscount" {
-        val catalog = FakeCatalog()
-        val teddyBear = Product("teddyBear", ProductUnit.EACH)
         val teddyBearPrice = 1.0
-        catalog.addProduct(teddyBear, teddyBearPrice)
-
-        val elf = ChristmasElf(catalog)
-        val discountedPriceForFiveTeddyBears = 4.0
-        elf.addSpecialOffer(SpecialOfferType.FIVE_FOR_AMOUNT, teddyBear, discountedPriceForFiveTeddyBears)
-
-        val sleigh = ShoppingSleigh()
         val numberOfTeddyBears = 6
-        repeat(numberOfTeddyBears) {
-            sleigh.addItem(teddyBear)
-        }
+        val discountedPriceForFiveTeddyBears = 4.0
 
-        val receipt = elf.checksOutArticlesFrom(sleigh)
+        val scenario = TestScenarioBuilder()
+            .withRepeatedSingleProduct("teddyBear", numberOfTeddyBears, ProductUnit.EACH, teddyBearPrice)
+            .withSpecialOffer(SpecialOfferType.FIVE_FOR_AMOUNT, "teddyBear", discountedPriceForFiveTeddyBears)
+            .build()
+        val teddyBear = scenario.catalog.product("teddyBear")!!
+
+        val receipt = scenario.checkout()
 
         val expectedNonDiscountedPrice = numberOfTeddyBears * teddyBearPrice
         val expectedTotalPrice = discountedPriceForFiveTeddyBears + teddyBearPrice
