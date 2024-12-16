@@ -33,7 +33,9 @@ class ChristmasElf(private val catalog: SantamarketCatalog) {
             receipt.addProduct(product, quantity, unitPrice, price)
         }
 
-        sleigh.handleOffers(receipt, offers, catalog)
+        sleigh.handleOffers(offers, catalog).forEach {
+            receipt.addDiscount(it)
+        }
         return receipt
     }
 }
