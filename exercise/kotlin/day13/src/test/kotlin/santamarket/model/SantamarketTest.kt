@@ -1,12 +1,132 @@
 package santamarket.model
 
+import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.doubles.plusOrMinus
+import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import santamarket.model.offer.ItemBundleForDiscountedPrice
-import santamarket.model.offer.Offer
 import santamarket.model.offer.SpecialOfferType
+
+class SantamarketTestDescribe : DescribeSpec({
+    describe("ShoppingSleigh") {
+        it("should be empty initially") {
+            val scenario = TestScenarioBuilder().build()
+
+            scenario.sleigh.getItems() shouldBe emptyList()
+            scenario.sleigh.productQuantities() shouldBe emptyMap()
+        }
+
+        it("should add single item") {
+            val scenario = TestScenarioBuilder()
+                .withRepeatedSingleProduct("teddybear", 1, ProductUnit.EACH, 1.0)
+                .build()
+            val teddybear = scenario.catalog.product("teddybear")!!
+
+            scenario.sleigh.getItems() shouldContainExactly listOf(ProductQuantity(teddybear, 1.0))
+        }
+
+        it("should add multiple items") {
+            val scenario = TestScenarioBuilder()
+                .withRepeatedSingleProduct("teddybear", 3, ProductUnit.EACH, 1.0)
+                .build()
+            val teddybear = scenario.catalog.product("teddybear")!!
+
+            scenario.sleigh.getItems() shouldContainExactly List(3) { (ProductQuantity(teddybear, 1.0)) }
+        }
+
+        it("should add single item with quantity") {
+            val scenario = TestScenarioBuilder()
+                .withProduct("teddybear", 2.0, ProductUnit.EACH, 1.0)
+                .build()
+            val teddybear = scenario.catalog.product("teddybear")!!
+
+            scenario.sleigh.getItems() shouldContainExactly listOf(ProductQuantity(teddybear, 2.0))
+        }
+
+        it("should add multiple items with quantity") {
+            val scenario = TestScenarioBuilder()
+                .withProduct("teddybear", 2.0, ProductUnit.EACH, 1.0)
+                .withProduct("teddybear", 1.0, ProductUnit.EACH, 1.0)
+                .build()
+            val teddybear = scenario.catalog.product("teddybear")!!
+
+            scenario.sleigh.getItems() shouldContainExactly listOf(
+                ProductQuantity(teddybear, 2.0),
+                ProductQuantity(teddybear, 1.0))
+        }
+
+        it("should return 1.0 as quantity of single item") {
+            val scenario = TestScenarioBuilder()
+                .withRepeatedSingleProduct("teddybear", 1, ProductUnit.EACH, 1.0)
+                .build()
+            val teddybear = scenario.catalog.product("teddybear")!!
+
+            scenario.sleigh.productQuantities() shouldContainExactly mapOf(Pair(teddybear, 1.0))
+        }
+
+        it("should return amount of items as quantity of multiple items ") {
+            val scenario = TestScenarioBuilder()
+                .withRepeatedSingleProduct("teddybear", 3, ProductUnit.EACH, 1.0)
+                .build()
+            val teddybear = scenario.catalog.product("teddybear")!!
+
+            scenario.sleigh.productQuantities() shouldContainExactly mapOf(Pair(teddybear, 3.0))
+        }
+
+        it("should return item given quantity for item with quantity") {
+            val scenario = TestScenarioBuilder()
+                .withProduct("teddybear", 2.0, ProductUnit.EACH, 1.0)
+                .build()
+            val teddybear = scenario.catalog.product("teddybear")!!
+
+            scenario.sleigh.productQuantities() shouldContainExactly mapOf(Pair(teddybear, 2.0))
+        }
+
+        it("should return sum of given quantities for multiple items with quantity") {
+            val scenario = TestScenarioBuilder()
+                .withProduct("teddybear", 2.0, ProductUnit.EACH, 1.0)
+                .withProduct("teddybear", 1.0, ProductUnit.EACH, 1.0)
+                .build()
+            val teddybear = scenario.catalog.product("teddybear")!!
+
+            scenario.sleigh.productQuantities() shouldContainExactly mapOf(Pair(teddybear, 3.0))
+        }
+
+        it("should be able to contain different items") {
+            val scenario = TestScenarioBuilder()
+                .withRepeatedSingleProduct("teddybear", 1, ProductUnit.EACH, 1.0)
+                .withProduct("teddybear", 2.0, ProductUnit.EACH, 1.0)
+                .withRepeatedSingleProduct("turkey", 1, ProductUnit.EACH, 1.0)
+                .withProduct("turkey", 3.0, ProductUnit.EACH, 1.0)
+                .build()
+            val teddybear = scenario.catalog.product("teddybear")!!
+            val turkey = scenario.catalog.product("turkey")!!
+
+            scenario.sleigh.getItems() shouldContainExactly listOf(
+                ProductQuantity(teddybear, 1.0),
+                ProductQuantity(teddybear, 2.0),
+                ProductQuantity(turkey, 1.0),
+                ProductQuantity(turkey, 3.0))
+        }
+
+        it("should return the sum of quantities for each product") {
+            val scenario = TestScenarioBuilder()
+                .withRepeatedSingleProduct("teddybear", 1, ProductUnit.EACH, 1.0)
+                .withProduct("teddybear", 2.0, ProductUnit.EACH, 1.0)
+                .withRepeatedSingleProduct("turkey", 1, ProductUnit.EACH, 1.0)
+                .withProduct("turkey", 3.0, ProductUnit.EACH, 1.0)
+                .build()
+            val teddybear = scenario.catalog.product("teddybear")!!
+            val turkey = scenario.catalog.product("turkey")!!
+
+            scenario.sleigh.productQuantities() shouldContainExactly mapOf(
+                Pair(teddybear, 3.0),
+                Pair(turkey, 4.0),)
+        }
+    }
+})
 
 class SantamarketTest : StringSpec({
 

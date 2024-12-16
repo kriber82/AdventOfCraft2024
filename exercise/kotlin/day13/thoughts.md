@@ -43,7 +43,10 @@
 - [ ] 2 Parking-Lot (any change with no direct impact on the main goal)
     - [ ] 2.1 Individual tests look very long
     - [x] 2.2 Improve (internal) discount names to reflect new understanding of discount types better
-    - [ ] 2.3 Talk to PO whether we can also improve external discount names & printouts
+    - [ ] 2.3 Talk to PO 
+      - [ ] We intend to deprecate SpecialOfferType -> OK?
+      - [ ] We intend to improve discount descriptions on receipts -> OK?
+      - [ ] We intend to remove ShoppingSleigh.addItem, as it adds complexity without much value -> OK?
     - [x] Reformulate discounts with polymorphism?
     - [x] add more expressive way of creating & adding offers to ChristmasElf 
       - [x] deprecate ChristmasElf.addSpecialOffer
