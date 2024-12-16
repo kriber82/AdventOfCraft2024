@@ -19,17 +19,4 @@ class ShoppingSleigh {
         productQuantities[product] = productQuantities.getOrDefault(product, 0.0) + quantity
     }
 
-    fun handleOffers(offers: Map<Product, Offer>, catalog: SantamarketCatalog): List<Discount> {
-        val result = mutableListOf<Discount>()
-        productQuantities.forEach { (product, itemsInCart) ->
-            offers[product]?.let { offer ->
-                val unitPrice = catalog.getUnitPrice(product)
-                val discount = offer.getDiscount(unitPrice, itemsInCart)
-                if (discount != null) {
-                    result.add(discount)
-                }
-            }
-        }
-        return result
-    }
 }

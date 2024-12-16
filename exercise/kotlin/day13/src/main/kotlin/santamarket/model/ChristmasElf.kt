@@ -33,9 +33,24 @@ class ChristmasElf(private val catalog: SantamarketCatalog) {
             receipt.addProduct(product, quantity, unitPrice, price)
         }
 
-        sleigh.handleOffers(offers, catalog).forEach {
+        findOffers(sleigh.productQuantities()).forEach {
             receipt.addDiscount(it)
         }
         return receipt
     }
+
+    private fun findOffers(productQuantities: Map<Product, Double>): List<Discount> {
+        val result = mutableListOf<Discount>()
+        productQuantities.forEach { (product, itemsInCart) ->
+            offers[product]?.let { offer ->
+                val unitPrice = catalog.getUnitPrice(product)
+                val discount = offer.getDiscount(unitPrice, itemsInCart)
+                if (discount != null) {
+                    result.add(discount)
+                }
+            }
+        }
+        return result
+    }
+
 }
