@@ -4,6 +4,8 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.doubles.plusOrMinus
+import io.kotest.matchers.doubles.shouldBeLessThan
+import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import santamarket.model.offer.ItemBundleForDiscountedPrice
@@ -185,13 +187,65 @@ class SantamarketTestDescribe : DescribeSpec({
         }
 
         describe("list of items") {
+            it("should contain one line with unit price for single item") {
+                val scenario = TestScenarioBuilder()
+                    .withProduct("teddyBear", 1.0, ProductUnit.EACH, 1.0)
+                    .build()
+                val teddyBear = scenario.catalog.product("teddyBear")!!
 
+                val receipt = scenario.checkout()
+
+                receipt.getItems() shouldContainExactly listOf(ReceiptItem(teddyBear, 1.0, 1.0, 1.0))
+            }
+
+            it("should contain one line with total price for single item with quality above 1") {
+                val scenario = TestScenarioBuilder()
+                    .withProduct("teddyBear", 3.0, ProductUnit.EACH, 1.0)
+                    .build()
+                val teddyBear = scenario.catalog.product("teddyBear")!!
+
+                val receipt = scenario.checkout()
+
+                receipt.getItems() shouldContainExactly listOf(ReceiptItem(teddyBear, 3.0, 1.0, 3.0))
+            }
+
+            it("should contain individual lines for products with several items") {
+                val scenario = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddyBear", 2, ProductUnit.EACH, 1.5)
+                    .withRepeatedSingleProduct("turkey", 1, ProductUnit.EACH, 2.0)
+                    .build()
+                val teddyBear = scenario.catalog.product("teddyBear")!!
+                val turkey = scenario.catalog.product("turkey")!!
+
+                val receipt = scenario.checkout()
+
+                receipt.getItems() shouldContainExactly listOf(
+                    ReceiptItem(teddyBear, 1.0, 1.5, 1.5),
+                    ReceiptItem(teddyBear, 1.0, 1.5, 1.5),
+                    ReceiptItem(turkey, 1.0, 2.0, 2.0))
+            }
+
+            it("should ignore discounts in calculated line price") {
+                val scenario = TestScenarioBuilder()
+                    .withProduct("teddyBear", 1.0, ProductUnit.EACH, 1.0)
+                    .withTenPercentDiscount("teddyBear")
+                    .build()
+                val teddyBear = scenario.catalog.product("teddyBear")!!
+
+                val receipt = scenario.checkout()
+
+                receipt.getItems() shouldContainExactly listOf(ReceiptItem(teddyBear, 1.0, 1.0, 1.0))
+                receipt.getTotalPrice() shouldBeLessThan 1.0
+                receipt.getDiscounts().size shouldBeGreaterThan 0
+            }
         }
 
         describe("list of discounts") {
 
         }
     }
+
+    describe("discounts") {}
 })
 
 class SantamarketTest : StringSpec({

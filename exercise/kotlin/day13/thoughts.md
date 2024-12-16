@@ -59,9 +59,9 @@
     - [ ] express tests in a way that better highlights the different tested featuers
       - [x] sleigh items & total 
       - [x] total
-      - [ ] receipt items
-        - [ ] without discounts
-        - [ ] unchanged by discounts
+      - [x] receipt items
+        - [x] without discounts
+        - [x] unchanged by discounts
       - [ ] discounts (each one individuially)
         - [ ] old addSpecialOffer
         - [ ] receipt output
