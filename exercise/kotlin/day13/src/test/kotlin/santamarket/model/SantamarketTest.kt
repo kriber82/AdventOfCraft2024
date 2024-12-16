@@ -10,50 +10,6 @@ import santamarket.model.offer.SpecialOfferType
 
 class SantamarketTest : StringSpec({
 
-    class TestScenario(val catalog: FakeCatalog, val sleigh: ShoppingSleigh, val elf: ChristmasElf) {
-        fun checkout(): Receipt {
-            return elf.checksOutArticlesFrom(sleigh)
-        }
-    }
-
-    class TestScenarioBuilder {
-        private val catalog = FakeCatalog()
-        private val sleigh = ShoppingSleigh()
-        private val elf = ChristmasElf(catalog)
-
-        fun withProduct(name: String, quantity: Double, unit: ProductUnit, price: Double): TestScenarioBuilder {
-            val product = Product(name, unit)
-            if (catalog.product(name) == null)
-                catalog.addProduct(product, price)
-            sleigh.addItemQuantity(product, quantity)
-            return this
-        }
-
-        fun withRepeatedSingleProduct(name: String, repetitions: Int, unit: ProductUnit, price: Double): TestScenarioBuilder {
-            val product = Product(name, unit)
-            if (catalog.product(name) == null)
-                catalog.addProduct(product, price)
-            repeat(repetitions) {
-                sleigh.addItem(product)
-            }
-            return this
-        }
-
-        fun withTenPercentDiscount(productName: String): TestScenarioBuilder {
-            elf.addSpecialOffer(SpecialOfferType.TEN_PERCENT_DISCOUNT, catalog.product(productName)!!, 10.0)
-            return this
-        }
-
-        fun withSpecialOffer(specialOfferType: SpecialOfferType, productName: String, argument: Double): TestScenarioBuilder {
-            elf.addSpecialOffer(specialOfferType, catalog.product(productName)!!, argument)
-            return this
-        }
-
-        fun build(): TestScenario {
-            return TestScenario(catalog, sleigh, elf)
-        }
-    }
-
     "noDiscount" {
         val teddyBearPrice = 1.0
         val numberOfTeddyBears = 3
