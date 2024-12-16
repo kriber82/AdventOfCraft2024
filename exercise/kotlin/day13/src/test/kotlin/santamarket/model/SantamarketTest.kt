@@ -8,38 +8,17 @@ import santamarket.model.offer.ItemBundleForDiscountedPrice
 import santamarket.model.offer.SpecialOfferType
 
 class SantamarketTest : StringSpec({
-    "noDiscount" {
-        val catalog = FakeCatalog()
-        val teddyBear = Product("teddyBear", ProductUnit.EACH)
-        val teddyBearPrice = 1.0
-        catalog.addProduct(teddyBear, teddyBearPrice)
 
-        val sleigh = ShoppingSleigh()
-        val numberOfTeddyBears = 3
-        sleigh.addItemQuantity(teddyBear, numberOfTeddyBears.toDouble())
-
-        val elf = ChristmasElf(catalog)
-        val receipt = elf.checksOutArticlesFrom(sleigh)
-
-        val expectedTotalPrice = numberOfTeddyBears * teddyBearPrice
-        val expectedReceiptItem =
-            ReceiptItem(teddyBear, numberOfTeddyBears.toDouble(), teddyBearPrice, expectedTotalPrice)
-
-        receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
-        receipt.getItems() shouldContainExactly listOf(expectedReceiptItem)
-    }
-
-    class TestScenario(val catalog: FakeCatalog, val sleigh: ShoppingSleigh) {
+    class TestScenario(val catalog: FakeCatalog, val sleigh: ShoppingSleigh, val elf: ChristmasElf) {
         fun checkout(): Receipt {
             return elf.checksOutArticlesFrom(sleigh)
         }
-
-        val elf: ChristmasElf = ChristmasElf(catalog)
     }
 
     class TestScenarioBuilder {
         private val catalog = FakeCatalog()
         private val sleigh = ShoppingSleigh()
+        private val elf = ChristmasElf(catalog)
 
         fun withProduct(name: String, quantity: Double, unit: ProductUnit, price: Double): TestScenarioBuilder {
             val product = Product(name, unit)
@@ -49,14 +28,37 @@ class SantamarketTest : StringSpec({
         }
 
         fun withTenPercentDiscount(productName: String): TestScenarioBuilder {
-            val elf = ChristmasElf(catalog)
             elf.addSpecialOffer(SpecialOfferType.TEN_PERCENT_DISCOUNT, catalog.product(productName)!!, 10.0)
             return this
         }
 
-        fun build(): TestScenario {
-            return TestScenario(catalog, sleigh)
+        fun withSpecialOffer(specialOfferType: SpecialOfferType, product: Product, argument: Double): TestScenarioBuilder {
+            elf.addSpecialOffer(specialOfferType, product, argument)
+            return this
         }
+
+        fun build(): TestScenario {
+            return TestScenario(catalog, sleigh, elf)
+        }
+    }
+
+    "noDiscount" {
+        val teddyBearPrice = 1.0
+        val numberOfTeddyBears = 3
+
+        val scenario = TestScenarioBuilder()
+            .withProduct("teddyBear", numberOfTeddyBears.toDouble(), ProductUnit.EACH, teddyBearPrice)
+            .build()
+        val teddyBear = scenario.catalog.product("teddyBear")!!
+
+        val receipt = scenario.checkout()
+
+        val expectedTotalPrice = numberOfTeddyBears * teddyBearPrice
+        val expectedReceiptItem =
+            ReceiptItem(teddyBear, numberOfTeddyBears.toDouble(), teddyBearPrice, expectedTotalPrice)
+
+        receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
+        receipt.getItems() shouldContainExactly listOf(expectedReceiptItem)
     }
 
     "tenPercentDiscount" {
@@ -109,19 +111,16 @@ class SantamarketTest : StringSpec({
     }
 
     "threeForTwoDiscount price other than 1.0" {
-        val catalog = FakeCatalog()
-        val teddyBear = Product("teddyBear", ProductUnit.EACH)
         val teddyBearPrice = 2.0
-        catalog.addProduct(teddyBear, teddyBearPrice)
-
-        val elf = ChristmasElf(catalog)
-        elf.addSpecialOffer(SpecialOfferType.THREE_FOR_TWO, teddyBear, 0.0)
-
-        val sleigh = ShoppingSleigh()
         val numberOfTeddyBears = 3
-        sleigh.addItemQuantity(teddyBear, numberOfTeddyBears.toDouble())
 
-        val receipt = elf.checksOutArticlesFrom(sleigh)
+        val scenario = TestScenarioBuilder()
+            .withProduct("teddyBear", numberOfTeddyBears.toDouble(), ProductUnit.EACH, teddyBearPrice)
+            .withSpecialOffer(SpecialOfferType.THREE_FOR_TWO, Product("teddyBear", ProductUnit.EACH), 0.0)
+            .build()
+        val teddyBear = scenario.catalog.product("teddyBear")!!
+
+        val receipt = scenario.checkout()
 
         val expectedNonDiscountedPrice = numberOfTeddyBears * teddyBearPrice
         val expectedTotalPrice = 2 * teddyBearPrice
