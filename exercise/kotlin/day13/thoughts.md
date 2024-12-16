@@ -49,8 +49,8 @@
       - [x] deprecate ChristmasElf.addSpecialOffer
       - [x] test new ChristmasElf.addOffer
     - [x] add tests for bundle offers (reduced price and reduced items to pay) that don't match bundle size (exists: fiveForAmountDiscount)
-    - [ ] understand difference between ShoppingSleight.getItems and ShoppingSleigh.getQuantities
-      - [ ] potentially refactor to unify concepts
+    - [x] understand difference between ShoppingSleight.getItems and ShoppingSleigh.getQuantities
+      - [x] potentially refactor to unify concepts (did as much as possible without touching public interface)
     - [ ] improve expressiveness of assertions
     - [ ] introduce a concept for ProductInSleight (might simplify both prod & test code)
     - [ ] express tests in a way that better highlights the different tested featuers
@@ -63,6 +63,7 @@
         - [ ] receipt output
         - [ ] reduced price
       - [ ] new addSpecialOffer (might be sufficient to test with one offer type)
+      - [ ] there can only be one special offer per product
     - [ ] check rest of codebase for possible improvements
 
 Starting with 1.1:

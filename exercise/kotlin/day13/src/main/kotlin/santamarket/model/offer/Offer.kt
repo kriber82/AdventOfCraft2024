@@ -8,6 +8,6 @@ interface Offer {
 
     fun getDiscount(
         unitPrice: Double,
-        itemsInCart: Double
+        sumOfItemQuantitiesInSleigh: Double
     ): Discount?
 }

@@ -10,10 +10,10 @@ class ItemBundleForDiscountedPrice(
 ) :
     Offer {
 
-    override fun getDiscount(unitPrice: Double, itemsInCart: Double): Discount? {
+    override fun getDiscount(unitPrice: Double, sumOfItemQuantitiesInSleigh: Double): Discount? {
         return getDiscountWithReducedPriceForMultipleItems(
             product,
-            itemsInCart,
+            sumOfItemQuantitiesInSleigh,
             unitPrice,
             bundleItemsAmount,
             bundlePrice,

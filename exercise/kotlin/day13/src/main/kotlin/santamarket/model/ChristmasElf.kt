@@ -24,23 +24,35 @@ class ChristmasElf(private val catalog: SantamarketCatalog) {
     fun checksOutArticlesFrom(sleigh: ShoppingSleigh): Receipt {
         val receipt = Receipt()
 
-        sleigh.getItems().forEach { (product, quantity) ->
-            val unitPrice = catalog.getUnitPrice(product)
-            val price = quantity * unitPrice
-            receipt.addProduct(product, quantity, unitPrice, price)
+        sleigh.getItems().forEach { (product, individualItemQuantity) ->
+            addItemToReceipt(product, individualItemQuantity, receipt)
         }
 
-        sleigh.productQuantities().forEach { (product, itemsInCart) ->
-            offers[product]?.let { offer ->
-                val unitPrice = catalog.getUnitPrice(product)
-                val discount = offer.getDiscount(unitPrice, itemsInCart)
-                if (discount != null) {
-                    receipt.addDiscount(discount)
-                }
-            }
+        sleigh.productQuantities().forEach { (product, sumOfItemQuantitiesInSleigh) ->
+            addDiscountToReceiptIfApplicable(product, sumOfItemQuantitiesInSleigh, receipt)
         }
 
         return receipt
+    }
+
+    private fun addItemToReceipt(product: Product, quantity: Double, receipt: Receipt) {
+        val unitPrice = catalog.getUnitPrice(product)
+        val price = quantity * unitPrice
+        receipt.addProduct(product, quantity, unitPrice, price)
+    }
+
+    private fun addDiscountToReceiptIfApplicable(
+        product: Product,
+        sumOfItemQuantitiesInSleigh: Double,
+        receipt: Receipt
+    ) {
+        offers[product]?.let { offer ->
+            val unitPrice = catalog.getUnitPrice(product)
+            val discount = offer.getDiscount(unitPrice, sumOfItemQuantitiesInSleigh)
+            if (discount != null) {
+                receipt.addDiscount(discount)
+            }
+        }
     }
 
 }

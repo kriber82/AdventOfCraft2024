@@ -1,22 +1,20 @@
 package santamarket.model
 
-import santamarket.model.offer.Offer
-
 class ShoppingSleigh {
-    private val items = mutableListOf<ProductQuantity>()
-    private val productQuantities = mutableMapOf<Product, Double>()
+    private val individualItems = mutableListOf<ProductQuantity>()
+    private val sumOfItemQuantities = mutableMapOf<Product, Double>()
 
-    fun getItems(): List<ProductQuantity> = items.toList()
+    fun getItems(): List<ProductQuantity> = individualItems.toList()
 
     fun addItem(product: Product) {
         addItemQuantity(product, 1.0)
     }
 
-    fun productQuantities(): Map<Product, Double> = productQuantities.toMap()
+    fun productQuantities(): Map<Product, Double> = sumOfItemQuantities.toMap()
 
     fun addItemQuantity(product: Product, quantity: Double) {
-        items.add(ProductQuantity(product, quantity))
-        productQuantities[product] = productQuantities.getOrDefault(product, 0.0) + quantity
+        individualItems.add(ProductQuantity(product, quantity))
+        sumOfItemQuantities[product] = sumOfItemQuantities.getOrDefault(product, 0.0) + quantity
     }
 
 }

@@ -8,9 +8,9 @@ class TenPercentOff(override val product: Product, private val percentOff: Doubl
 
     override fun getDiscount(
         unitPrice: Double,
-        itemsInCart: Double
+        sumOfItemQuantitiesInSleigh: Double
     ): Discount {
-        val undiscountedTotal = unitPrice * itemsInCart
+        val undiscountedTotal = unitPrice * sumOfItemQuantitiesInSleigh
         return Discount(
             product,
             "$percentOff% off",
