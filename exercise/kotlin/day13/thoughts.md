@@ -48,7 +48,19 @@
     - [x] add more expressive way of creating & adding offers to ChristmasElf 
       - [x] deprecate ChristmasElf.addSpecialOffer
       - [x] test new ChristmasElf.addOffer
-    - [ ] add tests for bundle offers (reduced price and reduced items to pay) that don't match bundle size
+    - [x] add tests for bundle offers (reduced price and reduced items to pay) that don't match bundle size (exists: fiveForAmountDiscount)
+    - [ ] improve expressiveness of assertions
+    - [ ] introduce a concept for ProductInSleight (might simplify both prod & test code)
+    - [ ] express tests in a way that better highlights the different tested featuers
+      - [ ] total
+      - [ ] receipt items
+        - [ ] without discounts
+        - [ ] unchanged by discounts
+      - [ ] discounts (each one individuially)
+        - [ ] old addSpecialOffer
+        - [ ] receipt output
+        - [ ] reduced price
+      - [ ] new addSpecialOffer (might be sufficient to test with one offer type)
     - [ ] check rest of codebase for possible improvements
 
 Starting with 1.1:
