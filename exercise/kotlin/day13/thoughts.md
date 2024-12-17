@@ -66,8 +66,8 @@
         - [ ] old addSpecialOffer
         - [ ] receipt output
         - [ ] reduced price
-      - [ ] new addSpecialOffer (might be sufficient to test with one offer type)
-      - [ ] there can only be one special offer per product
+      - [x] new addSpecialOffer (might be sufficient to test with one offer type)
+      - [x] there can only be one special offer per product
       - [ ] maybe introduce FakeOffer for simpler testing of other aspects of the code
     - [ ] check rest of codebase for possible improvements
 

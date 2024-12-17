@@ -10,6 +10,7 @@ import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import santamarket.model.offer.ItemBundleForDiscountedPrice
 import santamarket.model.offer.SpecialOfferType
+import santamarket.model.offer.TenPercentOff
 
 class SantamarketTestDescribe : DescribeSpec({
     describe("ShoppingSleigh") {
@@ -198,7 +199,7 @@ class SantamarketTestDescribe : DescribeSpec({
                 receipt.getItems() shouldContainExactly listOf(ReceiptItem(teddyBear, 1.0, 1.0, 1.0))
             }
 
-            it("should contain one line with total price for single item with quality above 1") {
+            it("should contain one line with total price for single item with quantity above 1") {
                 val scenario = TestScenarioBuilder()
                     .withProduct("teddyBear", 3.0, ProductUnit.EACH, 1.0)
                     .build()
@@ -251,7 +252,7 @@ class SantamarketTestDescribe : DescribeSpec({
                 receipt.getDiscounts() shouldBe emptyList()
             }
 
-            it("should contain discount for single item with discount") {
+            it("should contain discount for single item with offer") {
                 val scenario = TestScenarioBuilder()
                     .withProduct("teddyBear", 1.0, ProductUnit.EACH, 1.0)
                     .withTenPercentDiscount("teddyBear")
@@ -263,7 +264,7 @@ class SantamarketTestDescribe : DescribeSpec({
                 receipt.getDiscounts() shouldContainExactly listOf(Discount(teddyBear, "10.0% off", -0.1))
             }
 
-            it("should countain single discount for several items of the same type") {
+            it("should countain single entry for several items of the same type") {
                 val scenario = TestScenarioBuilder()
                     .withRepeatedSingleProduct("teddyBear", 3, ProductUnit.EACH, 1.0)
                     .withTenPercentDiscount("teddyBear")
@@ -275,7 +276,23 @@ class SantamarketTestDescribe : DescribeSpec({
                 receipt.getDiscounts() shouldContainExactly listOf(Discount(teddyBear, "10.0% off", -0.3))
             }
 
-            it("should not contain discount for items with inapplicable offer") {
+        }
+    }
+
+    describe("discount types") {
+        describe("christmas elfs discount logic") {
+            it("should apply discount for each applicable item") {
+                val scenario = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddyBear", 2, ProductUnit.EACH, 1.0)
+                    .withTenPercentDiscount("teddyBear")
+                    .build()
+
+                val receipt = scenario.checkout()
+
+                receipt.getTotalPrice() shouldBe (2 * 0.9 plusOrMinus 0.001)
+            }
+
+            it("should not apply discount for correct item type with insufficient quantity") {
                 val scenario = TestScenarioBuilder()
                     .withProduct("teddyBear", 1.0, ProductUnit.EACH, 1.0)
                     .withTwoForOneDiscount("teddyBear")
@@ -284,12 +301,75 @@ class SantamarketTestDescribe : DescribeSpec({
 
                 val receipt = scenario.checkout()
 
-                receipt.getDiscounts() shouldBe emptyList()
+                receipt.getTotalPrice() shouldBe (1.0 plusOrMinus 0.001)
+            }
+
+            it("should not apply discount for different item type") {
+                val scenario = TestScenarioBuilder()
+                    .withProduct("teddyBear", 0.0, ProductUnit.EACH, 1.0)
+                    .withProduct("turkey", 1.0, ProductUnit.EACH, 1.0)
+                    .withTwoForOneDiscount("teddyBear")
+                    .build()
+                val teddyBear = scenario.catalog.product("teddyBear")!!
+                val turkey = scenario.catalog.product("turkey")!!
+
+                val receipt = scenario.checkout()
+
+                receipt.getTotalPrice() shouldBe (1.0 plusOrMinus 0.001)
+            }
+
+            it("should check the total quantity of an item when applying discount") {
+                val scenario = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddyBear", 2, ProductUnit.EACH, 1.0)
+                    .withTwoForOneDiscount("teddyBear")
+                    .build()
+                val teddyBear = scenario.catalog.product("teddyBear")!!
+
+                val receipt = scenario.checkout()
+
+                receipt.getTotalPrice() shouldBe (1.0 plusOrMinus 0.001)
+            }
+
+            it("should override existing offer for given item type") {
+                val scenario = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddyBear", 2, ProductUnit.EACH, 1.0)
+                    .withTenPercentDiscount("teddyBear")
+                    .withTwoForOneDiscount("teddyBear")
+                    .build()
+                val teddyBear = scenario.catalog.product("teddyBear")!!
+
+                val receipt = scenario.checkout()
+
+                receipt.getTotalPrice() shouldBe (1.0 plusOrMinus 0.001)
+            }
+
+            it("should apply offers added with new addOffer") {
+                val scenario = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddyBear", 1, ProductUnit.EACH, 1.0)
+                    .build()
+                val teddyBear = scenario.catalog.product("teddyBear")!!
+                scenario.elf.addSpecialOffer(TenPercentOff(teddyBear, 10.0))
+
+                val receipt = scenario.checkout()
+
+                receipt.getTotalPrice() shouldBe (0.9 plusOrMinus 0.001)
+            }
+
+        }
+
+        describe("ten percent discount") {
+            it("should apply discount for each item") {
+                val scenario = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddyBear", 2, ProductUnit.EACH, 1.0)
+                    .withTenPercentDiscount("teddyBear")
+                    .build()
+
+                val receipt = scenario.checkout()
+
+                receipt.getTotalPrice() shouldBe (2 * 0.9 plusOrMinus 0.001)
             }
         }
     }
-
-    describe("discounts") {}
 })
 
 class SantamarketTest : StringSpec({
