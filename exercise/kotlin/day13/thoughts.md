@@ -16,7 +16,7 @@
     - [ ] 👍 1.1 Prepare the code for an easy addition of the `X for Y` discount type family
         - [x] 1.1.1 Merge "x" into other when branches
         - [x] 1.1.2 Push x into individual branches, to reduce dependencies between branches
-        - [ ] 1.1.4 Make different X for Y logics as similar as possible
+        - [x] 1.1.4 Make different X for Y logics as similar as possible
           - [x] 1.1.4.1 Introduce `discountItemsGiven` & `discountItemsPaid`
           - [x] 1.1.4.2 Use `discountItemsGiven` & `discountItemsPaid`
           - [x] 1.1.4.3 Inline variables so that all variants have the same equation
@@ -41,7 +41,7 @@
         - [ ] ...
     - [x] 👍 1.3 Refactor the existing code to use the `X for Y` discount computation method with the `Three for two` discount
 - [ ] 2 Parking-Lot (any change with no direct impact on the main goal)
-    - [ ] 2.1 Individual tests look very long
+    - [x] 2.1 Individual tests look very long
     - [x] 2.2 Improve (internal) discount names to reflect new understanding of discount types better
     - [ ] 2.3 Talk to PO 
       - [ ] We intend to deprecate SpecialOfferType -> OK?
@@ -54,7 +54,7 @@
     - [x] add tests for bundle offers (reduced price and reduced items to pay) that don't match bundle size (exists: fiveForAmountDiscount)
     - [x] understand difference between ShoppingSleight.getItems and ShoppingSleigh.getQuantities
       - [x] potentially refactor to unify concepts (did as much as possible without touching public interface)
-    - [ ] improve expressiveness of assertions
+    - [x] improve expressiveness of assertions -> tests now have way less assertions & 
     - [ ] introduce a concept for ProductInSleight (might simplify both prod & test code)
     - [ ] express tests in a way that better highlights the different tested featuers
       - [x] sleigh items & total 
