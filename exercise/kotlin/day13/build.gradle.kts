@@ -1,4 +1,3 @@
-import info.solidsoft.gradle.pitest.PitestPluginExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -28,15 +27,6 @@ pitest {
     timestampedReports.set(false)
     verbose.set(true)
 }
-
-/*
-// Assuming that you have already configured the Gradle/Maven extension
-configure<PitestPluginExtension> {
-    // testPlugin.set("Kotest")    // needed only with old PIT <1.6.7, otherwise having kotest-extensions-pitest on classpath is enough
-    targetClasses.set(listOf("santamarket.model.*"))
-}
-
- */
 
 tasks.test {
     useJUnitPlatform()

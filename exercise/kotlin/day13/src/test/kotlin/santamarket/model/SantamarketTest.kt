@@ -487,15 +487,16 @@ class SantamarketTestDescribe : DescribeSpec({
                     val amountOfFullBundles = 2
                     val amountOfLeftoverItems = 1
                     val itemsInSleigh = amountOfFullBundles * itemQuantityInBundle + amountOfLeftoverItems
+                    val unitPrice = 1.1
 
                     val builder = TestScenarioBuilder()
-                        .withRepeatedSingleProduct("teddyBear", itemsInSleigh, ProductUnit.EACH, 1.0)
+                        .withRepeatedSingleProduct("teddyBear", itemsInSleigh, ProductUnit.EACH, unitPrice)
                     addOfferToScenario(builder, "teddyBear", discountedPrice)
                     val scenario = builder.build()
 
                     val receipt = scenario.checkout()
 
-                    val expectedTotalPrice = amountOfFullBundles * discountedPrice + amountOfLeftoverItems * 1.0
+                    val expectedTotalPrice = amountOfFullBundles * discountedPrice + amountOfLeftoverItems * unitPrice
                     receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
                 }
 
