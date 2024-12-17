@@ -8,6 +8,9 @@ import io.kotest.matchers.doubles.shouldBeLessThan
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import io.kotest.property.Exhaustive
+import io.kotest.property.exhaustive.collection
+import io.kotest.property.forAll
 import santamarket.model.offer.ItemBundleForDiscountedPrice
 import santamarket.model.offer.SpecialOfferType
 import santamarket.model.offer.TenPercentOff
@@ -57,7 +60,8 @@ class SantamarketTestDescribe : DescribeSpec({
 
             scenario.sleigh.getItems() shouldContainExactly listOf(
                 ProductQuantity(teddyBear, 2.0),
-                ProductQuantity(teddyBear, 1.0))
+                ProductQuantity(teddyBear, 1.0)
+            )
         }
 
         it("should return 1.0 as quantity of single item") {
@@ -111,7 +115,8 @@ class SantamarketTestDescribe : DescribeSpec({
                 ProductQuantity(teddyBear, 1.0),
                 ProductQuantity(teddyBear, 2.0),
                 ProductQuantity(turkey, 1.0),
-                ProductQuantity(turkey, 3.0))
+                ProductQuantity(turkey, 3.0)
+            )
         }
 
         it("should return the sum of quantities for each product") {
@@ -126,7 +131,8 @@ class SantamarketTestDescribe : DescribeSpec({
 
             scenario.sleigh.productQuantities() shouldContainExactly mapOf(
                 Pair(teddyBear, 3.0),
-                Pair(turkey, 4.0),)
+                Pair(turkey, 4.0),
+            )
         }
     }
 
@@ -223,7 +229,8 @@ class SantamarketTestDescribe : DescribeSpec({
                 receipt.getItems() shouldContainExactly listOf(
                     ReceiptItem(teddyBear, 1.0, 1.5, 1.5),
                     ReceiptItem(teddyBear, 1.0, 1.5, 1.5),
-                    ReceiptItem(turkey, 1.0, 2.0, 2.0))
+                    ReceiptItem(turkey, 1.0, 2.0, 2.0)
+                )
             }
 
             it("should ignore discounts in calculated line price") {
@@ -372,49 +379,68 @@ class SantamarketTestDescribe : DescribeSpec({
             }
         }
 
-        describe("two for one discount") {
-            val scenario = TestScenarioBuilder()
-                .withRepeatedSingleProduct("teddyBear", 2, ProductUnit.EACH, 1.0)
-                .withTwoForOneDiscount("teddyBear")
-                .build()
+        forAll(
+            Exhaustive.collection(
+                listOf(
+                    Triple(TestScenarioBuilder::withTwoForOneDiscount, 2, 1),
+                    Triple(TestScenarioBuilder::withThreeForTwoDiscount, 3, 2),
+                )
+            )
+        ) { (addOfferToScenario, receivedItems, paidItems) ->
 
-            it("should reduce the price to single unit price") {
-                val receipt = scenario.checkout()
+            describe("$receivedItems for $paidItems offer") {
 
-                receipt.getTotalPrice() shouldBe (1.0 plusOrMinus 0.001)
+                val builder = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddyBear", receivedItems, ProductUnit.EACH, 1.0)
+                addOfferToScenario(builder, "teddyBear")
+                val scenario = builder.build()
+
+                it("should reduce the price to single unit price") {
+                    val receipt = scenario.checkout()
+
+                    val expectedTotalPrice = paidItems * 1.0
+                    receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
+                }
+
+                it("should output the correct discount description") {
+                    val receipt = scenario.checkout()
+
+                    receipt.getDiscounts().first().description shouldBe ("$receivedItems for $paidItems")
+                }
+
+                it("should not apply discount for item count below bundle size") {
+                    val itemsInSleigh = receivedItems - 1
+                    val builder = TestScenarioBuilder()
+                        .withRepeatedSingleProduct("teddyBear", itemsInSleigh, ProductUnit.EACH, 1.0)
+                    addOfferToScenario(builder, "teddyBear")
+                    val scenario = builder.build()
+
+                    val receipt = scenario.checkout()
+
+                    val expectedPrice = itemsInSleigh * 1.0
+                    receipt.getTotalPrice() shouldBe (expectedPrice plusOrMinus 0.001)
+                    receipt.getDiscounts() shouldBe emptyList()
+                }
+
+                it("should apply discount to full bundles and sell leftover items for normal price") {
+                    val amountOfFullBundles = 2
+                    val amountOfLeftoverItems = 1
+                    val itemsInSleigh = amountOfFullBundles * receivedItems + amountOfLeftoverItems
+
+                    val builder = TestScenarioBuilder()
+                        .withRepeatedSingleProduct("teddyBear", itemsInSleigh, ProductUnit.EACH, 1.0)
+                    addOfferToScenario(builder, "teddyBear")
+                    val scenario = builder.build()
+
+                    val receipt = scenario.checkout()
+
+                    val bundlePrice = paidItems * 1.0
+                    val expectedTotalPrice = amountOfFullBundles * bundlePrice + amountOfLeftoverItems * 1.0
+                    receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
+                }
+
             }
-
-            it("should output the correct discount description") {
-                val receipt = scenario.checkout()
-
-                receipt.getDiscounts().first().description shouldBe ("2 for 1")
-            }
-
-            it("should not apply discount for single item") {
-                val scenario = TestScenarioBuilder()
-                    .withRepeatedSingleProduct("teddyBear", 1, ProductUnit.EACH, 1.0)
-                    .withTwoForOneDiscount("teddyBear")
-                    .build()
-
-                val receipt = scenario.checkout()
-
-                receipt.getTotalPrice() shouldBe (1.0 plusOrMinus 0.001)
-                receipt.getDiscounts() shouldBe emptyList()
-            }
-
-            it("should apply discount to full bundles and sell leftover items for normal price") {
-                val scenario = TestScenarioBuilder()
-                    .withRepeatedSingleProduct("teddyBear", 5, ProductUnit.EACH, 1.0)
-                    .withTwoForOneDiscount("teddyBear")
-                    .build()
-
-                val receipt = scenario.checkout()
-
-                val amountOfFullBundles = 2
-                val amountOfLeftoverItems = 1
-                val expectedTotalPrice = amountOfFullBundles * 1.0 + amountOfLeftoverItems * 1.0
-                receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
-            }
+            true
 
         }
     }
