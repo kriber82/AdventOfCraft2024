@@ -359,10 +359,63 @@ class SantamarketTestDescribe : DescribeSpec({
                 .withTenPercentDiscount("teddyBear")
                 .build()
 
+            it("should reduce the price by ten percent") {
                 val receipt = scenario.checkout()
 
                 receipt.getTotalPrice() shouldBe (2 * 0.9 plusOrMinus 0.001)
             }
+
+            it("should output the correct discount description") {
+                val receipt = scenario.checkout()
+
+                receipt.getDiscounts().first().description shouldBe ("10.0% off")
+            }
+        }
+
+        describe("two for one discount") {
+            val scenario = TestScenarioBuilder()
+                .withRepeatedSingleProduct("teddyBear", 2, ProductUnit.EACH, 1.0)
+                .withTwoForOneDiscount("teddyBear")
+                .build()
+
+            it("should reduce the price to single unit price") {
+                val receipt = scenario.checkout()
+
+                receipt.getTotalPrice() shouldBe (1.0 plusOrMinus 0.001)
+            }
+
+            it("should output the correct discount description") {
+                val receipt = scenario.checkout()
+
+                receipt.getDiscounts().first().description shouldBe ("2 for 1")
+            }
+
+            it("should not apply discount for single item") {
+                val scenario = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddyBear", 1, ProductUnit.EACH, 1.0)
+                    .withTwoForOneDiscount("teddyBear")
+                    .build()
+
+                val receipt = scenario.checkout()
+
+                receipt.getTotalPrice() shouldBe (1.0 plusOrMinus 0.001)
+                receipt.getDiscounts() shouldBe emptyList()
+            }
+
+            it("should apply discount to full bundles and sell leftover items for normal price") {
+                val scenario = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddyBear", 5, ProductUnit.EACH, 1.0)
+                    .withTwoForOneDiscount("teddyBear")
+                    .build()
+
+                val receipt = scenario.checkout()
+
+                val amountOfFullBundles = 2
+                val amountOfLeftoverItems = 1
+                val expectedTotalPrice = amountOfFullBundles * 1.0 + amountOfLeftoverItems * 1.0
+                receipt.getTotalPrice() shouldBe (expectedTotalPrice plusOrMinus 0.001)
+            }
+
         }
     }
 })
