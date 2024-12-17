@@ -1,5 +1,27 @@
 # Day 13
 
+## TL;DR - My personal highlights afterwards
+
+I had so much fun with this. Maybe a little too much...
+Got carried away way beyond the goal of introducing the 2 for 1 offer along with a preparatory refactoring.
+
+My personal highlights:
+- Although trying to use the mikado technique I never had to backtrack.
+  - The cases in which I would have had to backtrack were obviously not ready for tackling yet
+    - At the same time the preparatory step was immediately visible to me.
+  - Tried to fill the tree structure for quite a while, reverted to adding things to a flat TODO list, as the complexity of the remaining code reduced
+  - I still like it for situations, where the complexity of the code makes guessing the next working step hard
+- It's interesting, how well the design of code can be improved without fully understanding it:
+  - I understood rather late along my refactorings, that the X_FOR_* offers do not all follow the same logic
+  - I realized the difference between items & quantities even later 
+- I really like the way the Offer strategies came out
+- Although the tests are now way longer, I think each individual test is now much easier to grasp.
+  - The builder helps tremendously with reducing setup noise
+  -  "One concept per test" helps to keep the length & amount of assertion code per test low
+  - I might try describing scenarios instead of features next time. This way, I might be able to reduce setup boilerplate further.
+- Using AI (copilot with Chat GPT 4o) is tricky, but can be a tremendous productivity boost
+- Finally got pitest to work in kotlin (and even with kotest) \o/
+
 ## Before looking at code
 
 - I like baby steps
