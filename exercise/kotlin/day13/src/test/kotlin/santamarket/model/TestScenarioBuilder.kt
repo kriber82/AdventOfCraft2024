@@ -30,6 +30,11 @@ class TestScenarioBuilder {
         return this
     }
 
+    fun withTwoForOneDiscount(productName: String): TestScenarioBuilder {
+        elf.addSpecialOffer(SpecialOfferType.TWO_FOR_ONE, catalog.product(productName)!!, 0.0)
+        return this
+    }
+
     fun withSpecialOffer(specialOfferType: SpecialOfferType, productName: String, argument: Double): TestScenarioBuilder {
         elf.addSpecialOffer(specialOfferType, catalog.product(productName)!!, argument)
         return this
@@ -38,4 +43,5 @@ class TestScenarioBuilder {
     fun build(): TestScenario {
         return TestScenario(catalog, sleigh, elf)
     }
+
 }

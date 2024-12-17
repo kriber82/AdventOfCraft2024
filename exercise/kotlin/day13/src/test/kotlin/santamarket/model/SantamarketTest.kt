@@ -241,7 +241,51 @@ class SantamarketTestDescribe : DescribeSpec({
         }
 
         describe("list of discounts") {
+            it("should be empty without offers") {
+                val scenario = TestScenarioBuilder()
+                    .withProduct("teddyBear", 1.0, ProductUnit.EACH, 1.0)
+                    .build()
 
+                val receipt = scenario.checkout()
+
+                receipt.getDiscounts() shouldBe emptyList()
+            }
+
+            it("should contain discount for single item with discount") {
+                val scenario = TestScenarioBuilder()
+                    .withProduct("teddyBear", 1.0, ProductUnit.EACH, 1.0)
+                    .withTenPercentDiscount("teddyBear")
+                    .build()
+                val teddyBear = scenario.catalog.product("teddyBear")!!
+
+                val receipt = scenario.checkout()
+
+                receipt.getDiscounts() shouldContainExactly listOf(Discount(teddyBear, "10.0% off", -0.1))
+            }
+
+            it("should countain single discount for several items of the same type") {
+                val scenario = TestScenarioBuilder()
+                    .withRepeatedSingleProduct("teddyBear", 3, ProductUnit.EACH, 1.0)
+                    .withTenPercentDiscount("teddyBear")
+                    .build()
+                val teddyBear = scenario.catalog.product("teddyBear")!!
+
+                val receipt = scenario.checkout()
+
+                receipt.getDiscounts() shouldContainExactly listOf(Discount(teddyBear, "10.0% off", -0.3))
+            }
+
+            it("should not contain discount for items with inapplicable offer") {
+                val scenario = TestScenarioBuilder()
+                    .withProduct("teddyBear", 1.0, ProductUnit.EACH, 1.0)
+                    .withTwoForOneDiscount("teddyBear")
+                    .build()
+                val teddyBear = scenario.catalog.product("teddyBear")!!
+
+                val receipt = scenario.checkout()
+
+                receipt.getDiscounts() shouldBe emptyList()
+            }
         }
     }
 
