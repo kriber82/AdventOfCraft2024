@@ -35,6 +35,16 @@ class TestScenarioBuilder {
         return this
     }
 
+    fun withTwoForDiscountedPriceOffer(productName: String, discountedPrice: Double): TestScenarioBuilder {
+        elf.addSpecialOffer(SpecialOfferType.TWO_FOR_AMOUNT, catalog.product(productName)!!, discountedPrice)
+        return this
+    }
+
+    fun withFiveForDiscountedPriceOffer(productName: String, discountedPrice: Double): TestScenarioBuilder {
+        elf.addSpecialOffer(SpecialOfferType.FIVE_FOR_AMOUNT, catalog.product(productName)!!, discountedPrice)
+        return this
+    }
+
     fun withThreeForTwoDiscount(productName: String): TestScenarioBuilder {
         elf.addSpecialOffer(SpecialOfferType.THREE_FOR_TWO, catalog.product(productName)!!, 0.0)
         return this

@@ -62,10 +62,10 @@
       - [x] receipt items
         - [x] without discounts
         - [x] unchanged by discounts
-      - [ ] discounts (each one individuially)
-        - [ ] old addSpecialOffer
-        - [ ] receipt output
-        - [ ] reduced price
+      - [x] discounts (each one individuially)
+        - [x] old addSpecialOffer
+        - [x] receipt output
+        - [x] reduced price
       - [x] new addSpecialOffer (might be sufficient to test with one offer type)
       - [x] there can only be one special offer per product
       - [ ] maybe introduce FakeOffer for simpler testing of other aspects of the code
@@ -96,3 +96,9 @@ Starting with 1.1:
   - will keep recording things I want to remember for later as an unstructured list
 - chose not to inherit ThreeForTwoOffer from ItemBundleForDiscountedPriceOffer, as the discounts feel different from the outside
 - will call it a day, as main task is done - was fun, would like to continue, but it's getting late
+- copilot wow moment: "Generate similar tests for TWO_FOR_AMOUNT and FIVE_FOR_AMOUNT:" 
+  - with test code for "2 for 1" & "3 for 2"
+  - added a few files as context
+  - copilot created tests
+    - semantically correct
+    - needed a little syntactic improvement (around missing builder methods)
