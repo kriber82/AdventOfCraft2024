@@ -32,7 +32,9 @@
   - Any feedback is welcome! (especially on EID.companion.parseYear ... there must be a better way to do this)
 - using property based tests everywhere could become too slow for large SW
 - wow, the property based tests found an actual bug: year = "+0" was parsed and probably should not have been
-- NICE: found kotest-assertions-arrow 
+- NICE: found kotest-assertions-arrow
+- copilot (chat) seems helpful when learning new idioms like arrow
+  - need to experiment with scope & abstraction level of prompts
 
 ### Test List:
 - [x] parse valid gender
@@ -46,7 +48,9 @@
 - [x] reject negative serial number
 - [x] reject non-number serial number
 - [x] parse valid serial number
-- [ ] calculate control key from payload
+- [x] calculate control key from payload
+  - [x] control key calculation should not fail vor valid EIDs  
+- [ ] reject control key calculation for non-numbers
 - [ ] reject non-matching control key
 - [ ] accept matching control key
 - [ ] parse matching control key?

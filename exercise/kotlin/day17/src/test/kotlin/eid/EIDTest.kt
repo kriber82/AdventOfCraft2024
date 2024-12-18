@@ -2,6 +2,7 @@ package eid
 
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
+import io.kotest.matchers.ints.shouldBeInRange
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -115,6 +116,16 @@ class EIDTest {
         EID.calculateControlKey("198007xx").shouldBeRight() shouldBe 67
     }
 
+    @Property
+    fun `should calculate valid control keys for valid EIDs`(@ForAll("validEids") validEid: String) {
+        EID.calculateControlKey(validEid).shouldBeRight() shouldBeInRange 1..97
+    }
+
+    @Property
+    fun `should reject control key calculation for non-numeric EIDs`(@ForAll("eidsWithNonDigitChars") validEid: String) {
+        EID.calculateControlKey(validEid).shouldBeLeft()
+    }
+
     @Provide
     fun validEidBuilders(): Arbitrary<EidStringBuilder> {
         return Combinators.combine(validGenders(), validYears(), validSerialNumbers())
@@ -126,6 +137,11 @@ class EIDTest {
     @Provide
     fun validEids(): Arbitrary<String> {
         return validEidBuilders().map { it.build() }
+    }
+
+    @Provide
+    fun eidsWithNonDigitChars(): Arbitrary<String> {
+        return Arbitraries.strings().ofLength(8).filter { containsOnlyDigits(it) }
     }
 
     private val validGenderChars = setOf('1', '2', '3')
@@ -147,7 +163,7 @@ class EIDTest {
 
     @Provide
     fun yearsContainingNonDigits(): Arbitrary<String> {
-        return Arbitraries.strings().ofLength(2).filter { !it.all { it in digitCharacters } }
+        return Arbitraries.strings().ofLength(2).filter { containsOnlyDigits(it) }
     }
 
     @Provide
@@ -157,9 +173,10 @@ class EIDTest {
 
     @Provide
     fun serialNumbersContainingNonDigits(): Arbitrary<String> {
-        return Arbitraries.strings().ofLength(3).filter { !it.all { it in digitCharacters } }
+        return Arbitraries.strings().ofLength(3).filter { containsOnlyDigits(it) }
     }
 
-    val digitCharacters: CharRange = '0'..'9'
+    private fun containsOnlyDigits(it: String) = !it.all { it in digitCharacters }
+    private val digitCharacters: CharRange = '0'..'9'
 }
 
