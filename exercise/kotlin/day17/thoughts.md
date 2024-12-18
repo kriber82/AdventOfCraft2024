@@ -35,6 +35,10 @@
 - NICE: found kotest-assertions-arrow
 - copilot (chat) seems helpful when learning new idioms like arrow
   - need to experiment with scope & abstraction level of prompts
+- implementing the full parser in the companion object:
+  - doesn't feel 100% correct
+  - but allows for the private constructor
+  - => keep
 
 ### Test List:
 - [x] parse valid gender

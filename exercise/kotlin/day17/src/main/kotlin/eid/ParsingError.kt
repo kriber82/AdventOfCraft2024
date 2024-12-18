@@ -27,7 +27,7 @@ sealed interface ParsingError {
     }
 
     class InvalidControlKey(controlKeySubstring: String) : ParsingError {
-        override val message = ""
+        override val message = "$controlKeySubstring does not represent a valid control key (must be between 01 and 97)"
     }
 
 }

@@ -3,7 +3,6 @@ package eid
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.matchers.ints.shouldBeInRange
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import net.jqwik.api.*
@@ -111,7 +110,7 @@ class EIDTest {
     }
 
     @Test
-    fun `calculates control yey for Jerceval's EID`() {
+    fun `calculates control key for Jerceval's EID`() {
         EID.calculateControlKey("198007xx").shouldBeRight() shouldBe 67
     }
 
@@ -143,6 +142,16 @@ class EIDTest {
     }
 
     @Property
+    fun `should reject invalid control keys`(
+        @ForAll("invalidControlKeys") invalidControlKey: String,
+        @ForAll("validEidBuilders") eidBuilder: EidStringBuilder
+    ) {
+        val input = eidBuilder.withControlKeyOverride(invalidControlKey).build()
+
+        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidControlKey>()
+    }
+
+    @Property
     fun `should parse control key`(@ForAll("validEids") validEid: String) {
         val parsed = EID.parse(validEid)
 
@@ -165,7 +174,7 @@ class EIDTest {
 
     @Provide
     fun eidsWithNonDigitChars(): Arbitrary<String> {
-        return Arbitraries.strings().ofLength(8).filter { containsOnlyDigits(it) }
+        return Arbitraries.strings().ofLength(8).filter { containsNonDigitCharacters(it) }
     }
 
     @Provide
@@ -201,7 +210,7 @@ class EIDTest {
 
     @Provide
     fun yearsContainingNonDigits(): Arbitrary<String> {
-        return Arbitraries.strings().ofLength(2).filter { containsOnlyDigits(it) }
+        return Arbitraries.strings().ofLength(2).filter { containsNonDigitCharacters(it) }
     }
 
     @Provide
@@ -211,7 +220,7 @@ class EIDTest {
 
     @Provide
     fun serialNumbersContainingNonDigits(): Arbitrary<String> {
-        return Arbitraries.strings().ofLength(3).filter { containsOnlyDigits(it) }
+        return Arbitraries.strings().ofLength(3).filter { containsNonDigitCharacters(it) }
     }
 
     @Provide
@@ -219,7 +228,15 @@ class EIDTest {
         return Arbitraries.integers().between(1, 97)
     }
 
-    private fun containsOnlyDigits(it: String) = !it.all { it in digitCharacters }
+    @Provide
+    fun invalidControlKeys(): Arbitrary<String> {
+        val belowRange = Arbitraries.integers().between(-9, 0).map { it.toString().padStart(2, '0') }
+        val aboveRange = Arbitraries.integers().between(98, 99).map { it.toString().padStart(2, '0') }
+        val containingNonDigits = Arbitraries.strings().ofLength(2).filter { containsNonDigitCharacters(it) }
+        return Arbitraries.oneOf(belowRange, aboveRange, containingNonDigits)
+    }
+
+    private fun containsNonDigitCharacters(it: String) = !it.all { it in digitCharacters }
     private val digitCharacters: CharRange = '0'..'9'
 }
 

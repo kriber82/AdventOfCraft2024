@@ -13,7 +13,6 @@ class EID private constructor(
     val controlKey: Int
 ) {
 
-
     companion object {
         private const val VALID_EID_LENGTH = 8
 
@@ -81,7 +80,7 @@ class EID private constructor(
             }
         }
 
-        private fun containsOnlyDigits(yearCandidate: String) = yearCandidate.matches("[0-9]+".toRegex())
+        private fun containsOnlyDigits(str: String) = str.matches("[0-9]+".toRegex())
 
         private fun parseIntFieldWithErrorProvider(
             eidSubstring: String,
