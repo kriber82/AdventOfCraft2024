@@ -1,45 +1,53 @@
 package eid
 
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.kotest.matchers.types.shouldBeTypeOf
 import net.jqwik.api.*
 import net.jqwik.api.constraints.StringLength
 
-data class EidPayloadSubstrings(val gender: String, val year: String, val serialNumber: String) {
+data class EidPayloadSubstrings(val gender: String, val year: Int, val serialNumber: String) {
+    val yearString = EIDTest.toYearString(year)
+
     fun plusControlKey(): String {
-        return "$gender$year$serialNumber" + "00" //TODO add real control key
+        return "$gender$yearString$serialNumber" + "00" //TODO add real control key
+    }
+
+    override fun toString(): String {
+        return "$gender$yearString$serialNumber"
     }
 }
 
 class EIDTest {
 
-    val years = Arbitraries.strings().ofLength(2)
-    val serialNumbers = Arbitraries.strings().ofLength(3)
-    val controlKeys = Arbitraries.strings().ofLength(2)
+    val serialNumbers = Arbitraries.strings().ofLength(3).withCharRange('0', '9')
+    val controlKeys = Arbitraries.strings().ofLength(2).withCharRange('0', '9')
 
     private val validGenderChars = setOf('1', '2', '3')
-
     @Provide
     fun validGenders(): Arbitrary<String> {
         return Arbitraries.strings().withChars(*validGenderChars.toCharArray()).ofLength(1)
     }
-
     @Provide
     fun invalidGenders(): Arbitrary<String> {
         return Arbitraries.strings().ofLength(1).filter { it[0] !in validGenderChars }
     }
 
     @Provide
+    fun validYears(): Arbitrary<Int> {
+        return Arbitraries.integers().between(0, 99)
+    }
+
+    @Provide
     fun validEidPayloads(): Arbitrary<EidPayloadSubstrings> {
-        return Combinators.combine(validGenders(), years, serialNumbers)
+        return Combinators.combine(validGenders(), validYears(), serialNumbers)
             .`as` {g, y, s -> EidPayloadSubstrings(g, y, s) }
     }
 
     @Provide
     fun validEids(): Arbitrary<String> {
-        return Combinators.combine(validGenders(), years, serialNumbers, controlKeys)
-            .`as` { s1, s2, s3, s4 -> "$s1$s2$s3$s4" }
+        return Combinators.combine(validEidPayloads(), controlKeys)
+            .`as` { p, s4 -> "$p$s4" }
     }
 
     @Property
@@ -54,7 +62,10 @@ class EIDTest {
 
     @Property
     fun `should accept valid EIDs`(@ForAll("validEids") validEid: String) {
-        EID.parse(validEid).getOrNull().toString() shouldBe validEid
+        val parsed = EID.parse(validEid)
+
+        parsed.should { it.isRight() }
+        parsed.getOrNull().toString() shouldBe validEid
     }
 
     @Property
@@ -73,11 +84,26 @@ class EIDTest {
         EID.parse(input).leftOrNull().shouldBeInstanceOf<ParsingError.InvalidElfGender>()
     }
 
-    private fun toEidField(elfGender: ElfGender): String {
-        return when (elfGender) {
-            ElfGender.Sloubi -> "1"
-            ElfGender.Gagna -> "2"
-            ElfGender.Catact -> "3"
+    @Property
+    fun `should parse year`(@ForAll("validYears") year: Int, @ForAll("validEidPayloads") randomEidFields: EidPayloadSubstrings) {
+        val usedEidPayload = EidPayloadSubstrings(randomEidFields.gender, year, randomEidFields.serialNumber)
+        val input = usedEidPayload.plusControlKey()
+
+        EID.parse(input).getOrNull()?.year shouldBe year
+    }
+
+    companion object {
+
+        private fun toEidField(elfGender: ElfGender): String {
+            return when (elfGender) {
+                ElfGender.Sloubi -> "1"
+                ElfGender.Gagna -> "2"
+                ElfGender.Catact -> "3"
+            }
+        }
+
+        fun toYearString(year: Int): String {
+            return year.toString().padStart(2, '0')
         }
     }
 }

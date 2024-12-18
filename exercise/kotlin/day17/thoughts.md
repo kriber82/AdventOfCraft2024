@@ -35,7 +35,7 @@
 - [ ] reject any non digits
 - [x] reject gender = 0
 - [x] reject gender > 3
-- [ ] parse valid year
+- [x] parse valid year
 - [ ] reject serial number = 0
 - [ ] parse valid serial number
 - [ ] calculate control key from payload

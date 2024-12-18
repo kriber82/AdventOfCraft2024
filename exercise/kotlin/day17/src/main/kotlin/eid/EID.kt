@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.raise.either
 import arrow.core.raise.ensure
 
-class EID private constructor (val eid: String, val gender: ElfGender) {
+class EID private constructor (val eid: String, val gender: ElfGender, val year: Int) {
 
     companion object {
         const val validEidLength = 8
@@ -19,8 +19,9 @@ class EID private constructor (val eid: String, val gender: ElfGender) {
                 }
 
                 val gender = parseGender(eidCandidate).bind()
+                val year = parseYear(eidCandidate).bind()
 
-                EID(eidCandidate, gender)
+                EID(eidCandidate, gender, year)
             }
         }
 
@@ -32,6 +33,11 @@ class EID private constructor (val eid: String, val gender: ElfGender) {
                 else -> Either.Left(ParsingError.InvalidElfGender(genderSubstring))
             }
         }
+
+        private fun parseYear(eidCandidate: String): Either<ParsingError, Int> {
+            return Either.Right(eidCandidate.substring(1, 3).toInt())
+        }
+
     }
 
     override fun toString(): String {
