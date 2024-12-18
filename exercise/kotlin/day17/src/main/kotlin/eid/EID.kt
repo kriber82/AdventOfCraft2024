@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.raise.either
 import arrow.core.raise.ensure
 
-class EID private constructor (val eid: String, val gender: ElfGender, val year: Int) {
+class EID private constructor (val eid: String, val gender: ElfGender, val year: Int, val serialNumber: Int) {
 
     companion object {
         const val validEidLength = 8
@@ -20,8 +20,9 @@ class EID private constructor (val eid: String, val gender: ElfGender, val year:
 
                 val gender = parseGender(eidCandidate).bind()
                 val year = parseYear(eidCandidate).bind()
+                val serialNumber = parseSerialNumber(eidCandidate).bind()
 
-                EID(eidCandidate, gender, year)
+                EID(eidCandidate, gender, year, serialNumber)
             }
         }
 
@@ -48,6 +49,23 @@ class EID private constructor (val eid: String, val gender: ElfGender, val year:
                 }
             }.mapLeft {
                 ParsingError.InvalidYear(yearCandidate)
+            }
+        }
+
+        private fun parseSerialNumber(eidCandidate: String): Either<ParsingError, Int> {
+            val serialCandidate = eidCandidate.substring(3, 6)
+            if (!serialCandidate.matches("[0-9]+".toRegex())) {
+                return Either.Left(ParsingError.InvalidSerialNumber(serialCandidate))
+            }
+            return Either.catch {
+                val parsedSerial = serialCandidate.toInt()
+                return if (parsedSerial < 1) {
+                    Either.Left(ParsingError.InvalidSerialNumber(serialCandidate))
+                } else {
+                    Either.Right(parsedSerial)
+                }
+            }.mapLeft {
+                ParsingError.InvalidSerialNumber(serialCandidate)
             }
         }
 

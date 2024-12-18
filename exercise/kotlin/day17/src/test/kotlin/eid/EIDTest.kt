@@ -79,23 +79,56 @@ class EIDTest {
         EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidYear>()
     }
 
+    @Property
+    fun `should parse valid serial number`(
+        @ForAll("validSerialNumbers") serialNumber: Int,
+        @ForAll("validEidBuilders") eidBuilder: EidStringBuilder
+    ) {
+        val input = eidBuilder.withSerialNumber(serialNumber).build()
+
+        EID.parse(input).shouldBeRight().serialNumber shouldBe serialNumber
+    }
+
+    @Property
+    fun `should reject negative serial numbers and zero`(
+        @ForAll @IntRange(min = -99, max = 0) zeroOrNegativeSerialNumber: Int,
+        @ForAll("validEidBuilders") eidBuilder: EidStringBuilder
+    ) {
+        val input = eidBuilder.withSerialNumber(zeroOrNegativeSerialNumber).build()
+
+        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidSerialNumber>()
+    }
+
+    @Property
+    fun `should reject non-number serial numbers`(
+        @ForAll("serialNumbersContainingNonDigits") invalidSerialNumber: String,
+        @ForAll("validEidBuilders") eidBuilder: EidStringBuilder
+    ) {
+        val input = eidBuilder.withSerialNumberString(invalidSerialNumber).build()
+
+        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidSerialNumber>()
+    }
+
     @Provide
     fun validEidBuilders(): Arbitrary<EidStringBuilder> {
-        return Combinators.combine(validGenders(), validYears(), serialNumbers)
+        return Combinators.combine(validGenders(), validYears(), validSerialNumbers())
             .`as` { g, y, sn ->
                 EidStringBuilder().withGenderString(g).withYear(y).withSerialNumber(sn)
             }
     }
+
     @Provide
     fun validEids(): Arbitrary<String> {
         return validEidBuilders().map { it.build() }
     }
 
     private val validGenderChars = setOf('1', '2', '3')
+
     @Provide
     fun validGenders(): Arbitrary<String> {
         return Arbitraries.strings().withChars(*validGenderChars.toCharArray()).ofLength(1)
     }
+
     @Provide
     fun invalidGenders(): Arbitrary<String> {
         return Arbitraries.strings().ofLength(1).filter { it[0] !in validGenderChars }
@@ -105,12 +138,22 @@ class EIDTest {
     fun validYears(): Arbitrary<Int> {
         return Arbitraries.integers().between(0, 99)
     }
+
     @Provide
     fun yearsContainingNonDigits(): Arbitrary<String> {
         return Arbitraries.strings().ofLength(2).filter { !it.all { it in digitCharacters } }
     }
 
-    val serialNumbers = Arbitraries.strings().ofLength(3).withCharRange('0', '9')
+    @Provide
+    fun validSerialNumbers(): Arbitrary<Int> {
+        return Arbitraries.integers().between(1, 999)
+    }
+
+    @Provide
+    fun serialNumbersContainingNonDigits(): Arbitrary<String> {
+        return Arbitraries.strings().ofLength(3).filter { !it.all { it in digitCharacters } }
+    }
+
     val digitCharacters: CharRange = '0'..'9'
 }
 
@@ -121,7 +164,7 @@ class EidStringBuilder {
     private var controlKeyOverride: String? = null
 
     fun withGender(gender: ElfGender): EidStringBuilder {
-        this.gender = toEidField(gender)
+        this.gender = toGenderString(gender)
         return this
     }
 
@@ -135,8 +178,18 @@ class EidStringBuilder {
         return this
     }
 
-    fun withSerialNumber(serialNumber: String): EidStringBuilder {
-        this.serialNumber = serialNumber
+    fun withYearString(yearString: String): EidStringBuilder {
+        this.year = yearString
+        return this
+    }
+
+    fun withSerialNumber(serialNumber: Int): EidStringBuilder {
+        this.serialNumber = toSerialNumberString(serialNumber)
+        return this
+    }
+
+    fun withSerialNumberString(serialNumberString: String): EidStringBuilder {
+        this.serialNumber = serialNumberString
         return this
     }
 
@@ -153,12 +206,7 @@ class EidStringBuilder {
         return "$gender$year$serialNumber$controlKey"
     }
 
-    fun withYearString(yearString: String): EidStringBuilder {
-        this.year = yearString
-        return this
-    }
-
-    private fun toEidField(elfGender: ElfGender): String {
+    private fun toGenderString(elfGender: ElfGender): String {
         return when (elfGender) {
             ElfGender.Sloubi -> "1"
             ElfGender.Gagna -> "2"
@@ -168,5 +216,9 @@ class EidStringBuilder {
 
     private fun toYearString(year: Int): String {
         return year.toString().padStart(2, '0')
+    }
+
+    private fun toSerialNumberString(serialNumber: Int): String {
+        return serialNumber.toString().padStart(3, '0')
     }
 }

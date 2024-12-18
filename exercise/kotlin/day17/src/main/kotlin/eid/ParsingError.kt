@@ -13,4 +13,8 @@ sealed interface ParsingError {
     data class InvalidYear(private val yearSubstring: String): ParsingError {
         override val message = "$yearSubstring dose not represent a valid year (must be between 00 and 99)"
     }
+
+    class InvalidSerialNumber(serialSubstring: String) : ParsingError {
+        override val message = "$serialSubstring dose not represent a valid serial number (must be between 000 and 999)"
+    }
 }

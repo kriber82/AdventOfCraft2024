@@ -42,10 +42,10 @@
 - [x] parse valid year
 - [x] reject negative year
 - [x] reject non-number year
-- [ ] reject serial number = 0
-- [ ] reject negative serial number
-- [ ] reject non-number serial number
-- [ ] parse valid serial number
+- [x] reject serial number = 0
+- [x] reject negative serial number
+- [x] reject non-number serial number
+- [x] parse valid serial number
 - [ ] calculate control key from payload
 - [ ] reject non-matching control key
 - [ ] accept matching control key
