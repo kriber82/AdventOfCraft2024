@@ -50,9 +50,9 @@
 - [x] parse valid serial number
 - [x] calculate control key from payload
   - [x] control key calculation should not fail vor valid EIDs  
-- [ ] reject control key calculation for non-numbers
+- [x] reject control key calculation for non-numbers
 - [ ] reject non-matching control key
-- [ ] accept matching control key
+- [x] accept matching control key
 - [ ] parse matching control key?
 - [ ] accept all valid eids
 

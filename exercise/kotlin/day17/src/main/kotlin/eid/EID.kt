@@ -7,20 +7,26 @@ import arrow.core.raise.ensure
 class EID private constructor(val eid: String, val gender: ElfGender, val year: Int, val serialNumber: Int) {
 
     companion object {
-        const val validEidLength = 8
+        private const val VALID_EID_LENGTH = 8
 
         fun parse(eidCandidate: String): Either<ParsingError, EID> {
             return either {
-                ensure(eidCandidate.length >= validEidLength) {
+                ensure(eidCandidate.length >= VALID_EID_LENGTH) {
                     ParsingError.InputTooShort()
                 }
-                ensure(eidCandidate.length <= validEidLength) {
+                ensure(eidCandidate.length <= VALID_EID_LENGTH) {
                     ParsingError.InputTooLong()
                 }
 
                 val gender = parseGender(eidCandidate).bind()
                 val year = parseYear(eidCandidate).bind()
                 val serialNumber = parseSerialNumber(eidCandidate).bind()
+
+                val calculateControlKey = calculateControlKey(eidCandidate).bind()
+                val parsedControlKey = parseControlKey(eidCandidate).bind()
+                ensure(parsedControlKey == calculateControlKey) {
+                    ParsingError.ControlDoesNotMatch(calculateControlKey, parsedControlKey)
+                }
 
                 EID(eidCandidate, gender, year, serialNumber)
             }
@@ -47,6 +53,13 @@ class EID private constructor(val eid: String, val gender: ElfGender, val year: 
                 eidCandidate.substring(3..5),
                 1
             ) { ParsingError.InvalidSerialNumber(it) }
+        }
+
+        private fun parseControlKey(eidCandidate: String): Either<ParsingError, Int> {
+            return parseIntFieldWithErrorProvider(
+                eidCandidate.substring(6..7),
+                1 //TODO upper bound
+            ) { ParsingError.InvalidControlKey(it) }
         }
 
         private fun containsOnlyDigits(yearCandidate: String) = yearCandidate.matches("[0-9]+".toRegex())
@@ -77,13 +90,12 @@ class EID private constructor(val eid: String, val gender: ElfGender, val year: 
                 val firstSixDigits = eidCandidate.substring(0..5)
                 val firstSixDigitsAsNumber = Either
                     .catch { firstSixDigits.toInt() }
-                    .mapLeft { ParsingError.ControlKeyError(firstSixDigits) }
+                    .mapLeft { ParsingError.CouldNotCalculateControlKey(firstSixDigits) }
                     .bind()
                 val modulo97 = firstSixDigitsAsNumber % 97
                 val complementTo97 = 97 - modulo97
                 complementTo97
             }
-            return Either.Right(0)
         }
 
     }

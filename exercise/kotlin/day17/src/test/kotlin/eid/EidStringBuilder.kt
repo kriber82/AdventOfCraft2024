@@ -1,10 +1,12 @@
 package eid
 
+import arrow.core.getOrElse
+
 class EidStringBuilder {
     private var gender: String = "1"
     private var year: String = "98"
     private var serialNumber: String = "007"
-    private var controlKeyOverride: String? = "67"
+    private var controlKeyOverride: String? = null
 
     fun withGender(gender: ElfGender): EidStringBuilder {
         this.gender = toGenderString(gender)
@@ -42,11 +44,16 @@ class EidStringBuilder {
     }
 
     fun build(): String {
-        var controlKey = "00" //TODO calculate
-        if (controlKeyOverride != null) {
-            controlKey = controlKeyOverride!!
+        val payload = "$gender$year$serialNumber"
+
+        val controlKey = if (controlKeyOverride == null) {
+            val controlKeyInt = EID.calculateControlKey(payload).getOrElse { 0 }
+            toControlKeyString(controlKeyInt)
+        } else {
+            controlKeyOverride!!
         }
-        return "$gender$year$serialNumber$controlKey"
+
+        return "$payload$controlKey"
     }
 
     private fun toGenderString(elfGender: ElfGender): String {
@@ -64,4 +71,9 @@ class EidStringBuilder {
     private fun toSerialNumberString(serialNumber: Int): String {
         return serialNumber.toString().padStart(3, '0')
     }
+
+    private fun toControlKeyString(controlKey: Int): String {
+        return controlKey.toString().padStart(2, '0')
+    }
+
 }

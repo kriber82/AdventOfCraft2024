@@ -112,7 +112,7 @@ class EIDTest {
     }
 
     @Test
-    fun calculatesControlKeyForEidCandidate() {
+    fun `calculates control yey for Jerceval's EID`() {
         EID.calculateControlKey("198007xx").shouldBeRight() shouldBe 67
     }
 
@@ -123,7 +123,7 @@ class EIDTest {
 
     @Property
     fun `should reject control key calculation for non-numeric EIDs`(@ForAll("eidsWithNonDigitChars") validEid: String) {
-        EID.calculateControlKey(validEid).shouldBeLeft()
+        EID.calculateControlKey(validEid).shouldBeLeft().shouldBeInstanceOf<ParsingError.CouldNotCalculateControlKey>()
     }
 
     @Provide
@@ -132,6 +132,16 @@ class EIDTest {
             .`as` { g, y, sn ->
                 EidStringBuilder().withGenderString(g).withYear(y).withSerialNumber(sn)
             }
+    }
+
+    @Test
+    fun `should accept Jerceval's EID with matching control key`() {
+        EID.parse("19800767").shouldBeRight()
+    }
+
+    @Test
+    fun `should reject Jerceval's EID with non-matching control key`() {
+        EID.parse("19800766").shouldBeLeft().shouldBeInstanceOf<ParsingError.ControlDoesNotMatch>()
     }
 
     @Provide
