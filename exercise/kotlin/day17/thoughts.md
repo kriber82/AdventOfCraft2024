@@ -51,8 +51,9 @@
 - [x] calculate control key from payload
   - [x] control key calculation should not fail vor valid EIDs  
 - [x] reject control key calculation for non-numbers
-- [ ] reject non-matching control key
+- [x] reject non-matching control key
 - [x] accept matching control key
+- [ ] reject control keys outside of valid range
 - [ ] parse matching control key?
 - [ ] accept all valid eids
 

@@ -144,6 +144,13 @@ class EIDTest {
         EID.parse("19800766").shouldBeLeft().shouldBeInstanceOf<ParsingError.ControlDoesNotMatch>()
     }
 
+    @Property
+    fun `should reject EIDs with non-matching control key`(
+        @ForAll("eidsWithNonMatchingControlKey") eidWithNonMatchingControlKey: String,
+    ) {
+        EID.parse(eidWithNonMatchingControlKey).shouldBeLeft().shouldBeInstanceOf<ParsingError.ControlDoesNotMatch>()
+    }
+
     @Provide
     fun validEids(): Arbitrary<String> {
         return validEidBuilders().map { it.build() }
@@ -152,6 +159,20 @@ class EIDTest {
     @Provide
     fun eidsWithNonDigitChars(): Arbitrary<String> {
         return Arbitraries.strings().ofLength(8).filter { containsOnlyDigits(it) }
+    }
+
+    @Provide
+    fun eidsWithNonMatchingControlKey(): Arbitrary<String> {
+        return Combinators.combine(validEids(), validControlKeys())
+            .`as` { validEids, nonMatchingControlKeyCandidate ->
+                val matchingControlKey = validEids.substring(6..7)
+                val controlKeyCandidateString = nonMatchingControlKeyCandidate.toString().padStart(2, '0')
+                if (matchingControlKey == controlKeyCandidateString) {
+                    ""
+                } else {
+                    validEids.substring(0..5) + controlKeyCandidateString
+                }
+            }.filter { it != "" }
     }
 
     private val validGenderChars = setOf('1', '2', '3')
@@ -184,6 +205,11 @@ class EIDTest {
     @Provide
     fun serialNumbersContainingNonDigits(): Arbitrary<String> {
         return Arbitraries.strings().ofLength(3).filter { containsOnlyDigits(it) }
+    }
+
+    @Provide
+    fun validControlKeys(): Arbitrary<Int> {
+        return Arbitraries.integers().between(1, 97)
     }
 
     private fun containsOnlyDigits(it: String) = !it.all { it in digitCharacters }
