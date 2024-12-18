@@ -53,7 +53,7 @@
 - [ ] accept all valid eids
 
 ## TODOs
-- [ ] use a builder to construct eids from candidates and individual fields?
+- [x] use a builder to construct eids from candidates and individual fields?
 - [x] find more succinct ways of asserting?
   - [x] parsed.shouldBeRight()
   - [x] parsed shouldHaveStringRepresentation eidString

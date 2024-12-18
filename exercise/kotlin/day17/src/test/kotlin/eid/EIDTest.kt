@@ -11,37 +11,6 @@ import net.jqwik.api.constraints.StringLength
 
 class EIDTest {
 
-    val serialNumbers = Arbitraries.strings().ofLength(3).withCharRange('0', '9')
-
-    private val validGenderChars = setOf('1', '2', '3')
-
-    @Provide
-    fun validGenders(): Arbitrary<String> {
-        return Arbitraries.strings().withChars(*validGenderChars.toCharArray()).ofLength(1)
-    }
-
-    @Provide
-    fun invalidGenders(): Arbitrary<String> {
-        return Arbitraries.strings().ofLength(1).filter { it[0] !in validGenderChars }
-    }
-
-    @Provide
-    fun validYears(): Arbitrary<Int> {
-        return Arbitraries.integers().between(0, 99)
-    }
-
-    val digitCharacters: CharRange = '0'..'9'
-
-    @Provide
-    fun yearsContainingNonDigits(): Arbitrary<String> {
-        return Arbitraries.strings().ofLength(2).filter { !it.all { it in digitCharacters } }
-    }
-
-    @Provide
-    fun validEids(): Arbitrary<String> {
-        return validEidBuilders().map { it.build() }
-    }
-
     @Property
     fun shouldRejectEIDsThatAreTooShort(@ForAll @StringLength(max = 7) tooShortForEid: String) {
         EID.parse(tooShortForEid).shouldBeLeft().shouldBeInstanceOf<ParsingError.InputTooShort>()
@@ -110,13 +79,6 @@ class EIDTest {
         EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidYear>()
     }
 
-    companion object {
-
-        internal fun toYearString(year: Int): String {
-            return year.toString().padStart(2, '0')
-        }
-    }
-
     @Provide
     fun validEidBuilders(): Arbitrary<EidStringBuilder> {
         return Combinators.combine(validGenders(), validYears(), serialNumbers)
@@ -124,7 +86,32 @@ class EIDTest {
                 EidStringBuilder().withGenderString(g).withYear(y).withSerialNumber(sn)
             }
     }
+    @Provide
+    fun validEids(): Arbitrary<String> {
+        return validEidBuilders().map { it.build() }
+    }
 
+    private val validGenderChars = setOf('1', '2', '3')
+    @Provide
+    fun validGenders(): Arbitrary<String> {
+        return Arbitraries.strings().withChars(*validGenderChars.toCharArray()).ofLength(1)
+    }
+    @Provide
+    fun invalidGenders(): Arbitrary<String> {
+        return Arbitraries.strings().ofLength(1).filter { it[0] !in validGenderChars }
+    }
+
+    @Provide
+    fun validYears(): Arbitrary<Int> {
+        return Arbitraries.integers().between(0, 99)
+    }
+    @Provide
+    fun yearsContainingNonDigits(): Arbitrary<String> {
+        return Arbitraries.strings().ofLength(2).filter { !it.all { it in digitCharacters } }
+    }
+
+    val serialNumbers = Arbitraries.strings().ofLength(3).withCharRange('0', '9')
+    val digitCharacters: CharRange = '0'..'9'
 }
 
 class EidStringBuilder {
@@ -144,7 +131,7 @@ class EidStringBuilder {
     }
 
     fun withYear(year: Int): EidStringBuilder {
-        this.year = EIDTest.toYearString(year)
+        this.year = toYearString(year)
         return this
     }
 
@@ -179,5 +166,7 @@ class EidStringBuilder {
         }
     }
 
-
+    private fun toYearString(year: Int): String {
+        return year.toString().padStart(2, '0')
+    }
 }
