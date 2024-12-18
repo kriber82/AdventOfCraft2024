@@ -71,6 +71,21 @@ class EID private constructor(val eid: String, val gender: ElfGender, val year: 
             }
         }
 
+        fun calculateControlKey(eidCandidate: String): Either<ParsingError, Int> {
+            //control key = complement to 97 of the number formed by the first 6 digits of the EID modulo 97
+            return either {
+                val firstSixDigits = eidCandidate.substring(0..5)
+                val firstSixDigitsAsNumber = Either
+                    .catch { firstSixDigits.toInt() }
+                    .mapLeft { ParsingError.ControlKeyError(firstSixDigits) }
+                    .bind()
+                val modulo97 = firstSixDigitsAsNumber % 97
+                val complementTo97 = 97 - modulo97
+                complementTo97
+            }
+            return Either.Right(0)
+        }
+
     }
 
     override fun toString(): String {

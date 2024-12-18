@@ -17,4 +17,8 @@ sealed interface ParsingError {
     class InvalidSerialNumber(serialSubstring: String) : ParsingError {
         override val message = "$serialSubstring dose not represent a valid serial number (must be between 000 and 999)"
     }
+
+    class ControlKeyError(firstSixDigits: String) : ParsingError {
+        override val message = "Cannot calculate control key from $firstSixDigits (must be a number between 000000 to 999999)"
+    }
 }
