@@ -32,7 +32,7 @@
   - Any feedback is welcome! (especially on EID.companion.parseYear ... there must be a better way to do this)
 - using property based tests everywhere could become too slow for large SW
 - wow, the property based tests found an actual bug: year = "+0" was parsed and probably should not have been
--  
+- NICE: found kotest-assertions-arrow 
 
 ### Test List:
 - [x] parse valid gender

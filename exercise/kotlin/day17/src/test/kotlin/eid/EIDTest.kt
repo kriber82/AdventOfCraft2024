@@ -1,8 +1,7 @@
 package eid
 
-import arrow.core.Either
-import io.kotest.matchers.Matcher
-import io.kotest.matchers.MatcherResult
+import io.kotest.assertions.arrow.core.shouldBeLeft
+import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -62,12 +61,12 @@ class EIDTest {
 
     @Property
     fun shouldRejectEIDsThatAreTooShort(@ForAll @StringLength(max = 7) tooShortForEid: String) {
-        EID.parse(tooShortForEid) shouldBeLeftOfType ParsingError.InputTooShort()
+        EID.parse(tooShortForEid).shouldBeLeft().shouldBeInstanceOf<ParsingError.InputTooShort>()
     }
 
     @Property
     fun `should reject EIDs that are too long`(@ForAll @StringLength(min = 9) tooLongForEid: String) {
-        EID.parse(tooLongForEid) shouldBeLeftOfType ParsingError.InputTooLong()
+        EID.parse(tooLongForEid).shouldBeLeft().shouldBeInstanceOf<ParsingError.InputTooLong>()
     }
 
     @Property
@@ -75,7 +74,7 @@ class EIDTest {
         val parsed = EID.parse(validEid)
 
         parsed.should { it.isRight() }
-        parsed.getOrNull().toString() shouldBe validEid
+        parsed.shouldBeRight().toString() shouldBe validEid
     }
 
     @Property
@@ -87,7 +86,7 @@ class EIDTest {
             EidPayloadSubstrings(toEidField(elfGender), randomEidFields.year, randomEidFields.serialNumber)
         val input = usedEidPayload.plusControlKey()
 
-        EID.parse(input).getOrNull()?.gender shouldBe elfGender
+        EID.parse(input).shouldBeRight().gender shouldBe elfGender
     }
 
     @Property
@@ -99,7 +98,7 @@ class EIDTest {
             EidPayloadSubstrings(invalidGenderString, randomEidFields.year, randomEidFields.serialNumber)
         val input = usedEidPayload.plusControlKey()
 
-        EID.parse(input) shouldBeLeftOfType ParsingError.InvalidElfGender("dummy")
+        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidElfGender>()
     }
 
     @Property
@@ -107,10 +106,11 @@ class EIDTest {
         @ForAll("validYears") year: Int,
         @ForAll("validEidPayloads") randomEidFields: EidPayloadSubstrings
     ) {
-        val usedEidPayload = EidPayloadSubstrings(randomEidFields.gender, toYearString(year), randomEidFields.serialNumber)
+        val usedEidPayload =
+            EidPayloadSubstrings(randomEidFields.gender, toYearString(year), randomEidFields.serialNumber)
         val input = usedEidPayload.plusControlKey()
 
-        EID.parse(input).getOrNull()?.year shouldBe year
+        EID.parse(input).shouldBeRight().year shouldBe year
     }
 
     @Property
@@ -121,7 +121,7 @@ class EIDTest {
         val usedEidPayload = EidPayloadSubstrings(randomEidFields.gender, toYearString(negativeYear), randomEidFields.serialNumber)
         val input = usedEidPayload.plusControlKey()
 
-        EID.parse(input) shouldBeLeftOfType ParsingError.InvalidYear("dummy")
+        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidYear>()
     }
 
     @Property
@@ -132,7 +132,7 @@ class EIDTest {
         val usedEidPayload = EidPayloadSubstrings(randomEidFields.gender, invalidYear, randomEidFields.serialNumber)
         val input = usedEidPayload.plusControlKey()
 
-        EID.parse(input) shouldBeLeftOfType ParsingError.InvalidYear("dummy")
+        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidYear>()
     }
 
     companion object {
@@ -150,15 +150,4 @@ class EIDTest {
         }
     }
 
-    inline infix fun <reified L, reified T: L> Either<L, *>.shouldBeLeftOfType(objectOfExpectedType: T) = this should beLeftOfType(objectOfExpectedType)
-
-    inline fun <reified L, reified T: L> beLeftOfType(objectOfExpectedType: T) = object : Matcher<Either<L, *>> {
-        override fun test(value: Either<L, *>): MatcherResult {
-            return MatcherResult(
-                value.isLeft() && value.leftOrNull() is T,
-                { "Expected Either to be Left of type ${T::class}, but was $value" },
-                { "Expected Either not to be Left of type ${T::class}, but was $value" }
-            )
-        }
-    }
 }
