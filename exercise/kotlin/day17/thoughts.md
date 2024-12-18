@@ -27,3 +27,17 @@
 
 - [How to use Either for error handling](https://proandroiddev.com/how-to-use-arrows-either-for-exception-handling-in-your-application-a73574b39d07)
 - https://www.conventionalcommits.org/en/v1.0.0/#summary
+
+### Test List:
+- [ ] parse valid gender
+- [ ] reject any non digits
+- [ ] reject gender = 0
+- [ ] reject gender > 3
+- [ ] parse valid year
+- [ ] reject serial number = 0
+- [ ] parse valid serial number
+- [ ] calculate control key from payload
+- [ ] reject non-matching control key
+- [ ] accept matching control key
+- [ ] parse matching control key?
+- [ ] accept all valid eids

@@ -4,7 +4,8 @@ import arrow.core.Either
 import arrow.core.raise.either
 import arrow.core.raise.ensure
 
-class EID {
+class EID private constructor (val eid: String) {
+
     companion object {
         const val validEidLength = 8
 
@@ -16,9 +17,13 @@ class EID {
                 ensure (eidCandidate.length <= validEidLength) {
                     ParsingError.InputTooLong()
                 }
-                EID()
+                EID(eidCandidate)
             }
         }
+    }
+
+    override fun toString(): String {
+        return eid
     }
 
 }
