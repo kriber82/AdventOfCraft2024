@@ -1,5 +1,8 @@
 package eid
 
+import arrow.core.Either
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -7,15 +10,13 @@ import net.jqwik.api.*
 import net.jqwik.api.constraints.IntRange
 import net.jqwik.api.constraints.StringLength
 
-data class EidPayloadSubstrings(val gender: String, val year: Int, val serialNumber: String) {
-    val yearString = EIDTest.toYearString(year)
-
+data class EidPayloadSubstrings(val gender: String, val year: String, val serialNumber: String) {
     fun plusControlKey(): String {
-        return "$gender$yearString$serialNumber" + "00" //TODO add real control key
+        return toString() + "00" //TODO add real control key
     }
 
     override fun toString(): String {
-        return "$gender$yearString$serialNumber"
+        return "$gender$year$serialNumber"
     }
 }
 
@@ -41,10 +42,16 @@ class EIDTest {
         return Arbitraries.integers().between(0, 99)
     }
 
+    val digitCharacters: CharRange = '0'..'9'
+    @Provide
+    fun yearsContainingNonDigits(): Arbitrary<String> {
+        return Arbitraries.strings().ofLength(2).filter { !it.all { it in digitCharacters } }
+    }
+
     @Provide
     fun validEidPayloads(): Arbitrary<EidPayloadSubstrings> {
         return Combinators.combine(validGenders(), validYears(), serialNumbers)
-            .`as` { g, y, s -> EidPayloadSubstrings(g, y, s) }
+            .`as` { g, y, s -> EidPayloadSubstrings(g, toYearString(y), s) }
     }
 
     @Provide
@@ -100,7 +107,7 @@ class EIDTest {
         @ForAll("validYears") year: Int,
         @ForAll("validEidPayloads") randomEidFields: EidPayloadSubstrings
     ) {
-        val usedEidPayload = EidPayloadSubstrings(randomEidFields.gender, year, randomEidFields.serialNumber)
+        val usedEidPayload = EidPayloadSubstrings(randomEidFields.gender, toYearString(year), randomEidFields.serialNumber)
         val input = usedEidPayload.plusControlKey()
 
         EID.parse(input).getOrNull()?.year shouldBe year
@@ -111,9 +118,21 @@ class EIDTest {
         @ForAll @IntRange(min = -9, max = -1) negativeYear: Int,
         @ForAll("validEidPayloads") randomEidFields: EidPayloadSubstrings
     ) {
-        val usedEidPayload = EidPayloadSubstrings(randomEidFields.gender, negativeYear, randomEidFields.serialNumber)
+        val usedEidPayload = EidPayloadSubstrings(randomEidFields.gender, toYearString(negativeYear), randomEidFields.serialNumber)
         val input = usedEidPayload.plusControlKey()
 
+        EID.parse(input).leftOrNull().shouldBeInstanceOf<ParsingError.InvalidYear>()
+    }
+
+    @Property
+    fun `should reject non-number years`(
+        @ForAll("yearsContainingNonDigits") invalidYear: String,
+        @ForAll("validEidPayloads") randomEidFields: EidPayloadSubstrings
+    ) {
+        val usedEidPayload = EidPayloadSubstrings(randomEidFields.gender, invalidYear, randomEidFields.serialNumber)
+        val input = usedEidPayload.plusControlKey()
+
+        EID.parse(input) shouldBeLeftOfType ParsingError.InvalidYear("dummy")
         EID.parse(input).leftOrNull().shouldBeInstanceOf<ParsingError.InvalidYear>()
     }
 
@@ -129,6 +148,18 @@ class EIDTest {
 
         fun toYearString(year: Int): String {
             return year.toString().padStart(2, '0')
+        }
+    }
+
+    inline infix fun <reified L, reified T: L> Either<L, *>.shouldBeLeftOfType(objectOfExpectedType: T) = this should beLeftOfType(objectOfExpectedType)
+
+    inline fun <reified L, reified T: L> beLeftOfType(objectOfExpectedType: T) = object : Matcher<Either<L, *>> {
+        override fun test(value: Either<L, *>): MatcherResult {
+            return MatcherResult(
+                value.isLeft() && value.leftOrNull() is T,
+                { "Expected Either to be Left of type ${T::class}, but was $value" },
+                { "Expected Either not to be Left of type ${T::class}, but was $value" }
+            )
         }
     }
 }

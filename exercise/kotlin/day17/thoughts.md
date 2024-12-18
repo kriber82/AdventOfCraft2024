@@ -28,8 +28,11 @@
 - [How to use Either for error handling](https://proandroiddev.com/how-to-use-arrows-either-for-exception-handling-in-your-application-a73574b39d07)
 - https://www.conventionalcommits.org/en/v1.0.0/#summary
 - found it hard to come up with a good to express a test that combines gender + rest of EID
-- researching concise ways to work with either took some time and mental effort. Any feedback is welcome!
+- researching concise ways to work with either took some time and mental effort. 
+  - Any feedback is welcome! (especially on EID.companion.parseYear ... there must be a better way to do this)
 - using property based tests everywhere could become too slow for large SW
+- wow, the property based tests found an actual bug: year = "+0" was parsed and probably should not have been
+-  
 
 ### Test List:
 - [x] parse valid gender
@@ -38,11 +41,20 @@
 - [x] reject gender > 3
 - [x] parse valid year
 - [x] reject negative year
-- [ ] reject non-number-year
+- [x] reject non-number year
 - [ ] reject serial number = 0
+- [ ] reject negative serial number
+- [ ] reject non-number serial number
 - [ ] parse valid serial number
 - [ ] calculate control key from payload
 - [ ] reject non-matching control key
 - [ ] accept matching control key
 - [ ] parse matching control key?
 - [ ] accept all valid eids
+
+## TODOs
+- [ ] use a builder to construct eids from candidates and individual fields?
+- [ ] find more succinct ways of asserting?
+  - parsed.shouldBeRight()
+  - parsed shouldHaveStringRepresentation eidString
+  - parsed shouldBeLeft someError

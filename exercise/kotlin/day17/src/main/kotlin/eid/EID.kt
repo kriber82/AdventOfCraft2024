@@ -36,11 +36,18 @@ class EID private constructor (val eid: String, val gender: ElfGender, val year:
 
         private fun parseYear(eidCandidate: String): Either<ParsingError, Int> {
             val yearCandidate = eidCandidate.substring(1, 3)
-            val parsedYear = yearCandidate.toInt()
-            return if (parsedYear < 0) {
-                Either.Left(ParsingError.InvalidYear(yearCandidate))
-            } else {
-                Either.Right(parsedYear)
+            if (!yearCandidate.matches("[0-9]+".toRegex())) {
+                return Either.Left(ParsingError.InvalidYear(yearCandidate))
+            }
+            return Either.catch {
+                val parsedYear = yearCandidate.toInt()
+                return if (parsedYear < 0) {
+                    Either.Left(ParsingError.InvalidYear(yearCandidate))
+                } else {
+                    Either.Right(parsedYear)
+                }
+            }.mapLeft {
+                ParsingError.InvalidYear(yearCandidate)
             }
         }
 
