@@ -25,4 +25,5 @@
 
 ## Implementing
 
-- 
+- [How to use Either for error handling](https://proandroiddev.com/how-to-use-arrows-either-for-exception-handling-in-your-application-a73574b39d07)
+- https://www.conventionalcommits.org/en/v1.0.0/#summary
