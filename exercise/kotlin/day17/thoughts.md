@@ -27,6 +27,8 @@
 
 - [How to use Either for error handling](https://proandroiddev.com/how-to-use-arrows-either-for-exception-handling-in-your-application-a73574b39d07)
 - https://www.conventionalcommits.org/en/v1.0.0/#summary
+- found it hard to come up with a good to express a test that combines gender + rest of EID
+- researching concise ways to work with either took some time and mental effort. Any feedback is welcome!
 
 ### Test List:
 - [ ] parse valid gender
