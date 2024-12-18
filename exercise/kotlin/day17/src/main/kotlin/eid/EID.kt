@@ -8,8 +8,11 @@ class EID {
     companion object {
         fun parse(eidCandidate: String): Either<ParsingError, EID> {
             return either {
-                ensure (eidCandidate.length > 7) {
+                ensure (eidCandidate.length >= 8) {
                     ParsingError.InputTooShort()
+                }
+                ensure (eidCandidate.length <= 8) {
+                    ParsingError.InputTooLong()
                 }
                 EID()
             }
