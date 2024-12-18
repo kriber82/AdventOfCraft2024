@@ -27,7 +27,6 @@ class EIDTest {
     fun `should accept valid EIDs`(@ForAll("validEids") validEid: String) {
         val parsed = EID.parse(validEid)
 
-        parsed.should { it.isRight() }
         parsed.shouldBeRight().toString() shouldBe validEid
     }
 
@@ -126,14 +125,6 @@ class EIDTest {
         EID.calculateControlKey(validEid).shouldBeLeft().shouldBeInstanceOf<ParsingError.CouldNotCalculateControlKey>()
     }
 
-    @Provide
-    fun validEidBuilders(): Arbitrary<EidStringBuilder> {
-        return Combinators.combine(validGenders(), validYears(), validSerialNumbers())
-            .`as` { g, y, sn ->
-                EidStringBuilder().withGenderString(g).withYear(y).withSerialNumber(sn)
-            }
-    }
-
     @Test
     fun `should accept Jerceval's EID with matching control key`() {
         EID.parse("19800767").shouldBeRight()
@@ -149,6 +140,22 @@ class EIDTest {
         @ForAll("eidsWithNonMatchingControlKey") eidWithNonMatchingControlKey: String,
     ) {
         EID.parse(eidWithNonMatchingControlKey).shouldBeLeft().shouldBeInstanceOf<ParsingError.ControlDoesNotMatch>()
+    }
+
+    @Property
+    fun `should parse control key`(@ForAll("validEids") validEid: String) {
+        val parsed = EID.parse(validEid)
+
+        val expectedControlKey = EID.calculateControlKey(validEid).getOrNull()
+        parsed.shouldBeRight().controlKey shouldBe expectedControlKey
+    }
+
+    @Provide
+    fun validEidBuilders(): Arbitrary<EidStringBuilder> {
+        return Combinators.combine(validGenders(), validYears(), validSerialNumbers())
+            .`as` { g, y, sn ->
+                EidStringBuilder().withGenderString(g).withYear(y).withSerialNumber(sn)
+            }
     }
 
     @Provide

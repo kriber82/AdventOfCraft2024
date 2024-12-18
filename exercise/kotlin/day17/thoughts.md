@@ -38,7 +38,7 @@
 
 ### Test List:
 - [x] parse valid gender
-- [ ] reject any non digits
+- [x] reject any non digits -> done in all relevant fields
 - [x] reject gender = 0
 - [x] reject gender > 3
 - [x] parse valid year
@@ -53,9 +53,10 @@
 - [x] reject control key calculation for non-numbers
 - [x] reject non-matching control key
 - [x] accept matching control key
-- [ ] reject control keys outside of valid range
-- [ ] parse matching control key?
-- [ ] accept all valid eids
+- [x] reject control keys outside of valid range -> not necessary
+- [x] reject control keys with non digit chars -> not necessary
+- [x] parse matching control key?
+- [x] accept all valid eids
 
 ## TODOs
 - [x] use a builder to construct eids from candidates and individual fields?
