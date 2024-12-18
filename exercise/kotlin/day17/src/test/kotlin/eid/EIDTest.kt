@@ -62,12 +62,12 @@ class EIDTest {
 
     @Property
     fun shouldRejectEIDsThatAreTooShort(@ForAll @StringLength(max = 7) tooShortForEid: String) {
-        EID.parse(tooShortForEid).leftOrNull() shouldBe ParsingError.InputTooShort()
+        EID.parse(tooShortForEid) shouldBeLeftOfType ParsingError.InputTooShort()
     }
 
     @Property
     fun `should reject EIDs that are too long`(@ForAll @StringLength(min = 9) tooLongForEid: String) {
-        EID.parse(tooLongForEid).leftOrNull() shouldBe ParsingError.InputTooLong()
+        EID.parse(tooLongForEid) shouldBeLeftOfType ParsingError.InputTooLong()
     }
 
     @Property
@@ -99,7 +99,7 @@ class EIDTest {
             EidPayloadSubstrings(invalidGenderString, randomEidFields.year, randomEidFields.serialNumber)
         val input = usedEidPayload.plusControlKey()
 
-        EID.parse(input).leftOrNull().shouldBeInstanceOf<ParsingError.InvalidElfGender>()
+        EID.parse(input) shouldBeLeftOfType ParsingError.InvalidElfGender("dummy")
     }
 
     @Property
@@ -121,7 +121,7 @@ class EIDTest {
         val usedEidPayload = EidPayloadSubstrings(randomEidFields.gender, toYearString(negativeYear), randomEidFields.serialNumber)
         val input = usedEidPayload.plusControlKey()
 
-        EID.parse(input).leftOrNull().shouldBeInstanceOf<ParsingError.InvalidYear>()
+        EID.parse(input) shouldBeLeftOfType ParsingError.InvalidYear("dummy")
     }
 
     @Property
@@ -133,7 +133,6 @@ class EIDTest {
         val input = usedEidPayload.plusControlKey()
 
         EID.parse(input) shouldBeLeftOfType ParsingError.InvalidYear("dummy")
-        EID.parse(input).leftOrNull().shouldBeInstanceOf<ParsingError.InvalidYear>()
     }
 
     companion object {
