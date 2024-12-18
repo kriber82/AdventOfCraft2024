@@ -29,6 +29,7 @@
 - https://www.conventionalcommits.org/en/v1.0.0/#summary
 - found it hard to come up with a good to express a test that combines gender + rest of EID
 - researching concise ways to work with either took some time and mental effort. Any feedback is welcome!
+- using property based tests everywhere could become too slow for large SW
 
 ### Test List:
 - [x] parse valid gender
@@ -36,6 +37,8 @@
 - [x] reject gender = 0
 - [x] reject gender > 3
 - [x] parse valid year
+- [x] reject negative year
+- [ ] reject non-number-year
 - [ ] reject serial number = 0
 - [ ] parse valid serial number
 - [ ] calculate control key from payload
