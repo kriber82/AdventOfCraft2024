@@ -1,20 +1,22 @@
 package eid
 
 import arrow.core.Either
+import arrow.core.flatMap
+import arrow.core.raise.catch
 import arrow.core.raise.either
 import arrow.core.raise.ensure
 
-class EID private constructor (val eid: String, val gender: ElfGender, val year: Int, val serialNumber: Int) {
+class EID private constructor(val eid: String, val gender: ElfGender, val year: Int, val serialNumber: Int) {
 
     companion object {
         const val validEidLength = 8
 
         fun parse(eidCandidate: String): Either<ParsingError, EID> {
             return either {
-                ensure (eidCandidate.length >= validEidLength) {
+                ensure(eidCandidate.length >= validEidLength) {
                     ParsingError.InputTooShort()
                 }
-                ensure (eidCandidate.length <= validEidLength) {
+                ensure(eidCandidate.length <= validEidLength) {
                     ParsingError.InputTooLong()
                 }
 
@@ -36,38 +38,40 @@ class EID private constructor (val eid: String, val gender: ElfGender, val year:
         }
 
         private fun parseYear(eidCandidate: String): Either<ParsingError, Int> {
-            val yearCandidate = eidCandidate.substring(1, 3)
-            if (!yearCandidate.matches("[0-9]+".toRegex())) {
-                return Either.Left(ParsingError.InvalidYear(yearCandidate))
-            }
-            return Either.catch {
-                val parsedYear = yearCandidate.toInt()
-                return if (parsedYear < 0) {
-                    Either.Left(ParsingError.InvalidYear(yearCandidate))
-                } else {
-                    Either.Right(parsedYear)
+            return either {
+                val yearCandidate = eidCandidate.substring(1, 3)
+                ensure(containsOnlyDigits(yearCandidate)) {
+                    ParsingError.InvalidYear(yearCandidate)
                 }
-            }.mapLeft {
-                ParsingError.InvalidYear(yearCandidate)
+                val parsedYear = Either
+                    .catch { yearCandidate.toInt() }
+                    .mapLeft { ParsingError.InvalidYear(yearCandidate) }
+                    .bind()
+                ensure(parsedYear >= 0) {
+                    ParsingError.InvalidYear(yearCandidate)
+                }
+                parsedYear
             }
         }
 
         private fun parseSerialNumber(eidCandidate: String): Either<ParsingError, Int> {
-            val serialCandidate = eidCandidate.substring(3, 6)
-            if (!serialCandidate.matches("[0-9]+".toRegex())) {
-                return Either.Left(ParsingError.InvalidSerialNumber(serialCandidate))
-            }
-            return Either.catch {
-                val parsedSerial = serialCandidate.toInt()
-                return if (parsedSerial < 1) {
-                    Either.Left(ParsingError.InvalidSerialNumber(serialCandidate))
-                } else {
-                    Either.Right(parsedSerial)
+            return either {
+                val serialCandidate = eidCandidate.substring(3, 6)
+                ensure(containsOnlyDigits(serialCandidate)) {
+                    ParsingError.InvalidSerialNumber(serialCandidate)
                 }
-            }.mapLeft {
-                ParsingError.InvalidSerialNumber(serialCandidate)
+                val parsedSerial = Either
+                    .catch { serialCandidate.toInt() }
+                    .mapLeft { ParsingError.InvalidSerialNumber(serialCandidate) }
+                    .bind()
+                ensure(parsedSerial >= 1) {
+                    ParsingError.InvalidSerialNumber(serialCandidate)
+                }
+                parsedSerial
             }
         }
+
+        private fun containsOnlyDigits(yearCandidate: String) = yearCandidate.matches("[0-9]+".toRegex())
 
     }
 
