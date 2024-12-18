@@ -1,6 +1,8 @@
 package eid
 
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
+import io.kotest.matchers.types.shouldBeTypeOf
 import net.jqwik.api.*
 import net.jqwik.api.constraints.StringLength
 
@@ -16,9 +18,16 @@ class EIDTest {
     val serialNumbers = Arbitraries.strings().ofLength(3)
     val controlKeys = Arbitraries.strings().ofLength(2)
 
+    private val validGenderChars = setOf('1', '2', '3')
+
     @Provide
     fun validGenders(): Arbitrary<String> {
-        return Arbitraries.strings().withChars('1', '2', '3').ofLength(1)
+        return Arbitraries.strings().withChars(*validGenderChars.toCharArray()).ofLength(1)
+    }
+
+    @Provide
+    fun invalidGenders(): Arbitrary<String> {
+        return Arbitraries.strings().ofLength(1).filter { it[0] !in validGenderChars }
     }
 
     @Provide
@@ -54,6 +63,14 @@ class EIDTest {
         val input = usedEidPayload.plusControlKey()
 
         EID.parse(input).getOrNull()?.gender shouldBe elfGender
+    }
+
+    @Property
+    fun `should reject invalid genders`(@ForAll("invalidGenders") invalidGenderString: String, @ForAll("validEidPayloads") randomEidFields: EidPayloadSubstrings) {
+        val usedEidPayload = EidPayloadSubstrings(invalidGenderString, randomEidFields.year, randomEidFields.serialNumber)
+        val input = usedEidPayload.plusControlKey()
+
+        EID.parse(input).leftOrNull().shouldBeInstanceOf<ParsingError.InvalidElfGender>()
     }
 
     private fun toEidField(elfGender: ElfGender): String {

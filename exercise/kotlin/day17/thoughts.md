@@ -31,10 +31,10 @@
 - researching concise ways to work with either took some time and mental effort. Any feedback is welcome!
 
 ### Test List:
-- [ ] parse valid gender
+- [x] parse valid gender
 - [ ] reject any non digits
-- [ ] reject gender = 0
-- [ ] reject gender > 3
+- [x] reject gender = 0
+- [x] reject gender > 3
 - [ ] parse valid year
 - [ ] reject serial number = 0
 - [ ] parse valid serial number
