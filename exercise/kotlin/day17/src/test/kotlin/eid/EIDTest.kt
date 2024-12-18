@@ -9,20 +9,9 @@ import net.jqwik.api.*
 import net.jqwik.api.constraints.IntRange
 import net.jqwik.api.constraints.StringLength
 
-data class EidPayloadSubstrings(val gender: String, val year: String, val serialNumber: String) {
-    fun plusControlKey(): String {
-        return toString() + "00" //TODO add real control key
-    }
-
-    override fun toString(): String {
-        return "$gender$year$serialNumber"
-    }
-}
-
 class EIDTest {
 
     val serialNumbers = Arbitraries.strings().ofLength(3).withCharRange('0', '9')
-    val controlKeys = Arbitraries.strings().ofLength(2).withCharRange('0', '9')
 
     private val validGenderChars = setOf('1', '2', '3')
 
@@ -50,8 +39,7 @@ class EIDTest {
 
     @Provide
     fun validEids(): Arbitrary<String> {
-        return Combinators.combine(validGenders(), validYears(), serialNumbers, controlKeys)
-            .`as` { g, y, sn, s4 -> "$g${toYearString(y)}$sn$s4" } //TODO use valid builder instead?
+        return validEidBuilders().map { it.build() }
     }
 
     @Property
@@ -131,9 +119,9 @@ class EIDTest {
 
     @Provide
     fun validEidBuilders(): Arbitrary<EidStringBuilder> {
-        return Combinators.combine(validGenders(), validYears(), serialNumbers, controlKeys)
-            .`as` { g, y, sn, c ->
-                EidStringBuilder().withGenderString(g).withYear(y).withSerialNumber(sn).withControlKeyOverride(c)
+        return Combinators.combine(validGenders(), validYears(), serialNumbers)
+            .`as` { g, y, sn ->
+                EidStringBuilder().withGenderString(g).withYear(y).withSerialNumber(sn)
             }
     }
 
