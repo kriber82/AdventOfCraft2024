@@ -28,14 +28,13 @@ class EID private constructor(
             return either {
                 ensureHasValidLength(eidCandidate)
 
-                val gender = parseGender(eidCandidate).bind()
-                val year = parseYear(eidCandidate).bind()
-                val serialNumber = parseSerialNumber(eidCandidate).bind()
-                val parsedControlKey = parseControlKey(eidCandidate).bind()
-
-                ensureControlKeyMatchesContent(eidCandidate, parsedControlKey)
-
-                EID(gender, year, serialNumber)
+                EID(
+                    gender = parseGender(eidCandidate).bind(),
+                    year = parseYear(eidCandidate).bind(),
+                    serialNumber = parseSerialNumber(eidCandidate).bind()
+                ).also {
+                    ensureControlKeyIsOk(eidCandidate)
+                }
             }
         }
 
@@ -78,13 +77,13 @@ class EID private constructor(
             ) { ParsingError.InvalidControlKey(it) }
         }
 
-        private fun Raise<ParsingError>.ensureControlKeyMatchesContent(
-            eidCandidate: String,
-            parsedControlKey: Int
+        private fun Raise<ParsingError>.ensureControlKeyIsOk(
+            eidCandidate: String
         ) {
+            val providedControlKey = parseControlKey(eidCandidate).bind()
             val calculatedControlKey = calculateControlKey(eidCandidate).bind()
-            ensure(parsedControlKey == calculatedControlKey) {
-                ParsingError.ControlKeyDoesNotMatch(calculatedControlKey, parsedControlKey)
+            ensure(providedControlKey == calculatedControlKey) {
+                ParsingError.ControlKeyDoesNotMatch(calculatedControlKey, providedControlKey)
             }
         }
 

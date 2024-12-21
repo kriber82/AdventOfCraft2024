@@ -22,8 +22,8 @@ sealed interface ParsingError {
         override val message = "Cannot calculate control key from $firstSixDigits (must be a number between 000000 to 999999)"
     }
 
-    class ControlKeyDoesNotMatch(calculatedControlKey: Int, parsedControlKey: Int): ParsingError {
-        override val message = "Control key $parsedControlKey does not match calculated control key $calculatedControlKey"
+    class ControlKeyDoesNotMatch(calculatedPayloadControlKey: Int, parsedControlKey: Int): ParsingError {
+        override val message = "Control key $parsedControlKey does not match calculated control key $calculatedPayloadControlKey"
     }
 
     class InvalidControlKey(controlKeySubstring: String) : ParsingError {
