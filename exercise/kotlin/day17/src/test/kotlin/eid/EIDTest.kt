@@ -32,12 +32,15 @@ class EIDTest : FunSpec({
         }
     }
 
-    val validGenders = Arb.stringPattern("[1-3]")
+    val validGenders = Arb.enum<ElfGender>()
     val validYears = Arb.int(0, 99)
     val validSerialNumbers = Arb.int(1, 999)
 
-    val validEidBuilders = Arb.bind(validGenders, validYears, validSerialNumbers) { g, y, sn ->
-        EidStringBuilder().withGenderString(g).withYear(y).withSerialNumber(sn)
+    val validEidBuilders = arbitrary {
+        EidStringBuilder()
+            .withGender(validGenders.next())
+            .withYear(validYears.next())
+            .withSerialNumber(validSerialNumbers.next())
     }
 
     val validEids = validEidBuilders.map { it.build() }
@@ -51,7 +54,7 @@ class EIDTest : FunSpec({
     }
 
     test("should parse genders") {
-        checkAll(Arb.enum<ElfGender>(), validEidBuilders) { elfGender, eidBuilder ->
+        checkAll(validGenders, validEidBuilders) { elfGender, eidBuilder ->
             val input = eidBuilder.withGender(elfGender).build()
 
             EID.parse(input)
