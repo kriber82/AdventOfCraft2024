@@ -16,6 +16,8 @@ dependencies {
     testImplementation("io.kotest.extensions:kotest-assertions-arrow:1.4.0")
 
     testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-property:$kotestVersion")
+
     testImplementation(kotlin("test"))
     testImplementation("net.jqwik:jqwik:1.9.2")
 }

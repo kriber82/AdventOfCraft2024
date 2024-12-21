@@ -97,6 +97,17 @@ Some of my PBT / jqwik highlights:
 - kotlin: return in let-lambda returns from the enclosing fun (see [stackoverflow](https://stackoverflow.com/questions/56671453/kotlin-where-the-return-from-inside-the-let-go) & [kotlin docs](https://kotlinlang.org/docs/returns.html))
   - not so with anonymous funs
 - and another (albeit minor) bug detected by PBT: "-00003xx" yielded a control key above 100, which in turn led to different parsing errors than expected
+- copilot
+  - GPT:
+    - converting class of 170 lines failed (probably due to length restrictions)
+    - worked in browser
+    - 
+  - claude
+    - better output, but aborted generating several times
+- kotest with properties (comparison to jqwik):
+  - is way more readable
+  - found edge cases much faster
+  - is slightly faster in execution
 
 ### Test List:
 - [x] parse valid gender
