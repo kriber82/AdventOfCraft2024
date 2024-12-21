@@ -46,14 +46,15 @@ class EidStringBuilder {
     fun build(): String {
         val payload = "$gender$year$serialNumber"
 
-        val controlKey = if (controlKeyOverride == null) {
-            val controlKeyInt = EID.calculateControlKey(payload).getOrElse { 0 }
-            toControlKeyString(controlKeyInt)
-        } else {
-            controlKeyOverride!!
-        }
+        val controlKey = buildControlKey(payload)
 
         return "$payload$controlKey"
+    }
+
+    private fun buildControlKey(payload: String): String {
+        controlKeyOverride?.let { return it }
+        val controlKeyInt = EID.calculateControlKey(payload).getOrElse { 0 }
+        return toControlKeyString(controlKeyInt)
     }
 
     private fun toGenderString(elfGender: ElfGender): String {
@@ -65,15 +66,20 @@ class EidStringBuilder {
     }
 
     private fun toYearString(year: Int): String {
-        return year.toString().padStart(2, '0')
+        return year.toZeroPaddedString(2)
     }
 
     private fun toSerialNumberString(serialNumber: Int): String {
-        return serialNumber.toString().padStart(3, '0')
+        return serialNumber.toZeroPaddedString(3)
     }
 
     private fun toControlKeyString(controlKey: Int): String {
-        return controlKey.toString().padStart(2, '0')
+        return controlKey.toZeroPaddedString(2)
     }
 
+    private fun Int.toZeroPaddedString(length: Int) = toString().padStart(length, '0')
+
+    override fun toString(): String {
+        return "EidStringBuilder($gender, $year, $serialNumber, $controlKeyOverride)"
+    }
 }

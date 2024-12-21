@@ -1,9 +1,11 @@
 package eid
 
 import arrow.core.Either
+import arrow.core.left
 import arrow.core.raise.Raise
 import arrow.core.raise.either
 import arrow.core.raise.ensure
+import arrow.core.right
 
 class EID private constructor(
     val eid: String,
@@ -42,10 +44,10 @@ class EID private constructor(
 
         private fun parseGender(eidCandidate: String): Either<ParsingError, ElfGender> {
             return when (val genderSubstring = eidCandidate.substring(0, 1)) {
-                "1" -> Either.Right(ElfGender.Sloubi)
-                "2" -> Either.Right(ElfGender.Gagna)
-                "3" -> Either.Right(ElfGender.Catact)
-                else -> Either.Left(ParsingError.InvalidElfGender(genderSubstring))
+                "1" -> ElfGender.Sloubi.right()
+                "2" -> ElfGender.Gagna.right()
+                "3" -> ElfGender.Catact.right()
+                else -> ParsingError.InvalidElfGender(genderSubstring).left()
             }
         }
 
@@ -80,23 +82,21 @@ class EID private constructor(
             }
         }
 
-        private fun containsOnlyDigits(str: String) = str.matches("[0-9]+".toRegex())
-
         private fun parseIntFieldWithErrorProvider(
             eidSubstring: String,
             validRange: IntRange,
-            errorProvider: (String) -> ParsingError
+            createErrorForEidSubstring: (String) -> ParsingError
         ): Either<ParsingError, Int> {
             return either {
                 ensure(containsOnlyDigits(eidSubstring)) {
-                    errorProvider(eidSubstring)
+                    createErrorForEidSubstring(eidSubstring)
                 }
                 val parsedField = Either
                     .catch { eidSubstring.toInt() }
-                    .mapLeft { errorProvider(eidSubstring) }
+                    .mapLeft { createErrorForEidSubstring(eidSubstring) }
                     .bind()
                 ensure(parsedField in validRange) {
-                    errorProvider(eidSubstring)
+                    createErrorForEidSubstring(eidSubstring)
                 }
                 parsedField
             }
@@ -109,11 +109,16 @@ class EID private constructor(
                     .catch { firstSixDigits.toInt() }
                     .mapLeft { ParsingError.CouldNotCalculateControlKey(firstSixDigits) }
                     .bind()
+                ensure(firstSixDigitsAsNumber >= 0) {
+                    ParsingError.CouldNotCalculateControlKey(firstSixDigits)
+                }
                 val modulo97 = firstSixDigitsAsNumber % 97
                 val complementTo97 = 97 - modulo97
                 complementTo97
             }
         }
+
+        private fun containsOnlyDigits(str: String) = str.matches("[0-9]+".toRegex())
 
     }
 

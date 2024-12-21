@@ -24,9 +24,7 @@ class EIDTest {
 
     @Property
     fun `should accept valid EIDs`(@ForAll("validEids") validEid: String) {
-        val parsed = EID.parse(validEid)
-
-        parsed.shouldBeRight().toString() shouldBe validEid
+        EID.parse(validEid).shouldBeRight().toString() shouldBe validEid
     }
 
     @Property
@@ -59,6 +57,8 @@ class EIDTest {
         EID.parse(input).shouldBeRight().year shouldBe year
     }
 
+    //might be merged to `should reject invalid years` with next test (pro: way less boilerplate, con: less descriptive & error pinpointing by test name not as good)
+    //see `should reject invalid control keys` for merged example
     @Property
     fun `should reject negative years`(
         @ForAll @IntRange(min = -9, max = -1) negativeYear: Int,
@@ -89,6 +89,7 @@ class EIDTest {
         EID.parse(input).shouldBeRight().serialNumber shouldBe serialNumber
     }
 
+    //might be merged (for details see comment)
     @Property
     fun `should reject negative serial numbers and zero`(
         @ForAll @IntRange(min = -99, max = 0) zeroOrNegativeSerialNumber: Int,
@@ -124,6 +125,10 @@ class EIDTest {
         EID.calculateControlKey(validEid).shouldBeLeft().shouldBeInstanceOf<ParsingError.CouldNotCalculateControlKey>()
     }
 
+    @Test fun `should reject generating control keys outside valid range - bug`() {
+        EID.calculateControlKey("-00003xx").shouldBeLeft().shouldBeInstanceOf<ParsingError.CouldNotCalculateControlKey>()
+    }
+
     @Test
     fun `should accept Jerceval's EID with matching control key`() {
         EID.parse("19800767").shouldBeRight()
@@ -141,6 +146,8 @@ class EIDTest {
         EID.parse(eidWithNonMatchingControlKey).shouldBeLeft().shouldBeInstanceOf<ParsingError.ControlDoesNotMatch>()
     }
 
+    //could isolate different tests for each variant of invalid control key
+    //see `should reject negative years` for unmerged example (see pros / cons there)
     @Property
     fun `should reject invalid control keys`(
         @ForAll("invalidControlKeys") invalidControlKey: String,
@@ -238,5 +245,6 @@ class EIDTest {
 
     private fun containsNonDigitCharacters(it: String) = !it.all { it in digitCharacters }
     private val digitCharacters: CharRange = '0'..'9'
+
 }
 
