@@ -15,17 +15,23 @@ class EIDTest {
 
     @Property
     fun shouldRejectEIDsThatAreTooShort(@ForAll @StringLength(max = 7) tooShortForEid: String) {
-        EID.parse(tooShortForEid).shouldBeLeft().shouldBeInstanceOf<ParsingError.InputTooShort>()
+        EID.parse(tooShortForEid)
+            .shouldBeLeft()
+            .shouldBeInstanceOf<ParsingError.InputTooShort>()
     }
 
     @Property
     fun `should reject EIDs that are too long`(@ForAll @StringLength(min = 9) tooLongForEid: String) {
-        EID.parse(tooLongForEid).shouldBeLeft().shouldBeInstanceOf<ParsingError.InputTooLong>()
+        EID.parse(tooLongForEid)
+            .shouldBeLeft()
+            .shouldBeInstanceOf<ParsingError.InputTooLong>()
     }
 
     @Property
     fun `should accept valid EIDs`(@ForAll("validEids") validEid: String) {
-        EID.parse(validEid).shouldBeRight().toString() shouldBe validEid
+        EID.parse(validEid)
+            .shouldBeRight()
+            .toString() shouldBe validEid
     }
 
     @Property
@@ -35,7 +41,9 @@ class EIDTest {
     ) {
         val input = eidBuilder.withGender(elfGender).build()
 
-        EID.parse(input).shouldBeRight().gender shouldBe elfGender
+        EID.parse(input)
+            .shouldBeRight()
+            .gender shouldBe elfGender
     }
 
     @Property
@@ -45,7 +53,9 @@ class EIDTest {
     ) {
         val input = eidBuilder.withGenderString(invalidGenderString).build()
 
-        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidElfGender>()
+        EID.parse(input)
+            .shouldBeLeft()
+            .shouldBeInstanceOf<ParsingError.InvalidElfGender>()
     }
 
     @Property
@@ -55,7 +65,9 @@ class EIDTest {
     ) {
         val input = eidBuilder.withYear(year).build()
 
-        EID.parse(input).shouldBeRight().year shouldBe year
+        EID.parse(input)
+            .shouldBeRight()
+            .year shouldBe year
     }
 
     //might be merged to `should reject invalid years` with next test (pro: way less boilerplate, con: less descriptive & error pinpointing by test name not as good)
@@ -67,7 +79,9 @@ class EIDTest {
     ) {
         val input = eidBuilder.withYear(negativeYear).build()
 
-        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidYear>()
+        EID.parse(input)
+            .shouldBeLeft()
+            .shouldBeInstanceOf<ParsingError.InvalidYear>()
     }
 
     @Property
@@ -77,7 +91,17 @@ class EIDTest {
     ) {
         val input = eidBuilder.withYearString(invalidYear).build()
 
-        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidYear>()
+        EID.parse(input)
+            .shouldBeLeft()
+            .shouldBeInstanceOf<ParsingError.InvalidYear>()
+    }
+
+    @Test
+    fun `should reject year containing + despite being valid number - bug`() {
+        val invalidYear = "+0"
+        EID.parse("1${invalidYear}00100")
+            .shouldBeLeft()
+            .shouldBeInstanceOf<ParsingError.InvalidYear>()
     }
 
     @Property
@@ -87,7 +111,9 @@ class EIDTest {
     ) {
         val input = eidBuilder.withSerialNumber(serialNumber).build()
 
-        EID.parse(input).shouldBeRight().serialNumber shouldBe serialNumber
+        EID.parse(input)
+            .shouldBeRight()
+            .serialNumber shouldBe serialNumber
     }
 
     //might be merged (for details see comment above)
@@ -98,7 +124,9 @@ class EIDTest {
     ) {
         val input = eidBuilder.withSerialNumber(zeroOrNegativeSerialNumber).build()
 
-        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidSerialNumber>()
+        EID.parse(input)
+            .shouldBeLeft()
+            .shouldBeInstanceOf<ParsingError.InvalidSerialNumber>()
     }
 
     @Property
@@ -108,7 +136,9 @@ class EIDTest {
     ) {
         val input = eidBuilder.withSerialNumberString(serialNumberContainingNonDigit).build()
 
-        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidSerialNumber>()
+        EID.parse(input)
+            .shouldBeLeft()
+            .shouldBeInstanceOf<ParsingError.InvalidSerialNumber>()
     }
 
     @Test
@@ -118,17 +148,22 @@ class EIDTest {
 
     @Property
     fun `should calculate valid control keys for valid EIDs`(@ForAll("validEids") validEid: String) {
-        EID.calculateControlKey(validEid).shouldBeRight() shouldBeInRange 1..97
+        EID.calculateControlKey(validEid)
+            .shouldBeRight()
+            .shouldBeInRange(1..97)
     }
 
     @Property
     fun `should reject control key calculation for non-numeric EIDs`(@ForAll("eidsWithNonDigitChars") validEid: String) {
-        EID.calculateControlKey(validEid).shouldBeLeft().shouldBeInstanceOf<ParsingError.CouldNotCalculateControlKey>()
+        EID.calculateControlKey(validEid)
+            .shouldBeLeft()
+            .shouldBeInstanceOf<ParsingError.CouldNotCalculateControlKey>()
     }
 
     @Test
     fun `should reject generating control keys outside valid range - bug`() {
-        EID.calculateControlKey("-00003xx").shouldBeLeft()
+        EID.calculateControlKey("-00003xx")
+            .shouldBeLeft()
             .shouldBeInstanceOf<ParsingError.CouldNotCalculateControlKey>()
     }
 
@@ -158,7 +193,9 @@ class EIDTest {
     ) {
         val input = eidBuilder.withControlKeyOverride(invalidControlKey).build()
 
-        EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidControlKey>()
+        EID.parse(input)
+            .shouldBeLeft()
+            .shouldBeInstanceOf<ParsingError.InvalidControlKey>()
     }
 
     @Property
@@ -247,4 +284,3 @@ class EIDTest {
     private fun containsNonDigitCharacters(it: String) = !it.all { it in '0'..'9' }
 
 }
-
