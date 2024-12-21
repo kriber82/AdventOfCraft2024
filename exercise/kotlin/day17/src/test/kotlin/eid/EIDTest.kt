@@ -1,5 +1,6 @@
 package eid
 
+import arrow.core.right
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.matchers.ints.shouldBeInRange
@@ -89,7 +90,7 @@ class EIDTest {
         EID.parse(input).shouldBeRight().serialNumber shouldBe serialNumber
     }
 
-    //might be merged (for details see comment)
+    //might be merged (for details see comment above)
     @Property
     fun `should reject negative serial numbers and zero`(
         @ForAll @IntRange(min = -99, max = 0) zeroOrNegativeSerialNumber: Int,
@@ -102,17 +103,17 @@ class EIDTest {
 
     @Property
     fun `should reject non-number serial numbers`(
-        @ForAll("serialNumbersContainingNonDigits") invalidSerialNumber: String,
+        @ForAll("serialNumbersContainingNonDigits") serialNumberContainingNonDigit: String,
         @ForAll("validEidBuilders") eidBuilder: EidStringBuilder
     ) {
-        val input = eidBuilder.withSerialNumberString(invalidSerialNumber).build()
+        val input = eidBuilder.withSerialNumberString(serialNumberContainingNonDigit).build()
 
         EID.parse(input).shouldBeLeft().shouldBeInstanceOf<ParsingError.InvalidSerialNumber>()
     }
 
     @Test
-    fun `calculates control key for Jerceval's EID`() {
-        EID.calculateControlKey("198007xx").shouldBeRight() shouldBe 67
+    fun `should calculate control key for Jerceval's EID`() {
+        EID.calculateControlKey("198007xx") shouldBe 67.right()
     }
 
     @Property
@@ -125,8 +126,10 @@ class EIDTest {
         EID.calculateControlKey(validEid).shouldBeLeft().shouldBeInstanceOf<ParsingError.CouldNotCalculateControlKey>()
     }
 
-    @Test fun `should reject generating control keys outside valid range - bug`() {
-        EID.calculateControlKey("-00003xx").shouldBeLeft().shouldBeInstanceOf<ParsingError.CouldNotCalculateControlKey>()
+    @Test
+    fun `should reject generating control keys outside valid range - bug`() {
+        EID.calculateControlKey("-00003xx").shouldBeLeft()
+            .shouldBeInstanceOf<ParsingError.CouldNotCalculateControlKey>()
     }
 
     @Test
@@ -136,14 +139,14 @@ class EIDTest {
 
     @Test
     fun `should reject Jerceval's EID with non-matching control key`() {
-        EID.parse("19800766").shouldBeLeft().shouldBeInstanceOf<ParsingError.ControlDoesNotMatch>()
+        EID.parse("19800766").shouldBeLeft().shouldBeInstanceOf<ParsingError.ControlKeyDoesNotMatch>()
     }
 
     @Property
     fun `should reject EIDs with non-matching control key`(
         @ForAll("eidsWithNonMatchingControlKey") eidWithNonMatchingControlKey: String,
     ) {
-        EID.parse(eidWithNonMatchingControlKey).shouldBeLeft().shouldBeInstanceOf<ParsingError.ControlDoesNotMatch>()
+        EID.parse(eidWithNonMatchingControlKey).shouldBeLeft().shouldBeInstanceOf<ParsingError.ControlKeyDoesNotMatch>()
     }
 
     //could isolate different tests for each variant of invalid control key
@@ -187,15 +190,13 @@ class EIDTest {
     @Provide
     fun eidsWithNonMatchingControlKey(): Arbitrary<String> {
         return Combinators.combine(validEids(), validControlKeys())
-            .`as` { validEids, nonMatchingControlKeyCandidate ->
-                val matchingControlKey = validEids.substring(6..7)
-                val controlKeyCandidateString = nonMatchingControlKeyCandidate.toString().padStart(2, '0')
-                if (matchingControlKey == controlKeyCandidateString) {
-                    ""
-                } else {
-                    validEids.substring(0..5) + controlKeyCandidateString
-                }
-            }.filter { it != "" }
+            .filter { validEid, nonMatchingControlKeyCandidate ->
+                val matchingControlKey = validEid.substring(6..7).toInt()
+                nonMatchingControlKeyCandidate != matchingControlKey
+            }
+            .`as` { validEid, nonMatchingControlKey ->
+                validEid.substring(0..5) + nonMatchingControlKey.toZeroPaddedString(2)
+            }
     }
 
     private val validGenderChars = setOf('1', '2', '3')
@@ -237,14 +238,13 @@ class EIDTest {
 
     @Provide
     fun invalidControlKeys(): Arbitrary<String> {
-        val belowRange = Arbitraries.integers().between(-9, 0).map { it.toString().padStart(2, '0') }
-        val aboveRange = Arbitraries.integers().between(98, 99).map { it.toString().padStart(2, '0') }
+        val belowRange = Arbitraries.integers().between(-9, 0).map { it.toZeroPaddedString(2) }
+        val aboveRange = Arbitraries.integers().between(98, 99).map { it.toZeroPaddedString(2) }
         val containingNonDigits = Arbitraries.strings().ofLength(2).filter { containsNonDigitCharacters(it) }
         return Arbitraries.oneOf(belowRange, aboveRange, containingNonDigits)
     }
 
-    private fun containsNonDigitCharacters(it: String) = !it.all { it in digitCharacters }
-    private val digitCharacters: CharRange = '0'..'9'
+    private fun containsNonDigitCharacters(it: String) = !it.all { it in '0'..'9' }
 
 }
 

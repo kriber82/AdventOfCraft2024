@@ -77,9 +77,9 @@ class EidStringBuilder {
         return controlKey.toZeroPaddedString(2)
     }
 
-    private fun Int.toZeroPaddedString(length: Int) = toString().padStart(length, '0')
-
     override fun toString(): String {
         return "EidStringBuilder($gender, $year, $serialNumber, $controlKeyOverride)"
     }
 }
+
+fun Int.toZeroPaddedString(length: Int) = toString().padStart(length, '0')

@@ -78,7 +78,7 @@ class EID private constructor(
         ) {
             val calculatedControlKey = calculateControlKey(eidCandidate).bind()
             ensure(parsedControlKey == calculatedControlKey) {
-                ParsingError.ControlDoesNotMatch(calculatedControlKey, parsedControlKey)
+                ParsingError.ControlKeyDoesNotMatch(calculatedControlKey, parsedControlKey)
             }
         }
 
