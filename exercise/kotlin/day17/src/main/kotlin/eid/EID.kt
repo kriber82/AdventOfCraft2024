@@ -8,12 +8,18 @@ import arrow.core.raise.ensure
 import arrow.core.right
 
 class EID private constructor(
-    val eid: String,
     val gender: ElfGender,
     val year: Int,
     val serialNumber: Int,
-    val controlKey: Int
 ) {
+
+    private val payload: String
+    val controlKey: Int
+
+    init {
+        payload = "${gender.intValue}${year.toZeroPaddedString(2)}${serialNumber.toZeroPaddedString(3)}"
+        controlKey = calculateControlKey(payload).getOrNull()!!
+    }
 
     companion object {
         private const val VALID_EID_LENGTH = 8
@@ -29,7 +35,7 @@ class EID private constructor(
 
                 ensureControlKeyMatchesContent(eidCandidate, parsedControlKey)
 
-                EID(eidCandidate, gender, year, serialNumber, parsedControlKey)
+                EID(gender, year, serialNumber)
             }
         }
 
@@ -123,7 +129,9 @@ class EID private constructor(
     }
 
     override fun toString(): String {
-        return eid
+        return "$payload${controlKey.toZeroPaddedString(2)}"
     }
 
 }
+
+fun Int.toZeroPaddedString(length: Int) = toString().padStart(length, '0')

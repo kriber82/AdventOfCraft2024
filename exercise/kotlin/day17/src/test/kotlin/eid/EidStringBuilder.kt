@@ -81,5 +81,3 @@ class EidStringBuilder {
         return "EidStringBuilder($gender, $year, $serialNumber, $controlKeyOverride)"
     }
 }
-
-fun Int.toZeroPaddedString(length: Int) = toString().padStart(length, '0')
