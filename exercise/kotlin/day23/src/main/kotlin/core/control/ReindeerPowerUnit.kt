@@ -14,5 +14,9 @@ class ReindeerPowerUnit(val reindeer: Reindeer) {
         }
     }
 
-    fun checkMagicPower() = reindeer.magicPower
+    fun checkMagicPower(): Float =
+        if (reindeer.sick || reindeer.needsRest())
+            0.0f
+        else
+            reindeer.magicPower
 }

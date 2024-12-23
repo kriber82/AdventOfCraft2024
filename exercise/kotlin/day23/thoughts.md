@@ -1,0 +1,63 @@
+## Before reading the code
+- Task: Make sure sleigh can fly
+  - Teo: Help figuring out what's wrong with the sleigh
+- Hints:
+  - Read [notice](../../../docs/day23/notice.md) before shipping! 
+  - Problem probably related to reindeers being sick (info from Teo)
+  - reindeer power sleigh through control system
+  - each deer can have amplifier to help
+  - Run App component to use dashboard
+- from documentation:
+  - ControlSystem: 
+    - XmasSpirit = needed power / controlMagicPower = currentPower
+  - sleigh engine
+    - seems to be a state machine. details in notice
+  - reindeer
+    - power depends on spirit, age & sickness
+    - can only provide power a certain amount of times (powerPullLimit) before needing to rest
+  - ReindeerPowerUnit
+    - reroutes reindeer power to control system
+    - has amplifier
+- Problems with codebase:
+  - structure
+  - lacking tests
+  - => instability
+  - only BASIC amplifiers used by control system currently
+    - available: 2 blessed (x2) and 1 divine (x3)
+  - ??? sick reindeer cannot produce magic power (should it be able to?)
+  - control system allows multiple actions (but should not?)
+- Constraints:
+  - No changes to reindeer class & attributes
+  - Don't touch external package
+
+- Open questions:
+  - which chain of actions do I need to support?
+  - can the reindeer rest in between stops?
+  - only ascend uses magical power
+    - gets power from all reindeer (can we switch some off to save power?)
+    - needs 40+ power
+    - drains all available power if successful
+  - would like to introduce Reindeer.rest()
+    - As we cannot change reindeer, reindeerPowerUnit could be used port/adapter to reindeer
+      - similarly: MagicStable, if necessary
+  - For providing enough power, we probably need to use the better amplifiers
+    - criteria: power and/or powerPullLimit 
+
+## Trying to make sleigh fly with quick fixes
+  - 2/4 tests failing
+  - App:
+    - interesting... allows 1 ascend before resting... -> what's the difference between test & prod?
+      - check for sick reindeer in checkMagicPower =>
+    - now
+      - available energy correctly shows 33 initially and doesn't ascend
+      - after resting, ascending works. check reason: 
+        - hunch: the sick reindeer seem to provide energy after resting => seemingly not
+        - is controller control magic power accumulated? => that's probably what "allows multiple actions meant"
+      - after fully spending, magicPower still returns values > 0
+        - add check for needsRest
+
+## TODOs
+
+- [ ] exception handling mess
+- [ ] RPU.checkMagicPower ignores needsRest? => bug in magicPower?
+- [ ] only consume reindeer power if there is enough energy

@@ -1,7 +1,9 @@
-import core.control.ControlSystem
-import core.control.SleighAction
-import core.control.SleighEngineStatus
+import core.control.*
+import external.stable.MagicStable
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.floats.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
@@ -50,5 +52,89 @@ class ControlSystemTest : StringSpec({
         controlSystem.startSystem()
         controlSystem.park()
         controlSystem.action shouldBe SleighAction.PARKED
+    }
+})
+
+class ControlSystemTestAdditions : FunSpec({
+    context("Reindeer Power Unit") {
+        context("Fresh and Sick Reindeer") {
+            val sickAndFreshDancer = MagicStable().allReindeers[0]
+            val tested = ReindeerPowerUnit(sickAndFreshDancer)
+
+            test("should return 0 on checkMagicPower") {
+                tested.checkMagicPower() shouldBe 0
+            }
+
+            test("should return 0 on harnessMagicPower") {
+                tested.harnessMagicPower() shouldBe 0
+            }
+        }
+
+        context("Rested and Sick Reindeer") {
+            val sickAndRestedDancer = MagicStable().allReindeers[0]
+            val tested = ReindeerPowerUnit(sickAndRestedDancer)
+
+            beforeTest {
+                sickAndRestedDancer.timesHarnessing = 0
+            }
+
+            test("should return 0 on checkMagicPower") {
+                tested.checkMagicPower() shouldBe 0
+            }
+
+            test("should return 0 on harnessMagicPower") {
+                tested.harnessMagicPower() shouldBe 0
+            }
+        }
+
+        context("fresh and healthy reindeer") {
+            val healthyAndRestedBlitzen = MagicStable().allReindeers[1]
+            val tested = ReindeerPowerUnit(healthyAndRestedBlitzen)
+
+            beforeTest {
+                healthyAndRestedBlitzen.timesHarnessing = 0
+            }
+
+            test("should return > 0 on checkMagicPower") {
+                tested.checkMagicPower() shouldBeGreaterThan 0.0f
+            }
+
+            test("should return > 0 on harnessMagicPower") {
+                tested.harnessMagicPower() shouldBeGreaterThan 0.0f
+            }
+
+        }
+
+        context("exhausted and healthy reindeer") {
+            val healthyAndExhaustedBlitzen = MagicStable().allReindeers[1]
+            val tested = ReindeerPowerUnit(healthyAndExhaustedBlitzen)
+
+            beforeTest {
+                while (!healthyAndExhaustedBlitzen.needsRest())
+                    healthyAndExhaustedBlitzen.timesHarnessing ++
+            }
+
+            test("should return 0 on checkMagicPower") {
+                tested.checkMagicPower() shouldBe 0.0f
+            }
+
+            test("should return 0 on harnessMagicPower") {
+                tested.harnessMagicPower() shouldBe 0.0f
+            }
+
+        }
+
+        context("sleigh") {
+            test("can not accumulate power over several ascends") {
+                val tested = ControlSystem()
+                tested.startSystem()
+                shouldThrow<ReindeersNeedRestException> {
+                    tested.ascend()
+                }
+                shouldThrow<ReindeersNeedRestException> {
+                    tested.ascend()
+                }
+            }
+        }
     }
 })
