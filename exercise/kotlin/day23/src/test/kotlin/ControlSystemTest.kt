@@ -10,6 +10,7 @@ import java.io.PrintStream
 
 class ControlSystemTest : StringSpec({
     val outputStreamCaptor = ByteArrayOutputStream()
+    val lineBreak = System.lineSeparator()
 
     beforeTest {
         System.setOut(PrintStream(outputStreamCaptor))
@@ -26,7 +27,7 @@ class ControlSystemTest : StringSpec({
         controlSystem.status = SleighEngineStatus.OFF
         controlSystem.startSystem()
         controlSystem.status shouldBe SleighEngineStatus.ON
-        outputStreamCaptor.toString().trim() shouldBe "Starting the sleigh...\nSystem ready."
+        outputStreamCaptor.toString().trim() shouldBe "Starting the sleigh...${lineBreak}System ready."
     }
 
     "testAscend" {
@@ -34,7 +35,7 @@ class ControlSystemTest : StringSpec({
         controlSystem.startSystem()
         controlSystem.ascend()
         controlSystem.action shouldBe SleighAction.FLYING
-        outputStreamCaptor.toString().trim() shouldBe "Starting the sleigh...\nSystem ready.\nAscending..."
+        outputStreamCaptor.toString().trim() shouldBe "Starting the sleigh...${lineBreak}System ready.${lineBreak}Ascending..."
     }
 
     "testDescend" {
@@ -44,7 +45,7 @@ class ControlSystemTest : StringSpec({
         controlSystem.descend()
         controlSystem.action shouldBe SleighAction.HOVERING
         outputStreamCaptor.toString()
-            .trim() shouldBe "Starting the sleigh...\nSystem ready.\nAscending...\nDescending..."
+            .trim() shouldBe "Starting the sleigh...${lineBreak}System ready.${lineBreak}Ascending...${lineBreak}Descending..."
     }
 
     "testPark" {
@@ -124,16 +125,37 @@ class ControlSystemTestAdditions : FunSpec({
 
         }
 
-        context("sleigh") {
-            test("can not accumulate power over several ascends") {
-                val tested = ControlSystem()
-                tested.startSystem()
-                shouldThrow<ReindeersNeedRestException> {
-                    tested.ascend()
-                }
-                shouldThrow<ReindeersNeedRestException> {
-                    tested.ascend()
-                }
+        context("power amplifiers") {
+            val healthyAndRestedBlitzen = MagicStable().allReindeers[1]
+
+            test("should amplify power by 2 with blessed amp") {
+                val standardReindeer = ReindeerPowerUnit(healthyAndRestedBlitzen)
+                val blessedReindeer = ReindeerPowerUnit(healthyAndRestedBlitzen, MagicPowerAmplifier(AmplifierType.BLESSED))
+
+                blessedReindeer.checkMagicPower() shouldBe standardReindeer.checkMagicPower() * 2
+                blessedReindeer.harnessMagicPower() shouldBe standardReindeer.harnessMagicPower() * 2
+            }
+
+            test("should amplify power by 3 with divine amp") {
+                val standardReindeer = ReindeerPowerUnit(healthyAndRestedBlitzen)
+                val divineReindeer = ReindeerPowerUnit(healthyAndRestedBlitzen, MagicPowerAmplifier(AmplifierType.DIVINE))
+
+                divineReindeer.checkMagicPower() shouldBe standardReindeer.checkMagicPower() * 3
+                divineReindeer.harnessMagicPower() shouldBe standardReindeer.harnessMagicPower() * 3
+            }
+        }
+
+    }
+
+    context("sleigh") {
+        test("can not accumulate power over several ascends") {
+            val tested = ControlSystem()
+            tested.startSystem()
+            shouldThrow<ReindeersNeedRestException> {
+                tested.ascend()
+            }
+            shouldThrow<ReindeersNeedRestException> {
+                tested.ascend()
             }
         }
     }

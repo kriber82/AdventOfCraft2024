@@ -29,6 +29,12 @@
 - Constraints:
   - No changes to reindeer class & attributes
   - Don't touch external package
+- yann:
+  - several layers to this problem
+    - bugfixing
+    - refactoring -> insights
+    - deep refactoring
+  - great refactoring kata: theatrical players
 
 - Open questions:
   - which chain of actions do I need to support?

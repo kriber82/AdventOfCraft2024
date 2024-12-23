@@ -2,8 +2,7 @@ package core.control
 
 import external.deer.Reindeer
 
-class ReindeerPowerUnit(val reindeer: Reindeer) {
-    private val amplifier = MagicPowerAmplifier(AmplifierType.BASIC)
+class ReindeerPowerUnit(val reindeer: Reindeer, private val amplifier: MagicPowerAmplifier = MagicPowerAmplifier(AmplifierType.BASIC)) {
 
     fun harnessMagicPower(): Float {
         return if (!reindeer.needsRest()) {
@@ -18,5 +17,5 @@ class ReindeerPowerUnit(val reindeer: Reindeer) {
         if (reindeer.sick || reindeer.needsRest())
             0.0f
         else
-            reindeer.magicPower
+            amplifier.amplify(reindeer.magicPower)
 }
