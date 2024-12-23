@@ -5,7 +5,7 @@ import external.deer.Reindeer
 class MagicStable {
     //Dasher is sick since yesterday
     private val dasher = Reindeer("Dasher", 4, 10, true)
-    private val dancer = Reindeer("Dancer", 2, 8) // give enhanced amp
+    private val dancer = Reindeer("Dancer", 2, 8) // give blessed amp
     private val prancer = Reindeer("Prancer", 3, 9) // give divine amp
     private val vixen = Reindeer("Vixen", 3, 6)
 
@@ -13,7 +13,7 @@ class MagicStable {
     private val comet = Reindeer("Comet", 4, 9, true)
     private val cupid = Reindeer("Cupid", 4, 6)
     private val donner = Reindeer("Donner", 7, 6)
-    private val blitzen = Reindeer("Blitzen", 8, 7) // give enhanced amp
+    private val blitzen = Reindeer("Blitzen", 8, 7) // give blessed amp
     private val rudolph = Reindeer("Rudolph", 6, 3)
 
     val allReindeers: List<Reindeer>

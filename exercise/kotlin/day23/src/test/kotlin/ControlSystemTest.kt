@@ -6,13 +6,15 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.floats.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import java.io.ByteArrayOutputStream
+import java.io.OutputStream
 import java.io.PrintStream
 
 class ControlSystemTest : StringSpec({
-    val outputStreamCaptor = ByteArrayOutputStream()
+    lateinit var outputStreamCaptor: OutputStream
     val lineBreak = System.lineSeparator()
 
     beforeTest {
+        outputStreamCaptor = ByteArrayOutputStream()
         System.setOut(PrintStream(outputStreamCaptor))
     }
 
@@ -148,8 +150,8 @@ class ControlSystemTestAdditions : FunSpec({
     }
 
     context("sleigh") {
-        test("can not accumulate power over several ascends") {
-            val tested = ControlSystem()
+        test("should not be able to accumulate power over several ascend tries") {
+            val tested = ControlSystem(emptyMap())
             tested.startSystem()
             shouldThrow<ReindeersNeedRestException> {
                 tested.ascend()
@@ -157,6 +159,13 @@ class ControlSystemTestAdditions : FunSpec({
             shouldThrow<ReindeersNeedRestException> {
                 tested.ascend()
             }
+        }
+
+        test("should be able to ascend with amplifiers applied") {
+            val tested = ControlSystem(hotfixAmplifiersByReindeerIndex)
+            tested.startSystem()
+            tested.ascend()
+            tested.action shouldBe SleighAction.FLYING
         }
     }
 })

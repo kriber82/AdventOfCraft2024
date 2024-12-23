@@ -3,7 +3,13 @@ package core.control
 import external.deer.Reindeer
 import external.stable.MagicStable
 
-class ControlSystem {
+val hotfixAmplifiersByReindeerIndex = mapOf(
+    1 to AmplifierType.BLESSED,
+    2 to AmplifierType.DIVINE,
+    7 to AmplifierType.BLESSED
+)
+
+class ControlSystem(private val amplifierByReindeerIndex: Map<Int, AmplifierType> = hotfixAmplifiersByReindeerIndex) { //TODO no need to store this map -> refactor to only use in constructor
     //The Xmas spirit is 40 magic power unit
     private val xmasSpirit = 40
     private val dashboard = Dashboard()
@@ -12,9 +18,12 @@ class ControlSystem {
     var status: SleighEngineStatus = SleighEngineStatus.OFF
     var action: SleighAction = SleighAction.PARKED
 
-    private fun bringAllReindeers() = magicStable.allReindeers.map { attachPowerUnit(it) }
+    private fun bringAllReindeers() = magicStable.allReindeers.mapIndexed { index, reindeer -> attachPowerUnit(index, reindeer) }
 
-    fun attachPowerUnit(reindeer: Reindeer) = ReindeerPowerUnit(reindeer)
+    fun attachPowerUnit(index: Int, reindeer: Reindeer): ReindeerPowerUnit {
+        val amplifierType = amplifierByReindeerIndex.getOrDefault(index, AmplifierType.BASIC)
+        return ReindeerPowerUnit(reindeer, MagicPowerAmplifier(amplifierType))
+    }
 
     fun startSystem() {
         dashboard.displayStatus("Starting the sleigh...")
@@ -27,10 +36,7 @@ class ControlSystem {
     fun ascend() {
         var controlMagicPower = 0f
         if (status == SleighEngineStatus.ON) {
-            val sleighPower = controlMagicPower
-            val reindeerPower = reindeerPowerUnits.map { it.checkMagicPower() }.sum()
-            val totalPower = sleighPower + reindeerPower
-            dashboard.displayStatus("Energy levels: Sleigh: $sleighPower, Reindeer: $reindeerPower, Total: $totalPower")
+            //debugOutputPowerDiagnostics(controlMagicPower)
 
             for (reindeerPowerUnit in reindeerPowerUnits) {
                 controlMagicPower += reindeerPowerUnit.harnessMagicPower()
@@ -44,6 +50,11 @@ class ControlSystem {
         } else {
             throw SleighNotStartedException()
         }
+    }
+
+    private fun debugOutputPowerDiagnostics(controlMagicPower: Float) {
+        val reindeerPower = reindeerPowerUnits.map { it.checkMagicPower() }.sum()
+        dashboard.displayStatus("Reindeer power available: $reindeerPower")
     }
 
     @Throws(SleighNotStartedException::class)

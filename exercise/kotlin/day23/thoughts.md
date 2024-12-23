@@ -67,3 +67,5 @@
 - [ ] exception handling mess
 - [ ] RPU.checkMagicPower ignores needsRest? => bug in magicPower?
 - [ ] only consume reindeer power if there is enough energy
+- [ ] optimize for less resting (by hand)
+- [ ] automatically apply better amplifiers
