@@ -1,5 +1,6 @@
 package core.control
 
+import adapters.stable.ReindeersFromMagicStable
 import external.deer.Reindeer
 import external.stable.MagicStable
 
@@ -9,12 +10,14 @@ val hotfixAmplifiersByReindeerIndex = mapOf(
     7 to AmplifierType.BLESSED
 )
 
-class ControlSystem(private val amplifierByReindeerIndex: Map<Int, AmplifierType> = hotfixAmplifiersByReindeerIndex) { //TODO no need to store this map -> refactor to only use in constructor
+class ControlSystem(
+    private val magicStable: ForGettingReindeer = ReindeersFromMagicStable(MagicStable()),
+    private val amplifierByReindeerIndex: Map<Int, AmplifierType> = hotfixAmplifiersByReindeerIndex) //TODO no need to store this map -> refactor to only use in constructor
+{
     //The Xmas spirit is 40 magic power unit
     private val xmasSpirit = 40
     private val dashboard = Dashboard()
-    private val magicStable = MagicStable()
-    private val reindeerPowerUnits = bringAllReindeers()
+    internal val reindeerPowerUnits = bringAllReindeers()
     var status: SleighEngineStatus = SleighEngineStatus.OFF
     var action: SleighAction = SleighAction.PARKED
 

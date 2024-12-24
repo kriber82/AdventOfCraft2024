@@ -1,4 +1,5 @@
 import core.control.*
+import external.deer.Reindeer
 import external.stable.MagicStable
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
@@ -151,7 +152,7 @@ class ControlSystemTestAdditions : FunSpec({
 
     context("sleigh") {
         test("should not be able to accumulate power over several ascend tries") {
-            val tested = ControlSystem(emptyMap())
+            val tested = ControlSystem(amplifierByReindeerIndex = emptyMap())
             tested.startSystem()
             shouldThrow<ReindeersNeedRestException> {
                 tested.ascend()
@@ -162,10 +163,28 @@ class ControlSystemTestAdditions : FunSpec({
         }
 
         test("should be able to ascend with amplifiers applied") {
-            val tested = ControlSystem(hotfixAmplifiersByReindeerIndex)
+            val tested = ControlSystem(amplifierByReindeerIndex = hotfixAmplifiersByReindeerIndex)
             tested.startSystem()
             tested.ascend()
             tested.action shouldBe SleighAction.FLYING
         }
+
+        test("should use reindeers from given repository") {
+            val reindeers = listOf(Reindeer("R1", 1, 1), Reindeer("R2", 2, 2))
+            val reindeerRepo: ForGettingReindeer = MagicStableFake(reindeers)
+            val tested = ControlSystem(reindeerRepo)
+
+            tested.reindeerPowerUnits.size shouldBe 2
+        }
+
+        /*
+        test("should automatically distribute amplifiers to healthy reindeers") {
+            val tested = ControlSystem()
+            tested.startSystem()
+            tested.ascend()
+            tested.action shouldBe SleighAction.FLYING
+        }
+
+         */
     }
 })
