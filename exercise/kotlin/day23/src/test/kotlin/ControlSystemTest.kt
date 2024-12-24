@@ -152,7 +152,7 @@ class ControlSystemTestAdditions : FunSpec({
 
     context("sleigh") {
         test("should not be able to accumulate power over several ascend tries") {
-            val tested = ControlSystem(amplifierByReindeerIndex = emptyMap())
+            val tested = ControlSystem(amplifierInventory= AmplifierInventory(0, 0), amplifierByReindeerIndex = emptyMap())
             tested.startSystem()
             shouldThrow<ReindeersNeedRestException> {
                 tested.ascend()
@@ -175,6 +175,16 @@ class ControlSystemTestAdditions : FunSpec({
             val tested = ControlSystem(reindeerRepo)
 
             tested.reindeerPowerUnits.size shouldBe 2
+        }
+
+        test ("should use available stronger amplifiers") {
+            val ampInventory = AmplifierInventory(1, 2)
+
+            val tested = ControlSystem(amplifierInventory = ampInventory, amplifierByReindeerIndex = emptyMap())
+
+            tested.reindeerPowerUnits.filter{ it.amplifier.amplifierType == AmplifierType.DIVINE }.size shouldBe 1
+            tested.reindeerPowerUnits.filter{ it.amplifier.amplifierType == AmplifierType.BLESSED}.size shouldBe 2
+            tested.reindeerPowerUnits.filter{ it.amplifier.amplifierType == AmplifierType.BASIC}.size shouldBe 6
         }
 
         /*

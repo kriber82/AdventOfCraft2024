@@ -12,6 +12,7 @@ val hotfixAmplifiersByReindeerIndex = mapOf(
 
 class ControlSystem(
     private val magicStable: ForGettingReindeer = ReindeersFromMagicStable(MagicStable()),
+    private val amplifierInventory: AmplifierInventory = AmplifierInventory(2, 1),
     private val amplifierByReindeerIndex: Map<Int, AmplifierType> = hotfixAmplifiersByReindeerIndex) //TODO no need to store this map -> refactor to only use in constructor
 {
     //The Xmas spirit is 40 magic power unit
@@ -24,7 +25,11 @@ class ControlSystem(
     private fun bringAllReindeers() = magicStable.allReindeers.mapIndexed { index, reindeer -> attachPowerUnit(index, reindeer) }
 
     fun attachPowerUnit(index: Int, reindeer: Reindeer): ReindeerPowerUnit {
-        val amplifierType = amplifierByReindeerIndex.getOrDefault(index, AmplifierType.BASIC)
+        val amplifierType = if (amplifierByReindeerIndex.isEmpty()) {
+            amplifierInventory.takeBestAvailableAmplifier()
+        } else {
+            amplifierByReindeerIndex.getOrDefault(index, AmplifierType.BASIC)
+        }
         return ReindeerPowerUnit(reindeer, MagicPowerAmplifier(amplifierType))
     }
 
