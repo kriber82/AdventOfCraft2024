@@ -22,7 +22,20 @@ class ControlSystem(
     var status: SleighEngineStatus = SleighEngineStatus.OFF
     var action: SleighAction = SleighAction.PARKED
 
-    private fun bringAllReindeers() = magicStable.allReindeers.mapIndexed { index, reindeer -> attachPowerUnit(index, reindeer) }
+    private fun bringAllReindeers(): List<ReindeerPowerUnit> {
+        if (amplifierByReindeerIndex.isEmpty()) {
+            val result = mutableListOf<ReindeerPowerUnit>()
+            val reindeerBySpirit = magicStable.allReindeers
+                .filter { !it.sick }
+                .sortedByDescending { it.magicPower }
+            for (reindeer in reindeerBySpirit) {
+                result.add(ReindeerPowerUnit(reindeer, MagicPowerAmplifier(amplifierInventory.takeBestAvailableAmplifier())))
+            }
+            return result
+        } else {
+            return magicStable.allReindeers.mapIndexed { index, reindeer -> attachPowerUnit(index, reindeer) }
+        }
+    }
 
     fun attachPowerUnit(index: Int, reindeer: Reindeer): ReindeerPowerUnit {
         val amplifierType = if (amplifierByReindeerIndex.isEmpty()) {
@@ -61,7 +74,7 @@ class ControlSystem(
     }
 
     private fun debugOutputPowerDiagnostics(controlMagicPower: Float) {
-        val reindeerPower = reindeerPowerUnits.map { it.checkMagicPower() }.sum()
+        val reindeerPower = checkAvailablePower()
         dashboard.displayStatus("Reindeer power available: $reindeerPower")
     }
 
@@ -95,4 +108,7 @@ class ControlSystem(
     }
 
     private fun checkReindeerStatus(controlMagicPower: Float) = controlMagicPower >= xmasSpirit
+    fun checkAvailablePower(): Float {
+        return reindeerPowerUnits.map { it.checkMagicPower() }.sum()
+    }
 }

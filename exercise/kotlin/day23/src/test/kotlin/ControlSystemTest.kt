@@ -1,3 +1,4 @@
+import adapters.stable.ReindeersFromMagicStable
 import core.control.*
 import external.deer.Reindeer
 import external.stable.MagicStable
@@ -6,6 +7,11 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.floats.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.bind
+import io.kotest.property.arbitrary.int
+import io.kotest.property.arbitrary.shuffle
+import io.kotest.property.checkAll
 import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 import java.io.PrintStream
@@ -184,17 +190,46 @@ class ControlSystemTestAdditions : FunSpec({
 
             tested.reindeerPowerUnits.filter{ it.amplifier.amplifierType == AmplifierType.DIVINE }.size shouldBe 1
             tested.reindeerPowerUnits.filter{ it.amplifier.amplifierType == AmplifierType.BLESSED}.size shouldBe 2
-            tested.reindeerPowerUnits.filter{ it.amplifier.amplifierType == AmplifierType.BASIC}.size shouldBe 6
+            tested.reindeerPowerUnits.filter{ it.amplifier.amplifierType == AmplifierType.BASIC}.size shouldBe 6 - 2 //leave sick reindeer home
         }
 
-        /*
-        test("should automatically distribute amplifiers to healthy reindeers") {
-            val tested = ControlSystem()
-            tested.startSystem()
-            tested.ascend()
-            tested.action shouldBe SleighAction.FLYING
+        test("should automatically distribute amplifiers to healthy reindeer") {
+            val tested = ControlSystem(ReindeersFromMagicStable(MagicStable()), AmplifierInventory(1, 2), emptyMap())
+
+            tested.checkAvailablePower() shouldBe 65.0f
         }
 
-         */
+        val santasReindeerIndices = ReindeerBuilder.getSantasReindeers().indices.toList()
+        val reindeerIndexPermutations = Arb.shuffle(santasReindeerIndices)
+        val upToThreeSickReindeerIndices = Arb.bind(Arb.int(0..3), reindeerIndexPermutations) { sickCount, indices ->
+            indices.take(sickCount)
+        }
+        test("should be able to power the sleigh with up to 3 sick reindeer") {
+            checkAll(upToThreeSickReindeerIndices) { sickReindeerIndices ->
+                val reindeers = ReindeerBuilder.getSantasReindeers().mapIndexed { index, builder ->
+                    builder.withSickness(sickReindeerIndices.contains(index)).build()
+                }
+                val tested = ControlSystem(MagicStableFake(reindeers), AmplifierInventory(1, 2), emptyMap())
+
+                tested.startSystem()
+                tested.ascend()
+                tested.action shouldBe SleighAction.FLYING
+            }
+        }
+
+        val eightToNineSickReindeerIndices = Arb.bind(Arb.int(8..9), reindeerIndexPermutations) { sickCount, indices ->
+            indices.take(sickCount)
+        }
+        test("should not be able to power the sleigh with 8 or 9 sick reindeer") {
+            checkAll(eightToNineSickReindeerIndices) { sickReindeerIndices ->
+                val reindeers = ReindeerBuilder.getSantasReindeers().mapIndexed { index, builder ->
+                    builder.withSickness(sickReindeerIndices.contains(index)).build()
+                }
+                val tested = ControlSystem(MagicStableFake(reindeers), AmplifierInventory(1, 2), emptyMap())
+
+                tested.startSystem()
+                shouldThrow<ReindeersNeedRestException> { tested.ascend() }
+            }
+        }
     }
 })
