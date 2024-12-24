@@ -50,17 +50,28 @@
     - criteria: power and/or powerPullLimit 
 
 ## Trying to make sleigh fly with quick fixes
-  - 2/4 tests failing
-  - App:
-    - interesting... allows 1 ascend before resting... -> what's the difference between test & prod?
-      - check for sick reindeer in checkMagicPower =>
-    - now
-      - available energy correctly shows 33 initially and doesn't ascend
-      - after resting, ascending works. check reason: 
-        - hunch: the sick reindeer seem to provide energy after resting => seemingly not
-        - is controller control magic power accumulated? => that's probably what "allows multiple actions meant"
-      - after fully spending, magicPower still returns values > 0
-        - add check for needsRest
+- 2/4 tests failing
+- App:
+  - interesting... allows 1 ascend before resting... -> what's the difference between test & prod?
+    - check for sick reindeer in checkMagicPower =>
+  - now
+    - available energy correctly shows 33 initially and doesn't ascend
+    - after resting, ascending works. check reason: 
+      - hunch: the sick reindeer seem to provide energy after resting => seemingly not
+      - is controller control magic power accumulated? => that's probably what "allows multiple actions meant"
+    - after fully spending, magicPower still returns values > 0
+      - add check for needsRest
+
+## Adding automated amplifier distribution
+
+- interesting about manual map for distributing amplifiers 
+  - was a helpful crook to get santa flying
+  - made code worse, if anything
+  - was simple to test
+- automated amp distribution:
+  - made manual map obsolete
+  - needed preparatory refactoring to be testable
+  - adds more stability to the overall system, by allowing to account for further sick reindeer
 
 ## TODOs
 

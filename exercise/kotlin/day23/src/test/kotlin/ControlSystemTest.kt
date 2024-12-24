@@ -158,7 +158,7 @@ class ControlSystemTestAdditions : FunSpec({
 
     context("sleigh") {
         test("should not be able to accumulate power over several ascend tries") {
-            val tested = ControlSystem(amplifierInventory= AmplifierInventory(0, 0), amplifierByReindeerIndex = emptyMap())
+            val tested = ControlSystem(amplifierInventory= AmplifierInventory(0, 0))
             tested.startSystem()
             shouldThrow<ReindeersNeedRestException> {
                 tested.ascend()
@@ -169,7 +169,7 @@ class ControlSystemTestAdditions : FunSpec({
         }
 
         test("should be able to ascend with amplifiers applied") {
-            val tested = ControlSystem(amplifierByReindeerIndex = hotfixAmplifiersByReindeerIndex)
+            val tested = ControlSystem()
             tested.startSystem()
             tested.ascend()
             tested.action shouldBe SleighAction.FLYING
@@ -186,7 +186,7 @@ class ControlSystemTestAdditions : FunSpec({
         test ("should use available stronger amplifiers") {
             val ampInventory = AmplifierInventory(1, 2)
 
-            val tested = ControlSystem(amplifierInventory = ampInventory, amplifierByReindeerIndex = emptyMap())
+            val tested = ControlSystem(amplifierInventory = ampInventory)
 
             tested.reindeerPowerUnits.filter{ it.amplifier.amplifierType == AmplifierType.DIVINE }.size shouldBe 1
             tested.reindeerPowerUnits.filter{ it.amplifier.amplifierType == AmplifierType.BLESSED}.size shouldBe 2
@@ -194,7 +194,7 @@ class ControlSystemTestAdditions : FunSpec({
         }
 
         test("should automatically distribute amplifiers to healthy reindeer") {
-            val tested = ControlSystem(ReindeersFromMagicStable(MagicStable()), AmplifierInventory(1, 2), emptyMap())
+            val tested = ControlSystem(ReindeersFromMagicStable(MagicStable()), AmplifierInventory(1, 2))
 
             tested.checkAvailablePower() shouldBe 65.0f
         }
@@ -209,7 +209,7 @@ class ControlSystemTestAdditions : FunSpec({
                 val reindeers = ReindeerBuilder.getSantasReindeers().mapIndexed { index, builder ->
                     builder.withSickness(sickReindeerIndices.contains(index)).build()
                 }
-                val tested = ControlSystem(MagicStableFake(reindeers), AmplifierInventory(1, 2), emptyMap())
+                val tested = ControlSystem(MagicStableFake(reindeers), AmplifierInventory(1, 2))
 
                 tested.startSystem()
                 tested.ascend()
@@ -225,7 +225,7 @@ class ControlSystemTestAdditions : FunSpec({
                 val reindeers = ReindeerBuilder.getSantasReindeers().mapIndexed { index, builder ->
                     builder.withSickness(sickReindeerIndices.contains(index)).build()
                 }
-                val tested = ControlSystem(MagicStableFake(reindeers), AmplifierInventory(1, 2), emptyMap())
+                val tested = ControlSystem(MagicStableFake(reindeers), AmplifierInventory(1, 2))
 
                 tested.startSystem()
                 shouldThrow<ReindeersNeedRestException> { tested.ascend() }
