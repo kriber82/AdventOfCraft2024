@@ -1,21 +1,34 @@
 package core.control
 
+import adapters.stable.ReindeersFromMagicStable
 import external.deer.Reindeer
 import external.stable.MagicStable
 
-class ControlSystem {
+class ControlSystem(
+    private val magicStable: ForGettingReindeer = ReindeersFromMagicStable(MagicStable()),
+    private val amplifierInventory: AmplifierInventory = AmplifierInventory(2, 1))
+{
     //The Xmas spirit is 40 magic power unit
     private val xmasSpirit = 40
     private val dashboard = Dashboard()
-    private val magicStable = MagicStable()
-    private val reindeerPowerUnits = bringAllReindeers()
+    internal val reindeerPowerUnits = bringAllReindeers()
     var status: SleighEngineStatus = SleighEngineStatus.OFF
     var action: SleighAction = SleighAction.PARKED
-    private var controlMagicPower = 0f
 
-    private fun bringAllReindeers() = magicStable.allReindeers.map { attachPowerUnit(it) }
+    private fun bringAllReindeers(): List<ReindeerPowerUnit> {
+            val result = mutableListOf<ReindeerPowerUnit>()
 
-    fun attachPowerUnit(reindeer: Reindeer) = ReindeerPowerUnit(reindeer)
+            val reindeerBySpirit = magicStable.allReindeers
+                .filter { !it.sick }
+                .sortedByDescending { it.magicPower }
+
+            for (reindeerWithHighestSpirit in reindeerBySpirit) {
+                val bestAmplifier = MagicPowerAmplifier(amplifierInventory.takeBestAvailableAmplifier())
+                result.add(ReindeerPowerUnit(reindeerWithHighestSpirit, bestAmplifier))
+            }
+
+            return result
+    }
 
     fun startSystem() {
         dashboard.displayStatus("Starting the sleigh...")
@@ -26,12 +39,15 @@ class ControlSystem {
 
     @Throws(ReindeersNeedRestException::class, SleighNotStartedException::class)
     fun ascend() {
+        var controlMagicPower = 0f
         if (status == SleighEngineStatus.ON) {
+            //debugOutputPowerDiagnostics(controlMagicPower)
+
             for (reindeerPowerUnit in reindeerPowerUnits) {
                 controlMagicPower += reindeerPowerUnit.harnessMagicPower()
             }
 
-            if (checkReindeerStatus()) {
+            if (checkReindeerStatus(controlMagicPower)) {
                 dashboard.displayStatus("Ascending...")
                 action = SleighAction.FLYING
                 controlMagicPower = 0f
@@ -39,6 +55,11 @@ class ControlSystem {
         } else {
             throw SleighNotStartedException()
         }
+    }
+
+    private fun debugOutputPowerDiagnostics(controlMagicPower: Float) {
+        val reindeerPower = checkAvailablePower()
+        dashboard.displayStatus("Reindeer power available: $reindeerPower")
     }
 
     @Throws(SleighNotStartedException::class)
@@ -70,5 +91,8 @@ class ControlSystem {
         dashboard.displayStatus("System shutdown.")
     }
 
-    private fun checkReindeerStatus() = controlMagicPower >= xmasSpirit
+    private fun checkReindeerStatus(controlMagicPower: Float) = controlMagicPower >= xmasSpirit
+    fun checkAvailablePower(): Float {
+        return reindeerPowerUnits.map { it.checkMagicPower() }.sum()
+    }
 }
